@@ -4,6 +4,7 @@
 
 namespace netco
 {
+    /*对象池, 从内存池获取内存块构造对象,判断构造函数/析构函数是否为trivial选择不同的对象构造/析构方式*/
     template <class T>
     class objPool
     {

@@ -3,7 +3,8 @@
 #include <stdint.h>
 
 namespace netco
-{
+{   
+    /*时间类，定义了以毫秒为单位的时间戳*/
     class Time{
     public:
         Time(int64_t msSinceEpoch) : timeVal_(msSinceEpoch) {}

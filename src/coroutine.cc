@@ -26,12 +26,16 @@ Coroutine::Coroutine(Processor* pro, size_t stackSize, coFunCallBack& func)
 
 Coroutine::~Coroutine()
 {
-    printf("coId:%d destructing\n", id_);
+    #ifdef DEBUGING
+        printf("coId:%d destructing\n", id_);
+    #endif
 }
 
 void Coroutine::resume()
 {
-    printf("CoID%d resuming\n", id_);
+    #ifdef DEBUGING
+        printf("CoID%d resuming\n", id_);
+    #endif
     Context* mainCtx = pMyProcessor_->getMainCtx();
     // mainCtx.makeCurContext();
     switch(status_)

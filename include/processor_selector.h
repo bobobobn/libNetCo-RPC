@@ -3,11 +3,13 @@
 
 namespace netco
 {
+
     enum scheduleStrategy
     {
-        MIN_EVENT_FIRST = 0 , //�����¼�����
-        ROUND_ROBIN			  //�����ַ�
+        MIN_EVENT_FIRST = 0 , 
+        ROUND_ROBIN			  
     };
+    /* 协程调度策略管理器，决定下一个协程应该放到哪一个线程中*/
     class ProcessorSelector
     {
     public:

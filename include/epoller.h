@@ -7,6 +7,7 @@ namespace netco
 {
 	class Coroutine;
 
+	/* 监听事件, 事件的handler为Coroutine */
 	class Epoller
 	{
 	public:

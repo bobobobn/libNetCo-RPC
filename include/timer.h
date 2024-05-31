@@ -13,7 +13,9 @@ namespace netco
 {
     class Coroutine;
     class Epoller;
-
+	/* 
+		定时器类, 在coroutine需要等待时,向timer中注册coroutine后yield
+	*/
     class Timer
     {
     public:

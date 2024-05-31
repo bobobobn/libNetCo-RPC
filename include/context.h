@@ -3,6 +3,7 @@
 
 namespace netco{
     class Processor;
+    /* 封装了ucontext中的上下文切换*/
     class Context{
     public:
         Context(size_t sSize);

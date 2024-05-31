@@ -94,7 +94,9 @@ int Epoller::getActEvServ(int timeOutMs, std::vector<Coroutine*>& activeEvServs)
 			Coroutine* pCo = static_cast<Coroutine*>(activeEpollEvents_[i].data.ptr);
             if( nullptr != pCo)
             {
-                printf("coID:%d ,event:%d\n",pCo->id_, activeEpollEvents_[i].events);
+                #ifdef DEBUGING
+                    printf("coID:%d ,event:%d\n",pCo->id_, activeEpollEvents_[i].events);
+                #endif
 			    activeEvServs.push_back(pCo);
             }
 		}

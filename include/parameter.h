@@ -1,4 +1,3 @@
-//@author Liu Yukang
 #pragma once
 #include <stddef.h>
 
@@ -6,19 +5,19 @@ namespace netco
 {
 	namespace parameter
 	{
-		//Э��ջ��С
+		//协程的调用栈大小
 		const static size_t coroutineStackSize = 32 * 1024;
 
-		//��ȡ��Ծ��epoll_event������ĳ�ʼ����
+		// 存储epoll活动事件的vector初始大小
 		static constexpr int epollerListFirstSize = 16;
 
-		//epoll_wait������ʱ��
+		// epoll_wait等待时长
 		static constexpr int epollTimeOutMs = 10000;
 
-		//�������еĳ���
+		// socket listen的backLog参数
 		constexpr static unsigned backLog = 4096;
 
-		//�ڴ��û�п����ڴ��ʱ����memPoolMallocObjCnt�������С���ڴ��
+		// 内存池分配对象大小的内存个数
 		static constexpr size_t memPoolMallocObjCnt = 40;
 	}
 	

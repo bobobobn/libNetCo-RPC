@@ -2,8 +2,11 @@
 #include "context.h"
 #include <functional>
 
+
 namespace netco{
     class Processor;
+
+    /* 协程类Coroutine, 由Processor接管, 并由Processor调度 */
     class Coroutine{
     public:
         enum coStatus

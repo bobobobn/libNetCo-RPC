@@ -5,6 +5,7 @@
 
 namespace netco
 {
+    /* 内存块链表结点结构体 */
     struct MemBlockNode{
         union 
         {
@@ -12,6 +13,7 @@ namespace netco
             char data;
         };        
     };
+    /* 内存池类, mallocListHead_存储了整块连续内存的首地址链表,freeListHead_链表存储了可用的objSize_大小的内存块的指针*/
     template<size_t objsize>
     class MemPool
     {

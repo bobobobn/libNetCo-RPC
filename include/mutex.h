@@ -3,6 +3,7 @@
 #include <bits/codecvt.h>
 
 namespace netco{
+    /*互斥锁, GuardLocker RAII生命周期管理*/
     class MutexLock
     {
     public:

@@ -78,7 +78,9 @@ void Processor::eventLoop()
                 GuardLocker lock(coSetLocker);
                 coSet_.insert(co);
             }
-            printf("coID:%d starting\n", co->id_);
+            #ifdef DEBUGING
+                printf("coID:%d starting\n", co->id_);
+            #endif
             resume(co);
             
         }
@@ -137,7 +139,9 @@ void Processor::resume(Coroutine* co)
 
 void Processor::yield()
 {
-    printf("coID:%d yield\n", curCo_->id_);
+    #ifdef DEBUGING
+        printf("coID:%d yield\n", curCo_->id_);
+    #endif
     curCo_->yield();
     mainCtx_.swapToMe(curCo_->getCtx());
 }

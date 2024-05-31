@@ -8,6 +8,12 @@
 
 namespace netco
 {   
+    /* 
+        单例模式的Scheduler, 
+        首次getScheduler获取实例传入threadNum值,
+        创建threadNum个Processor对象/线程,
+        通过proSelector_调度Processor 
+    */
     class Scheduler
     {
         protected:

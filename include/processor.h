@@ -17,7 +17,12 @@
 
 extern __thread int threadIdx;
 namespace netco
-{
+{   
+    /*
+        运行着one thread one loop的processor类,
+        管理coroutine对象,
+        thread的loop为eventLoop函数
+    */
     class Processor
     {
     public:

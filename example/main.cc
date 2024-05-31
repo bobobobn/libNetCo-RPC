@@ -1,4 +1,3 @@
-//@author Liu Yukang
 #include <iostream>
 #include <sys/sysinfo.h>
 
@@ -48,8 +47,7 @@ void single_acceptor_server_test()
 								break;
 							}
 						}
-						myNetCo->co_sleep(100);//��Ҫ��һ�£�����û������Ͼ͹ر���
-    					std::cout<<"down here"<<std::endl;
+						myNetCo->co_sleep(100);
 					}
 					);
 			}

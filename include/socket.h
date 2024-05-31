@@ -10,6 +10,12 @@ namespace netco
 {
     class Socket;
     using SocketPtr = typename std::shared_ptr<Socket>;
+    /* 
+        hook socket,
+        hook了accept/read/send,
+        在accept/read/send的目标fd阻塞时,
+        添加事件至epoller, yield当前协程
+    */
     class Socket
     {
     public:

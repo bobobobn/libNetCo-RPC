@@ -1,4 +1,3 @@
-//@author Liu Yukang
 #pragma once
 #include "scheduler.h"
 #include "mstime.h"
@@ -6,6 +5,7 @@
 
 namespace netco 
 {
+	/* 单例模式的NetCo类, 在首次获取对象实例时需初始化进程的线程数*/
 	class NetCo
 	{
 	public:
