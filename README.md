@@ -18,6 +18,8 @@ netco::co_sleep(time)当前协程time毫秒后继续执行;
 cd src
 make
 '''
+
+''' cpp
 使用时包含include/socket.h，即可使用socket族函数接口
 Socket s; //创建一个socket类
 s.bind(80); //绑定端口号80
@@ -28,3 +30,4 @@ conSock->read(buf, 1024); //读连接上的数据
 conSock->send(buf, 1024); //往对端写数据
 Socket clientSock;
 clientSock.connect("127.0.0.1", 80); //建立一个连接,之后即可如上述read和send
+'''
