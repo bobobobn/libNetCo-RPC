@@ -19,7 +19,12 @@ Linux 下 C++ 基于 `ucontext` 库实现轻量级对称协程，HOOK 了常用 
 ```sh
 cd src
 make
+```
 
+编译src文件夹源码，使用时包含include/netco_api.h，即可使用netco协程库接口
+``` cpp
+netco::co_go(func)执行一条协程；
+netco::co_sleep(time)当前协程time毫秒后继续执行;
 ```
 
 ``` cpp
