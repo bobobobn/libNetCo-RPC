@@ -63,6 +63,25 @@ int Socket::bind(int port)
 	return ret;
 }
 
+int Socket::bind(const char* ip,int port)
+{
+    port_ = port;
+	struct sockaddr_in serv;
+	memset(&serv, 0, sizeof(struct sockaddr_in));
+	serv.sin_family = AF_INET;
+	serv.sin_port = htons(port);
+	if(ip == nullptr)
+    {
+        serv.sin_addr.s_addr = htonl(INADDR_ANY);   
+    }
+    else
+    {
+        serv.sin_addr.s_addr = inet_addr(ip);
+    }
+	int ret = ::bind(sockFd_, (struct sockaddr*) & serv, sizeof(serv));
+	return ret;
+}
+
 int Socket::listen()
 {
 	int ret = ::listen(sockFd_, parameter::backLog);

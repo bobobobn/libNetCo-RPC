@@ -42,6 +42,7 @@ namespace netco
         void setNonBlockSocket();
         void setBlockSocket();
         int bind(int port);
+        int bind(const char* ip,int port);
         SocketPtr accept();
         int listen();
         ssize_t read(void* buf, size_t size);

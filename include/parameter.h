@@ -19,6 +19,9 @@ namespace netco
 
 		// 内存池分配对象大小的内存个数
 		static constexpr size_t memPoolMallocObjCnt = 40;
+
+		// 默认线程数，为NULL时，线程数=CPU核心数
+		static constexpr int threadNum = NULL;
 	}
 	
 }

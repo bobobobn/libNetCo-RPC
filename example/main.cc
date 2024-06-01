@@ -8,11 +8,10 @@
 
 using namespace netco;
 
-NetCo* myNetCo = NetCo::getNetCo(::get_nprocs_conf());
 void single_acceptor_server_test()
 {
 	
-	myNetCo->co_go(
+	netco::co_go(
 		[]{
 			netco::Socket listener;
 			if (listener.isUseful())
@@ -29,7 +28,7 @@ void single_acceptor_server_test()
 			while (1){
 				netco::SocketPtr conn = listener.accept();
 				conn->setTcpNoDelay(true);
-				myNetCo->co_go(
+				netco::co_go(
 					[conn]
 					{
 						std::vector<char> buf;
@@ -47,7 +46,7 @@ void single_acceptor_server_test()
 								break;
 							}
 						}
-						myNetCo->co_sleep(100);
+						netco::co_sleep(100);
 					}
 					);
 			}
@@ -58,10 +57,10 @@ void single_acceptor_server_test()
 void test_co()
 {
 	
-	myNetCo->co_go(
+	netco::co_go(
 		[]{
 			std::cout<<"co func"<<std::endl;
-			myNetCo->co_sleep(100);
+			netco::co_sleep(100);
 		}
 	);
 }
@@ -73,7 +72,7 @@ int main()
 
 	single_acceptor_server_test();
 	// test_co();
-	myNetCo->sche_join();
+	netco::sche_join();
 	std::cout << "end" << std::endl;
 	return 0;
 }
