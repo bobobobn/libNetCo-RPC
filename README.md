@@ -19,3 +19,17 @@ Linux 下 C++ 基于 `ucontext` 库实现轻量级对称协程，HOOK 了常用 
 ```sh
 cd src
 make
+'''
+
+''' cpp
+使用时包含include/socket.h，即可使用socket族函数接口
+Socket s; //创建一个socket类
+s.bind(80); //绑定端口号80
+s.bind("127.0.0.1", 80); //绑定127.0.0.1:80
+s.listen(); //开始监听
+SocketPtr conSock(s.accept()); //accept一个连接
+conSock->read(buf, 1024); //读连接上的数据
+conSock->send(buf, 1024); //往对端写数据
+Socket clientSock;
+clientSock.connect("127.0.0.1", 80); //建立一个连接,之后即可如上述read和send
+'''
