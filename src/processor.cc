@@ -5,7 +5,7 @@
 #include <memory>
 using namespace netco;
 
-__thread int threadIdx;
+__thread int threadIdx = -1;
 
 static void* threadLoop(void* processor)
 {

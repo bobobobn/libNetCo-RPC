@@ -20,7 +20,7 @@ namespace netco
             Scheduler(int);
             ~Scheduler(){}
         public:
-            static Scheduler* getScheduler(int threadNum);
+            static Scheduler* getScheduler(int threadNum = 0);
 
             void createNewCo(std::function<void()>&& func, size_t stackSize);
             void createNewCo(std::function<void()>& func, size_t stackSize);
@@ -41,4 +41,10 @@ namespace netco
             ProcessorSelector proSelector_;
 
     };
+    inline int getThisCoId() {        
+        if(threadIdx>=0)
+            return (netco::Scheduler::getScheduler()->getProcessor(threadIdx)->getCurCo()->id_);
+        else 
+            return -1;
+    }
 }

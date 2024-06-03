@@ -24,7 +24,7 @@ namespace netco{
         void yield();
         inline void startFunc() { coFuncb_(); }
         inline Context* getCtx() { return &ctx_; }
-        int id_;
+        const int id_;
     private:
         coFunCallBack coFuncb_;
         Context ctx_;

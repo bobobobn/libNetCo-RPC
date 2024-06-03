@@ -1,12 +1,19 @@
 #include "../include/scheduler.h"
+#include "../include/log.h"
 #include <cassert>
 using namespace netco;
 
+
 const int Scheduler::procNums = ::get_nprocs_conf();
+
 Scheduler::Scheduler(int threadCnt)
     :proSelector_(processors_, MIN_EVENT_FIRST)
 {
-    assert(threadCnt>0);
+    if(threadCnt <= 0)
+    {
+        NETCO_LOG() << "threadCnt<=0, using default value procNums = " << procNums;
+        threadCnt = procNums;
+    }
     for(int i = 0; i < threadCnt; i++){
         ProcessorPtr myPro = std::make_shared<Processor>(i);
         myPro->loop();
