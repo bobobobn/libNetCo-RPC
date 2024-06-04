@@ -42,6 +42,6 @@ clientSock.connect("127.0.0.1", 80); //建立一个连接,之后即可如上述r
 ## 类图
 ---
 ### 日志系统
-![log](https://github.com/bobobobn/libNetCo/assets/145976151/41a8c0ab-a891-45ac-a5d9-19770950d0e7)
+![log](https://github.com/bobobobn/libNetCo/assets/145976151/6afc5ae2-f6de-4ca1-97fa-b6cf521a608d)
 ### netco协程库
-![netco](https://github.com/bobobobn/libNetCo/assets/145976151/0845b307-3b24-4b66-b880-b703cfd499ab)
+![netco](https://github.com/bobobobn/libNetCo/assets/145976151/bb00a5ef-a0ed-4209-a681-6be5bce92fb2)
