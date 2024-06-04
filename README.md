@@ -20,16 +20,13 @@ Linux 下 C++ 基于 `ucontext` 库实现轻量级对称协程，HOOK 了常用 
 cd src
 make
 ```
-
 编译src文件夹源码，使用时包含include/netco_api.h，即可使用netco协程库接口
-
 ``` cpp
 netco::co_go(func)//执行一条协程；
 netco::co_sleep(1000)//当前协程睡眠1000毫秒后继续执行;
 ```
-
-``` cpp
 使用时包含include/socket.h，即可使用socket族函数接口
+``` cpp
 Socket s; //创建一个socket类
 s.bind(80); //绑定端口号80
 s.bind("127.0.0.1", 80); //绑定127.0.0.1:80
