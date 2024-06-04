@@ -47,6 +47,8 @@ root->addAppender(fileApp); //添加文件输出器到root:Logger
 
 NETCO_LOG_DEBUG(root) << "hello";                 //流式输出DEBUG级别
 NETCO_LOG_FMT_DEBUG(mylog, "%s", "hello myargs"); //格式化输出DEBUG级别
+NETCO_LOG_XXLEVEL(root) << "hello";                 //流式输出XXLEVEL级别
+NETCO_LOG_FMT_XXLEVEL(mylog, "%s", "hello myargs"); //格式化输出XXLEVEL级别
 ```
 ## 类图
 ---
