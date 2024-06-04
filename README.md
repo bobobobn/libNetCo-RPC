@@ -2,7 +2,7 @@
 
 ## 介绍
 ---
-Linux 下 C++ 基于 `ucontext` 库实现轻量级对称协程，HOOK 了常用 SOCKET 的 API。
+Linux 下 C++ 基于 `ucontext` 库实现轻量级对称协程，HOOK 了常用 SOCKET 的 API，构建了日志系统。
 
 ## 特性
 ---
