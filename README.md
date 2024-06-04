@@ -6,7 +6,7 @@ Linux 下 C++ 基于 `ucontext` 库实现轻量级对称协程，HOOK 了常用 
 
 ## 特性
 ---
-* 构建了扩展能力强的日志系统，支持配置类似log4j的输出格式，继承LoggerAppender类实现log(LogLeven, shared_ptr<LogEvent>)方法即可实现新的输出器
+* 构建了扩展能力强的日志系统，支持配置类似log4j的输出格式，继承`netco::LoggerAppender`类实现`log(LogLeven, shared_ptr<LogEvent>)`方法即可实现新的输出器
 * 基于 `boost::ucontext` 函数集开发了协程对象
 * 实现了线程/协程调度器，自带负载均衡，同时支持用户指定 CPU 核心数和特定 CPU 核心来运行任务
 * 可根据实际需要动态配置协程栈大小，同时配置了内存池提升多协程的调度速度
