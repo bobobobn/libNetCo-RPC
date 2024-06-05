@@ -61,6 +61,6 @@ NETCO_LOG_FMT_XXLEVEL(mylog, "%s", "hello myargs"); //格式化输出XXLEVEL级�
 
 ## 压力测试
 ---
-tcpserver构建的ECHO服务器，QPS4万多
+CPU：4CORE@4GHZ MEM:8G3000MHZ tcpserver构建的ECHO服务器，QPS4万多
 ![image](https://github.com/bobobobn/libNetCo-RPC/assets/145976151/d975a3f0-f439-490a-b87f-0ed3171951d2)
 
