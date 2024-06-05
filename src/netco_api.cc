@@ -1,44 +1,40 @@
 #include "../include/netco_api.h"
-#include <iostream>
+#include "../include/log.h"
 
+void netco::co_go(std::function<void()>&& func, size_t stackSize, int tid)
+{
+	if (tid < 0)
+	{
+		// LOG_INFO("CREATE A CO");
+		netco::Scheduler::getScheduler()->createNewCo(std::move(func), stackSize);
+	}
+	else
+	{
+		tid %= netco::Scheduler::getScheduler()->getProCnt();
+		netco::Scheduler::getScheduler()->getProcessor(tid)->goNewCo(std::move(func), stackSize);
+	}
+}
 
 void netco::co_go(std::function<void()>& func, size_t stackSize, int tid)
 {
-    using namespace netco;
-    Scheduler* myScheduler = Scheduler::getScheduler(parameter::threadNum);
-    if(tid < 0)
-    {
-        myScheduler->createNewCo(func, stackSize);
-    }
-    else
-    {
-        myScheduler->createNewCo(func, stackSize, tid);
-    }
-}
-void netco::co_go(std::function<void()>&& func, size_t stackSize, int tid)
-{
-    using namespace netco;
-    Scheduler* myScheduler = Scheduler::getScheduler(parameter::threadNum);
-    if(tid < 0)
-    {
-        myScheduler->createNewCo(func, stackSize);
-    }
-    else
-    {
-        myScheduler->createNewCo(func, stackSize, tid);
-    }
+	if (tid < 0)
+	{
+		// LOG_INFO("CREATE A CO");
+		netco::Scheduler::getScheduler()->createNewCo(func, stackSize);
+	}
+	else
+	{
+		tid %= netco::Scheduler::getScheduler()->getProCnt();
+		netco::Scheduler::getScheduler()->getProcessor(tid)->goNewCo(func, stackSize);
+	}
 }
 
-void netco::co_sleep(int64_t ms)
+void netco::co_sleep(Time time)
 {
-    using namespace netco;
-    Scheduler* myScheduler = Scheduler::getScheduler(parameter::threadNum);
-    myScheduler->getProcessor(threadIdx)->sleep(ms);
+	netco::Scheduler::getScheduler()->getProcessor(threadIdx)->wait(time);
 }
 
 void netco::sche_join()
 {
-    using namespace netco;
-    Scheduler* myScheduler = Scheduler::getScheduler(parameter::threadNum);
-    myScheduler->join();
+	netco::Scheduler::getScheduler()->join();
 }

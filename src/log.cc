@@ -8,18 +8,18 @@ Logger::Logger(const std::string & name)
     : level_(LogLevel::DEBUG)
 {
     logName_ = name;
-    formatter_.reset(new LoggerFormatter("%d%T%t%T%N%T%F%T[%p]%T[%c]%T%f:%l%T%m%n"));    
+    formatter_.reset(new LoggerFormatter("%d%T[%p]%T[%c]%T%f:%l%T%m%n"));    
 }
 
 void Logger::setLevel(LogLevel::Level level)
 {
-    GuardLocker lock(locker_);
+    SpinlockGuard lock(locker_);
     level_ = level;
 }
 
 void Logger::setFormatter(LoggerFormatter::Ptr val) {
     {
-        GuardLocker lock(locker_);
+        SpinlockGuard lock(locker_);
         formatter_ = val;
     }
 }
@@ -34,13 +34,13 @@ void Logger::addAppender(LoggerAppender::Ptr appender){
     if(!appender->hasFormatter()){
         appender->setFormatter(formatter_);
     }
-    GuardLocker lock(locker_);
+    SpinlockGuard lock(locker_);
     appenders_.push_back(appender);
 }
 
 void Logger::delAppender(LoggerAppender::Ptr appender){
 
-    GuardLocker lock(locker_);
+    SpinlockGuard lock(locker_);
     for(auto it = appenders_.begin();
         it<appenders_.end();it++)
     {
@@ -54,7 +54,7 @@ void Logger::delAppender(LoggerAppender::Ptr appender){
 
 void Logger::log(LogLevel::Level level, LogEvent::Ptr event)
 {
-    GuardLocker lock(locker_);
+    SpinlockGuard lock(locker_);
     if(level >= level_){
         for(auto &i : appenders_){
             i->log(level, event);
@@ -159,9 +159,9 @@ void EventParse::LevelFormatItem(std::ostream& os, LogEvent::Ptr event){
     }
     os << levelStr;
 }
-// void EventParse::NameFormatItem(std::ostream& os, LogEvent::Ptr event){
-//     os << event->getFile();
-// }
+void EventParse::NameFormatItem(std::ostream& os, LogEvent::Ptr event){
+    os << event->getLogger()->getName();
+}
 void EventParse::FilenameFormatItem(std::ostream& os, LogEvent::Ptr event){
     os << event->getFile();
 }
@@ -397,14 +397,14 @@ LoggerManager* LoggerManager::getInstance()
 Logger::Ptr LoggerManager::getLogger(const std::string& name)
 {
     {
-        GuardLocker lock(loggerMapLocker);
+        SpinlockGuard lock(loggerMapLocker);
         if(loggerMap_.find(name) != loggerMap_.end()){
             return loggerMap_[name];
         }
     }
     Logger::Ptr newLogger = std::make_shared<Logger>(name);
     {
-        GuardLocker lock(loggerMapLocker);
+        SpinlockGuard lock(loggerMapLocker);
         loggerMap_.insert({name, newLogger});
     }
     return newLogger;

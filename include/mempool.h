@@ -1,95 +1,110 @@
 #pragma once
-#include <stddef.h>
-#include <cstdlib>
 #include "parameter.h"
+#include "utils.h"
+#include "log.h"
 
 namespace netco
 {
-    /* 内存块链表结点结构体 */
-    struct MemBlockNode{
-        union 
-        {
-            MemBlockNode* next;
-            char data;
-        };        
-    };
-    /* 内存池类, mallocListHead_存储了整块连续内存的首地址链表,freeListHead_链表存储了可用的objSize_大小的内存块的指针*/
-    template<size_t objsize>
-    class MemPool
-    {
-    public:
-        MemPool()
-        :freeListHead_(nullptr), mallocListHead_(nullptr), mallocTimes_(0)
-        {
-            if(objsize<sizeof(MemBlockNode))
-            {    
-                objSize_ = sizeof(MemBlockNode);
-            }
-            else
-            {    
-                objSize_ = objsize;
-            }
-        }        
-        ~MemPool()
-        {
-            while(mallocListHead_){
-                MemBlockNode* to_free = mallocListHead_;
-                mallocListHead_ = mallocListHead_->next;
-                free( static_cast<void*> (to_free) );
-            }
-        }
-        void* allocAMemBlock();
-        void freeAMemBlock(void* block);
+	/** 效仿STL二级空间配置器的实现*/
+	struct MemBlockNode
+	{
+		union
+		{
+			MemBlockNode* next;
+			char data;
+		};
+	};
 
-    private:
-        size_t objSize_;
-        size_t mallocTimes_;
-        MemBlockNode* freeListHead_;
-        MemBlockNode* mallocListHead_;
+	/**
+	 * 每次可以从内存池中获取objSize大小的内存块 
+	 * 该内存池块的大小是与对象大小强相关的
+	 */
+	template<size_t objSize>
+	class MemPool
+	{
+	public:
+		MemPool()
+			:_freeListHead(nullptr), _mallocListHead(nullptr), _mallocTimes(0)
+		{
+			if (objSize < sizeof(MemBlockNode))
+			{
+				objSize_ = sizeof(MemBlockNode);
+			}
+			else
+			{
+				objSize_ = objSize;
+			}
+		};
 
-    };
-}
+		~MemPool();
 
-namespace netco
-{
-    template <size_t objsize>
-    void* MemPool<objsize>::allocAMemBlock()
-    {
-        void* ret;
-        // 没有空闲的内存块了，分配新的内存块
-        if( nullptr == freeListHead_ )
-        {
-            int objCnt = parameter::memPoolMallocObjCnt + mallocTimes_;
-            void* newMemBlock = malloc( objCnt * objSize_ + sizeof(MemBlockNode));
-            // 连接新内存块和旧内存块链表,表头为mallocListHead_
-            MemBlockNode* newMallocHead = static_cast<MemBlockNode*> (newMemBlock);
-            newMallocHead->next = mallocListHead_;
-            mallocListHead_ = newMallocHead;
-            newMemBlock = static_cast<char*> (newMemBlock) + sizeof(MemBlockNode);        
+		DISALLOW_COPY_MOVE_AND_ASSIGN(MemPool);
 
-            // 将新内存块划分为多个对象大小的内存，并以链表存于freeListHead_
-            for(int i = 0; i < objCnt; i++)
-            {
-                MemBlockNode* newObjHead = static_cast<MemBlockNode*> (newMemBlock);
-                newObjHead->next = freeListHead_;
-                freeListHead_ = newObjHead;
-                newMemBlock = static_cast<char*> (newMemBlock) + objSize_;
-            }
-            ++mallocTimes_;
-        }
-        ret = &freeListHead_->data;
-        freeListHead_ = freeListHead_->next;
-        return ret;
-    }
-    template <size_t objsize>
-    void MemPool<objsize>::freeAMemBlock(void* block)
-    {
-        if( nullptr == block )
-        {
-            return;
-        }
-        MemBlockNode* freeMem = static_cast<MemBlockNode*> (block);
-        freeMem->next = freeListHead_;
-        freeListHead_ = freeMem;
-    }
+		void* AllocAMemBlock();
+		void FreeAMemBlock(void* block);
+
+	private:
+
+		MemBlockNode* _freeListHead;
+
+		MemBlockNode* _mallocListHead;
+
+		size_t _mallocTimes;
+
+		size_t objSize_;
+	};
+
+	template<size_t objSize>
+	MemPool<objSize>::~MemPool()
+	{
+		while (_mallocListHead)
+		{
+			MemBlockNode* mallocNode = _mallocListHead;
+			_mallocListHead = mallocNode->next;
+			free(static_cast<void*>(mallocNode));	
+		}
+	}
+
+	template<size_t objSize>
+	void* MemPool<objSize>::AllocAMemBlock()
+	{
+		void* ret;
+		if (nullptr == _freeListHead)
+		{
+			/** 首先会分配(40 + 分配次数) * 对象大小的内存空间*/
+			size_t mallocCnt = parameter::memPoolMallocObjCnt + _mallocTimes;
+			void* newMallocBlk = malloc(mallocCnt * objSize_ + sizeof(MemBlockNode));
+			/** 将该内存空间的首地址解释为一个MemBlockNode指针*/
+			MemBlockNode* mallocNode = static_cast<MemBlockNode*>(newMallocBlk);
+			/** mallocNode是一个头节点*/
+			mallocNode->next = _mallocListHead;
+
+			_mallocListHead = mallocNode;
+
+			newMallocBlk = static_cast<char*>(newMallocBlk) + sizeof(MemBlockNode);
+			for (size_t i = 0; i < mallocCnt; ++i)
+			{
+				MemBlockNode* newNode = static_cast<MemBlockNode*>(newMallocBlk);
+				newNode->next = _freeListHead;
+				_freeListHead = newNode;
+				newMallocBlk = static_cast<char*>(newMallocBlk) + objSize_;
+			}
+			++_mallocTimes;
+		}
+		ret = &(_freeListHead->data);
+		_freeListHead = _freeListHead->next;
+		return ret;
+	}
+
+	template<size_t objSize>
+	void MemPool<objSize>::FreeAMemBlock(void* block)
+	{
+		if (nullptr == block)
+		{
+			return;
+		}
+		MemBlockNode* newNode = static_cast<MemBlockNode*>(block);
+		newNode->next = _freeListHead;
+		_freeListHead = newNode;
+	}
 }

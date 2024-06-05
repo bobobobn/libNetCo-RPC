@@ -1,72 +1,88 @@
 #include "../include/timer.h"
+#include "../include/coroutine.h"
 #include "../include/epoller.h"
-#include <unistd.h>
-#include <sys/timerfd.h>
+
 #include <sys/epoll.h>
-#include <cstring>
+#include <sys/timerfd.h>
+#include <string.h>
+#include <unistd.h>
+
 using namespace netco;
 
 Timer::Timer()
-    :timeFd_(-1)
+	: timeFd_(-1)
 {}
 
-Timer::~Timer(){
-    if(isTimeFdUseful())
-        ::close(timeFd_);
+Timer::~Timer() 
+{
+	if (isTimeFdUseful())
+	{
+		::close(timeFd_);
+	}
 }
 
-bool Timer::init(Epoller* epoller)
+bool Timer::init(Epoller* pEpoller)
 {
-    timeFd_ = ::timerfd_create(CLOCK_MONOTONIC, TFD_NONBLOCK | TFD_CLOEXEC);
-    if(isTimeFdUseful()){
-        return epoller->addEv(nullptr, timeFd_, EPOLLIN | EPOLLPRI | EPOLLRDHUP);
-    }
-    return false;
+	timeFd_ = ::timerfd_create(CLOCK_MONOTONIC, TFD_NONBLOCK | TFD_CLOEXEC);
+	if (isTimeFdUseful())
+	{
+		// 监听timerfd
+		return pEpoller->addEv(nullptr, timeFd_, EPOLLIN | EPOLLPRI | EPOLLRDHUP);	
+	}
+	return false;
 }
 
 void Timer::getExpiredCoroutines(std::vector<Coroutine*>& expiredCoroutines)
 {
-    Time now = Time::now();
-    while( (!timerCoHeap_.empty()) && (timerCoHeap_.top().first < now) ){
-        Coroutine* expiredCoroutine = timerCoHeap_.top().second;
-        expiredCoroutines.push_back(expiredCoroutine);
-        timerCoHeap_.pop();
-    }
-    ssize_t cnt = TIMER_DUMMYBUF_SIZE;
-    while (cnt >= TIMER_DUMMYBUF_SIZE)
-    {
-        cnt = ::read(timeFd_, dummyBuf_, TIMER_DUMMYBUF_SIZE);
-    }
-    if( (!timerCoHeap_.empty()) ){
+	Time nowTime = Time::now();
+	while (!timerCoHeap_.empty() && timerCoHeap_.top().first <= nowTime)
+	{
+		expiredCoroutines.push_back(timerCoHeap_.top().second);
+		timerCoHeap_.pop();
+	}
+	if (!expiredCoroutines.empty())
+	{
+		ssize_t cnt = TIMER_DUMMYBUF_SIZE;
+		while (cnt >= TIMER_DUMMYBUF_SIZE)
+		{
+			cnt = ::read(timeFd_, dummyBuf_, TIMER_DUMMYBUF_SIZE);	
+		}
+	}
+	// 需要重新设置定时的时间，到期唤醒timerfd
+	if (!timerCoHeap_.empty())
+	{
 		Time time = timerCoHeap_.top().first;
 		resetTimeOfTimefd(time);
-    }
+	}
+}
+void Timer::runAt(Time time, Coroutine* pCo)
+{
+	timerCoHeap_.push(std::move(std::pair<Time, Coroutine*>(time, pCo)));
+	if (timerCoHeap_.top().first == time)
+	{
+		// 如果新加入的任务是最紧急的任务 就需要立即更改timerfd到期的时间
+		resetTimeOfTimefd(time);
+	}
 }
 
-bool Timer::resetTimeOfTimefd(Time time){
-    struct itimerspec newValue;
+bool Timer::resetTimeOfTimefd(Time time)
+{
+	struct itimerspec newValue;
+	struct itimerspec oldValue;
 	memset(&newValue, 0, sizeof newValue);
-    newValue.it_value = time.timeIntervalFromNow();
-    int ret = ::timerfd_settime(timeFd_, 0, &newValue, nullptr);
-    return ret<0 ? false : true;
+	memset(&oldValue, 0, sizeof oldValue);
+	newValue.it_value = time.timeIntervalFromNow();
+	int ret = ::timerfd_settime(timeFd_, 0, &newValue, &oldValue);
+	return ret < 0 ? false : true;
 }
 
-void Timer::runAt(Time time, Coroutine* co)
+void Timer::runAfter(Time time, Coroutine* pCo)
 {
-    timerCoHeap_.push({time, co});
-    if(timerCoHeap_.top().first == time)
-    {
-        resetTimeOfTimefd(time);
-    }
-}
-
-void Timer::runAfter(Time time, Coroutine* co)
-{
-    Time afterTime(Time::now().getTimeVal() + time.getTimeVal());
-    runAt(afterTime, co);
+	Time runTime(Time::now().getTimeVal() + time.getTimeVal());
+	runAt(runTime, pCo);
 }
 
 void Timer::wakeUp()
 {
-    resetTimeOfTimefd(Time::now());
+	resetTimeOfTimefd(Time::now());
 }

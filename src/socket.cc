@@ -1,140 +1,33 @@
 #include "../include/socket.h"
-#include "../include/parameter.h"
 #include "../include/scheduler.h"
-#include <fcntl.h>
-#include <arpa/inet.h>
-#include <cstring>
-#include <netinet/tcp.h>
+#include "../include/log.h"
+
 #include <netinet/in.h>
+#include <netinet/tcp.h>
+#include <arpa/inet.h>
+#include <stdio.h>  
+#include <fcntl.h>
+#include <string.h>
 #include <sys/epoll.h>
+
 using namespace netco;
 
-void Socket::setNonBlockSocket()
+/** RAII*/
+Socket::~Socket()
 {
-    int oldOpt = fcntl(sockFd_, F_GETFL, 0);
-    int ret = fcntl(sockFd_, F_SETFL, oldOpt | O_NONBLOCK);
-}
-
-void Socket::setBlockSocket()
-{
-    int oldOpt = fcntl(sockFd_, F_GETFL, 0);
-    int ret = fcntl(sockFd_, F_SETFL, oldOpt & ~O_NONBLOCK);
-}
-
-SocketPtr Socket::accept_raw()
-{
-    int connfd = -1;
-    struct sockaddr_in client_addr;
-    socklen_t addr_len = sizeof(sockaddr_in);
-    connfd = ::accept(sockFd_, (sockaddr*) &client_addr, &addr_len);
-    if(connfd<0)
-        return std::make_shared<Socket>(connfd);
-    
-    int port = ntohs(client_addr.sin_port);          
-	struct in_addr in = client_addr.sin_addr;
-	char ip[INET_ADDRSTRLEN];   
-	inet_ntop(AF_INET, &in, ip, sizeof(ip));
-    return std::make_shared<Socket>(connfd, std::string(ip), port);
-}
-
-SocketPtr Socket::accept()
-{
-    SocketPtr connSock = accept_raw();
-    if(connSock->isUseful())
-        return connSock;
-	netco::Scheduler::getScheduler(0)->getProcessor(threadIdx)->waitEvent(sockFd_, EPOLLIN | EPOLLPRI | EPOLLRDHUP | EPOLLHUP);
-	auto con(accept_raw());
-	if(con->isUseful()){
-		return con;
+	--(*_pRef);
+	if (!(*_pRef) && isUseful())
+	{
+		::close(_sockfd);
+		delete _pRef;
 	}
-	return accept();   
-    
 }
-
-int Socket::bind(int port)
-{
-    port_ = port;
-	struct sockaddr_in serv;
-	memset(&serv, 0, sizeof(struct sockaddr_in));
-	serv.sin_family = AF_INET;
-	serv.sin_port = htons(port);
-	serv.sin_addr.s_addr = htonl(INADDR_ANY);
-	int ret = ::bind(sockFd_, (struct sockaddr*) & serv, sizeof(serv));
-	return ret;
-}
-
-int Socket::bind(const char* ip,int port)
-{
-    port_ = port;
-	struct sockaddr_in serv;
-	memset(&serv, 0, sizeof(struct sockaddr_in));
-	serv.sin_family = AF_INET;
-	serv.sin_port = htons(port);
-	if(ip == nullptr)
-    {
-        serv.sin_addr.s_addr = htonl(INADDR_ANY);   
-    }
-    else
-    {
-        serv.sin_addr.s_addr = inet_addr(ip);
-    }
-	int ret = ::bind(sockFd_, (struct sockaddr*) & serv, sizeof(serv));
-	return ret;
-}
-
-int Socket::listen()
-{
-	int ret = ::listen(sockFd_, parameter::backLog);
-	return ret;
-}
-
-ssize_t Socket::read(void* buf, size_t count)
-{
-	auto ret = ::read(sockFd_, buf, count);
-	if (ret >= 0){
-		return ret;
-	}
-	if(ret == -1 && errno == EINTR){
-		return read(buf, count);
-	}
-	netco::Scheduler::getScheduler(0)->getProcessor(threadIdx)->waitEvent(sockFd_, EPOLLIN | EPOLLPRI | EPOLLRDHUP | EPOLLHUP);
-	return ::read(sockFd_, buf, count);
-}
-
-void Socket::connect(const char* ip, int port){
-	struct sockaddr_in addr = {0};
-	addr.sin_family= AF_INET;
-	addr.sin_port = htons(port);
-	inet_pton(AF_INET, ip, &addr.sin_addr);
-	ip_ = std::string(ip);
-	port_ = port;
-	auto ret = ::connect(sockFd_, (struct sockaddr*)&addr, sizeof(sockaddr_in));
-	if(ret == 0){
-		return;
-	}
-	if(ret == -1 && errno == EINTR){
-		return connect(ip, port);
-	}
-	netco::Scheduler::getScheduler(0)->getProcessor(threadIdx)->waitEvent(sockFd_, EPOLLOUT);
-	return connect(ip, port);
-}
-
-ssize_t Socket::send(const void* buf, size_t count)
-{
-	size_t sendIdx = ::send(sockFd_, buf, count, MSG_NOSIGNAL);
-	if (sendIdx >= count){
-		return count;
-	}
-	netco::Scheduler::getScheduler(0)->getProcessor(threadIdx)->waitEvent(sockFd_, EPOLLOUT);
-	return send((char *)buf + sendIdx, count - sendIdx);
-}
-
 
 bool Socket::getSocketOpt(struct tcp_info* tcpi) const
 {
 	socklen_t len = sizeof(*tcpi);
 	memset(tcpi, 0, sizeof(*tcpi));
-	return ::getsockopt(sockFd_, SOL_TCP, TCP_INFO, tcpi, &len) == 0;
+	return ::getsockopt(_sockfd, SOL_TCP, TCP_INFO, tcpi, &len) == 0;
 }
 
 bool Socket::getSocketOptString(char* buf, int len) const
@@ -172,16 +65,136 @@ std::string Socket::getSocketOptString() const
 }
 
 
+int Socket::bind(const char* ip,int port)
+{
+	_port = port;
+	struct sockaddr_in serv;
+	memset(&serv, 0, sizeof(struct sockaddr_in));
+	serv.sin_family = AF_INET;
+	serv.sin_port = htons(port);
+    if(ip == nullptr)
+    {
+        serv.sin_addr.s_addr = htonl(INADDR_ANY);   
+    }
+    else
+    {
+        serv.sin_addr.s_addr = inet_addr(ip);
+    }
+	int ret = ::bind(_sockfd, (struct sockaddr*) & serv, sizeof(serv));
+	return ret;
+}
+
+int Socket::listen()
+{
+	int ret = ::listen(_sockfd, parameter::backLog);
+	return ret;
+}
+
+Socket Socket::accept_raw()
+{
+	int connfd = -1;
+	struct sockaddr_in client;
+	socklen_t len = sizeof(client);
+	connfd = ::accept(_sockfd, (struct sockaddr*) & client, &len);
+	if (connfd < 0)
+	{
+		return Socket(connfd);
+	}
+
+	struct sockaddr_in* sock = (struct sockaddr_in*) & client;
+	int port = ntohs(sock->sin_port);          
+	struct in_addr in = sock->sin_addr;
+	char ip[INET_ADDRSTRLEN];   
+	inet_ntop(AF_INET, &in, ip, sizeof(ip));
+
+	return Socket(connfd, std::string(ip), port);
+}
+
+Socket Socket::accept()
+{
+	auto ret(accept_raw());
+	if(ret.isUseful())
+	{
+		return ret;
+	}
+	// 将该socket加入epoll监听池并切出所属的协程
+	netco::Scheduler::getScheduler()->getProcessor(threadIdx)->waitEvent(_sockfd, EPOLLIN | EPOLLPRI | EPOLLRDHUP | EPOLLHUP);
+	// 执行到此说明当前协程恢复运行 也就是加入epoll的fd存在激活的事件 那么就再连接一次
+	auto con(accept_raw());
+	if(con.isUseful())
+	{
+		return con;
+	}
+	// 加入： 失败的话 尝试重连
+	return accept();
+}
+
+ssize_t Socket::read(void* buf, size_t count)
+{
+	// 调用系统接口读入数据到buf中
+	auto ret = ::read(_sockfd, buf, count);
+	//NETCO_LOG()<<("the read bytes len is %d",ret);
+
+	if (ret >= 0)
+	{
+		// 一次读完 直接返回
+		return ret;
+	}
+	/** 接收缓存区没有数据，则会返回-1*/
+	if(ret == -1 && errno == EINTR)
+	{
+		// 出错 重读
+		NETCO_LOG()<<("read has error");
+		return read(buf, count);
+	}
+	// 还没有数据可读 将socket加入epoll监听池并切出所属的协程，等有数据两再回来读
+	//NETCO_LOG()<<("the coroutine yield");
+	netco::Scheduler::getScheduler()->getProcessor(threadIdx)->waitEvent(_sockfd, EPOLLIN | EPOLLPRI | EPOLLRDHUP | EPOLLHUP);
+	//NETCO_LOG()<<("the coroutine wake");
+	// Modify: 当前协程恢复运行 那么就继续读
+	//return ::read(_sockfd, buf, count);
+	return read(buf,count);
+}
+
+void Socket::connect(const char* ip, int port)
+{
+	struct sockaddr_in addr = {0};
+	addr.sin_family= AF_INET;
+	addr.sin_port = htons(port);
+	inet_pton(AF_INET, ip, &addr.sin_addr);
+	_ip = std::string(ip);
+	_port = port;
+	auto ret = ::connect(_sockfd, (struct sockaddr*)&addr, sizeof(sockaddr_in));
+	if(ret == 0){
+		return;
+	}
+	if(ret == -1 && errno == EINTR){
+		return connect(ip, port);
+	}
+	netco::Scheduler::getScheduler()->getProcessor(threadIdx)->waitEvent(_sockfd, EPOLLOUT);
+	return connect(ip, port);
+}
+
+ssize_t Socket::send(const void* buf, size_t count)
+{
+	size_t sendIdx = ::send(_sockfd, buf, count, MSG_NOSIGNAL);
+	if (sendIdx >= count){
+		return count;
+	}
+	netco::Scheduler::getScheduler()->getProcessor(threadIdx)->waitEvent(_sockfd, EPOLLOUT);
+	return send((char *)buf + sendIdx, count - sendIdx);
+}
+
 int Socket::shutdownWrite()
 {
-	int ret = ::shutdown(sockFd_, SHUT_WR);
+	int ret = ::shutdown(_sockfd, SHUT_WR);
 	return ret;
 }
 
 int Socket::setTcpNoDelay(bool on)
 {
 	int optval = on ? 1 : 0;
-	int ret = ::setsockopt(sockFd_, IPPROTO_TCP, TCP_NODELAY,
+	int ret = ::setsockopt(_sockfd, IPPROTO_TCP, TCP_NODELAY,
 		&optval, static_cast<socklen_t>(sizeof optval));
 	return ret;
 }
@@ -189,7 +202,7 @@ int Socket::setTcpNoDelay(bool on)
 int Socket::setReuseAddr(bool on)
 {
 	int optval = on ? 1 : 0;
-	int ret = ::setsockopt(sockFd_, SOL_SOCKET, SO_REUSEADDR,
+	int ret = ::setsockopt(_sockfd, SOL_SOCKET, SO_REUSEADDR,
 		&optval, static_cast<socklen_t>(sizeof optval));
 	return ret;
 }
@@ -199,7 +212,7 @@ int Socket::setReusePort(bool on)
 	int ret = -1;
 #ifdef SO_REUSEPORT
 	int optval = on ? 1 : 0;
-	ret = ::setsockopt(sockFd_, SOL_SOCKET, SO_REUSEPORT,
+	ret = ::setsockopt(_sockfd, SOL_SOCKET, SO_REUSEPORT,
 		&optval, static_cast<socklen_t>(sizeof optval));
 #endif
 	return ret;
@@ -208,8 +221,70 @@ int Socket::setReusePort(bool on)
 int Socket::setKeepAlive(bool on)
 {
 	int optval = on ? 1 : 0;
-	int ret = ::setsockopt(sockFd_, SOL_SOCKET, SO_KEEPALIVE,
+	int ret = ::setsockopt(_sockfd, SOL_SOCKET, SO_KEEPALIVE,
 		&optval, static_cast<socklen_t>(sizeof optval));
 	return ret;
 }
 
+int Socket::setNonBolckSocket()
+{
+	auto flags = fcntl(_sockfd, F_GETFL, 0);
+	int ret = fcntl(_sockfd, F_SETFL, flags | O_NONBLOCK);  
+	return ret;
+}
+
+
+int Socket::setBlockSocket()
+{
+	auto flags = fcntl(_sockfd, F_GETFL, 0);
+	int ret = fcntl(_sockfd, F_SETFL, flags & ~O_NONBLOCK);   
+	return ret;
+}
+
+ssize_t Socket::recvfrom(int sockfd, void* buf, int len, unsigned int flags,
+						sockaddr* from, socklen_t* fromlen)
+{
+	if(sockfd != _sockfd)
+	{
+		NETCO_LOG()<<("ERROR: the sockfd is not same as current Socket");
+		return -1;
+	}
+	// 调用系统接口读入数据到buf中
+	auto ret = ::recvfrom(sockfd, buf, len, flags, from, fromlen);
+	//NETCO_LOG()<<("the read bytes len is %d",ret);
+
+	if (ret >= 0)
+	{
+		// 一次读完 直接返回
+		return ret;
+	}
+	/** 接收缓存区没有数据，则会返回-1*/
+	if(ret == -1 && errno == EINTR)
+	{
+		// 出错 重读
+		NETCO_LOG()<<("recvfrom has error");
+		return recvfrom(sockfd, buf, len, flags, from, fromlen);
+	}
+	// 还没有数据可读 将socket加入epoll监听池并切出所属的协程，等有数据两再回来读
+
+	netco::Scheduler::getScheduler()->getProcessor(threadIdx)->waitEvent(sockfd, EPOLLIN | EPOLLPRI | EPOLLRDHUP | EPOLLHUP);
+
+	// Modify: 当前协程恢复运行 那么就继续读
+	return recvfrom(sockfd, buf, len, flags, from, fromlen);
+}
+
+ssize_t Socket::sendto(int sockfd, const void* buf, int len, unsigned int flags,
+						const struct sockaddr* to, int tolen)
+{
+	if(sockfd != _sockfd)
+	{
+		NETCO_LOG()<<("ERROR: the sockfd is not same as current Socket");
+		return -1;
+	}
+	size_t sendIdx = ::sendto(sockfd, buf, len, flags, to, tolen);
+	if (sendIdx >= len){
+		return len;
+	}
+	netco::Scheduler::getScheduler()->getProcessor(threadIdx)->waitEvent(sockfd, EPOLLOUT);
+	return sendto(sockfd, (char*)buf + sendIdx, len - sendIdx, flags, to, tolen);
+}

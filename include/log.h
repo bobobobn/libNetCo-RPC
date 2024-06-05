@@ -1,7 +1,7 @@
 #pragma once
-#include "mutex.h"
-#include "processor.h"
-#include "scheduler.h"
+#include "spinlock_guard.h"
+// #include "processor.h"
+// #include "scheduler.h"
 #include <vector>
 #include <memory>
 #include <string>
@@ -10,6 +10,7 @@
 #include <fstream>
 #include <iostream>
 #include <cstring>
+#include <map>
 
 /**
  * @brief 使用流式方式将日志级别level的日志写入到logger
@@ -17,8 +18,8 @@
 #define NETCO_LOG_LEVEL(logger, level) \
     if(logger->getLevel() <= level) \
         netco::EventWraper(netco::LogEvent::Ptr(new netco::LogEvent(logger, level, \
-                        __FILE__, __LINE__, 0, threadIdx,\
-                netco::getThisCoId(), time(0)))).getSS()
+                        __FILE__, __LINE__, 0, -1,\
+                -1, time(0)))).getSS()
 
 /**
  * @brief 使用流式方式将日志级别debug的日志写入到logger
@@ -51,8 +52,8 @@
 #define NETCO_LOG_FMT_LEVEL(logger, level, fmt, ...) \
     if(logger->getLevel() <= level) \
         netco::EventWraper(netco::LogEvent::Ptr(new netco::LogEvent(logger, level, \
-                        __FILE__, __LINE__, 0, threadIdx,\
-                netco::getThisCoId(), time(0)))).getEvent()->format(fmt, __VA_ARGS__)
+                        __FILE__, __LINE__, 0, -1,\
+                -1, time(0)))).getEvent()->format(fmt, __VA_ARGS__)
 
 /**
  * @brief 使用格式化方式将日志级别debug的日志写入到logger
@@ -189,7 +190,7 @@ namespace netco
     {
     public:
         using Ptr = std::shared_ptr<LoggerFormatter>;
-        LoggerFormatter(const std::string& format = "%d%T%t%T%N%T%F%T[%p]%T[%c]%T%f:%l%T%m%n");            
+        LoggerFormatter(const std::string& format = "%d%T[%p]%T[%c]%T%f:%l%T%m%n");            
         std::string format(LogEvent::Ptr);
         void format(std::ostream&, LogEvent::Ptr);
         void init();
@@ -257,7 +258,7 @@ namespace netco
         std::vector<LoggerAppender::Ptr> appenders_;
         std::string logName_;
         LoggerFormatter::Ptr formatter_;
-        netco::MutexLock locker_;
+        netco::Spinlock locker_;
         LogLevel::Level level_;
 
 
@@ -307,7 +308,7 @@ namespace netco
         LoggerManager();
     private:
         /// Mutex
-        netco::MutexLock loggerMapLocker;
+        netco::Spinlock loggerMapLocker;
         /// 日志器容器
         std::map<std::string, Logger::Ptr> loggerMap_;
         /// 主日志器

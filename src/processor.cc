@@ -1,208 +1,226 @@
 #include "../include/processor.h"
-#include "../include/objpool.h"
-#include <iostream>
-#include <cassert>
-#include <memory>
+#include "../include/parameter.h"
+#include "../include/spinlock_guard.h"
+
+#include <sys/epoll.h>
+#include <unistd.h>
+
 using namespace netco;
 
 __thread int threadIdx = -1;
 
-static void* threadLoop(void* processor)
-{
-    Processor* pro = (Processor*) processor;
-    pro->eventLoop();
-}
-
-
-
 Processor::Processor(int tid)
-    : tid_(tid), curCo_(nullptr), thread_(nullptr), runningQueue_(0), mainCtx_(0), pStatus_(PRO_STOPPING)
-{    
-    mainCtx_.makeCurContext();
+	: tid_(tid), status_(PRO_STOPPED), pLoop_(nullptr), runningNewQue_(0), pCurCoroutine_(nullptr), mainCtx_(0)
+{
+	// 初始化处理器主程序上下文
+	mainCtx_.makeCurContext();         
 }
 
 Processor::~Processor()
 {
-    if( PRO_RUNNING == pStatus_ )
-    {
-        stop();
-    }
-    if( PRO_STOPPED == pStatus_ )
-    {
-        join();
-    }
-    {    
-        GuardLocker lock(coSetLocker);
-        for( Coroutine* co : coSet_)
-        {
-            GuardLocker lock(objPoolLocker_);
-            objPool_.delete_obj(co);
-        }
-    }
-
+	if (PRO_RUNNING == status_)
+	{
+		stop();
+	}
+	if (PRO_STOPPING == status_)
+	{
+		join();
+	}
+	if (nullptr != pLoop_)
+	{
+		delete pLoop_;
+	}
+	for (auto co : coSet_)
+	{
+		delete co;
+	}
 }
 
-void Processor::eventLoop()
+void Processor::resume(Coroutine* pCo)
 {
-    threadIdx = tid_;
-    while( PRO_RUNNING == pStatus_ )
-    {
-        if(actCoroutines_.size())
-            actCoroutines_.clear();
-        if(timerExpiredCo_.size())
-            timerExpiredCo_.clear();
-        epoller_.getActEvServ(-1 /*parameter::epollTimeOutMs*/, actCoroutines_);
-        timer_.getExpiredCoroutines(timerExpiredCo_);
-
-        // 恢复超时协程
-        for(Coroutine* expiredCo:timerExpiredCo_){
-            int alive_flag = 0;
-            {
-                GuardLocker lock(coSetLocker);
-                if(coSet_.find(expiredCo) != coSet_.end()){
-                    alive_flag = 1;
-                }
-            }
-            if(alive_flag)
-            {
-                resume(expiredCo);
-            }
-        }
-        // 启动新加入的协程
-        while(!newCoroutines_[runningQueue_].empty())
-        {
-            Coroutine* co;
-            co = newCoroutines_[runningQueue_].front();
-            newCoroutines_[runningQueue_].pop_front();
-            {
-                GuardLocker lock(coSetLocker);
-                coSet_.insert(co);
-            }
-            #ifdef DEBUGING
-                printf("coID:%d starting\n", co->id_);
-            #endif
-            resume(co);
-            
-        }
-        {
-            GuardLocker lock(queueLocker_);
-            runningQueue_ = !runningQueue_;
-        }
-
-        // 恢复事件协程
-        for(Coroutine* activeCo:actCoroutines_){
-            resume(activeCo);
-        }
-
-        // 删除退出的协程，归还内存块
-        for(Coroutine* deadCo:removedCo_){
-            {
-                GuardLocker lock(coSetLocker);
-                coSet_.erase(deadCo);
-            }
-            {
-                GuardLocker lock(objPoolLocker_);
-                objPool_.delete_obj(deadCo);
-            }
-        }
-        removedCo_.clear();
-    }
-    pStatus_ = PRO_STOPPED;
-    
+	if (nullptr == pCo)
+	{
+		return;
+	}
+	if (coSet_.find(pCo) == coSet_.end())
+	{
+		return;
+	}
+	pCurCoroutine_ = pCo;
+	pCo->resume();
 }
 
-void Processor::loop()
-{
-    if(!epoller_.init())
-        return;
-    if(!timer_.init(&epoller_))
-        return;
-    pStatus_ = PRO_RUNNING;
-    thread_ = std::make_unique<pthread_t>();
-    int ret = pthread_create(&*thread_, nullptr, threadLoop, this);
-    assert(ret==0);
-    
-}
-
-void Processor::killCurCo()
-{
-	removedCo_.push_back(curCo_);
-}
-
-void Processor::resume(Coroutine* co)
-{
-    if(nullptr == co)
-        return;
-    curCo_ = co;
-    co->resume();
-}
 
 void Processor::yield()
 {
-    #ifdef DEBUGING
-        printf("coID:%d yield\n", curCo_->id_);
-    #endif
-    curCo_->yield();
-    mainCtx_.swapToMe(curCo_->getCtx());
+	pCurCoroutine_->yield();                       
+	mainCtx_.swapToMe(pCurCoroutine_->getCtx());
 }
 
-void Processor::sleep(int64_t ms)
+void Processor::wait(Time time)
 {
-    timer_.runAfter(Time(ms), curCo_);
-    yield();
+	pCurCoroutine_->yield();		
+	timer_.runAfter(time,pCurCoroutine_);		
+	mainCtx_.swapToMe(pCurCoroutine_->getCtx());	
 }
 
-void Processor::waitEvent(int fd, int event)
+void Processor::goCo(Coroutine* pCo)
 {
-    epoller_.addEv(curCo_, fd, event);
-    yield();
-    epoller_.removeEv(curCo_, fd, event);
+	{
+		SpinlockGuard lock(newQueLock_);	
+		newCoroutines_[!runningNewQue_].push(pCo);	
+	}
+	// 每加入一个新协程就唤醒处理器，从而立即执行该协程搭载的任务
+	wakeUpEpoller();
 }
 
-void Processor::goNewCo(std::function<void()>&& coFuncb, size_t stackSize)
+void Processor::goCoBatch(std::vector<Coroutine*>& cos)
 {
-    Coroutine* newCo = nullptr;
-    {
-        GuardLocker lock(objPoolLocker_);
-        newCo = objPool_.new_obj(this, stackSize, coFuncb);
-    }
-    {
-        GuardLocker lock(queueLocker_);
-        newCoroutines_[runningQueue_].push_back(newCo);
-    }
-    timer_.wakeUp();
+	{
+		SpinlockGuard lock(newQueLock_);
+		for(auto pCo : cos)
+		{
+			newCoroutines_[!runningNewQue_].push(pCo);
+		}
+	}
+	wakeUpEpoller();
 }
 
-void Processor::goNewCo(std::function<void()>& coFuncb, size_t stackSize)
+
+bool Processor::loop()
 {
-    Coroutine* newCo = nullptr;
-    {
-        GuardLocker lock(objPoolLocker_);
-        newCo = objPool_.new_obj(this, stackSize, coFuncb);
-    }
-    {    
-        GuardLocker lock(queueLocker_);
-        newCoroutines_[runningQueue_].push_back(newCo);
-    }
-    timer_.wakeUp();
+	if (!epoller_.init())
+	{
+		return false;
+	}
+
+	if (!timer_.init(&epoller_))
+	{
+		return false;
+	}
+
+	pLoop_ = new std::thread
+	(
+		[this]
+		{
+			threadIdx = tid_;               
+			status_ = PRO_RUNNING;           
+			while (PRO_RUNNING == status_)
+			{
+				if (actCoroutines_.size())
+				{
+					actCoroutines_.clear();  
+				}
+				if (timerExpiredCo_.size())
+				{
+					timerExpiredCo_.clear();
+				}
+				
+				// 获取活跃的事件，这里是loop中唯一会被阻塞的地方(epoll_wait)
+				epoller_.getActEvServ(parameter::epollTimeOutMs, actCoroutines_);
+
+				// 首先处理定时任务协程
+				timer_.getExpiredCoroutines(timerExpiredCo_);
+				size_t timerCoCnt = timerExpiredCo_.size();
+				for (size_t i = 0; i < timerCoCnt; ++i)
+				{
+					resume(timerExpiredCo_[i]);           
+				}
+
+				Coroutine* pNewCo = nullptr;
+				int runningQue = runningNewQue_;                    
+				
+				// 其次执行新加入的协程
+				while (!newCoroutines_[runningQue].empty())    	   
+				{
+					{
+						pNewCo = newCoroutines_[runningQue].front();
+						newCoroutines_[runningQue].pop();
+						coSet_.insert(pNewCo);
+					}
+					resume(pNewCo);                            
+				}
+
+				{
+					// 上锁并转换任务队列
+					SpinlockGuard lock(newQueLock_);
+					runningNewQue_ = !runningQue;              
+				}
+
+				// 然后执行被epoll唤醒的协程
+				size_t actCoCnt = actCoroutines_.size();
+				for (size_t i = 0; i < actCoCnt; ++i)
+				{
+					resume(actCoroutines_[i]);
+				}
+
+				// 最后销毁已经执行完毕的协程
+				for (auto deadCo : removedCo_)
+				{
+					coSet_.erase(deadCo);
+					//delete deadCo;
+					{
+						SpinlockGuard lock(coPoolLock_);   
+						coPool_.delete_obj(deadCo);
+					}
+				}
+				removedCo_.clear();
+				
+			}
+			// 如果跳出循环 状态变更为处理器暂停
+			status_ = PRO_STOPPED;
+		}
+    );
+    return true;
+}
+
+
+void Processor::waitEvent(int fd, int ev)
+{
+	epoller_.addEv(pCurCoroutine_, fd, ev);
+	yield();
+	epoller_.removeEv(pCurCoroutine_, fd, ev);
 }
 
 void Processor::stop()
 {
-    pStatus_ = PRO_STOPPING;
-    timer_.wakeUp();
+	status_ = PRO_STOPPING;
 }
 
 void Processor::join()
 {
-    pthread_join(*thread_, nullptr);
+	pLoop_->join();
 }
 
-size_t Processor::getCoCnt()
+void Processor::wakeUpEpoller()
 {
-    {
-        GuardLocker lock(coSetLocker);
-        return coSet_.size();
-    }
+	timer_.wakeUp();
+}
 
+void Processor::goNewCo(std::function<void()>&& coFunc, size_t stackSize)
+{
+	Coroutine* pCo = nullptr;
+
+	{
+		SpinlockGuard lock(coPoolLock_);				
+		pCo = coPool_.new_obj(this, stackSize, std::move(coFunc));	 
+	}
+	goCo(pCo);
+}
+
+void Processor::goNewCo(std::function<void()>& coFunc, size_t stackSize)
+{
+	//Coroutine* pCo = new Coroutine(this, stackSize, coFunc);
+	Coroutine* pCo = nullptr;
+
+	{
+		SpinlockGuard lock(coPoolLock_);
+		pCo = coPool_.new_obj(this, stackSize, coFunc);
+	}
+	goCo(pCo);
+}
+
+void Processor::killCurCo()
+{
+	removedCo_.push_back(pCurCoroutine_);
 }

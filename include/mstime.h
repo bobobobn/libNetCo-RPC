@@ -1,50 +1,68 @@
 #pragma once
-#include <sys/time.h>
 #include <stdint.h>
+#include <time.h>
+
+struct timespec;
 
 namespace netco
-{   
-    /*时间类，定义了以毫秒为单位的时间戳*/
-    class Time{
-    public:
-        Time(int64_t msSinceEpoch) : timeVal_(msSinceEpoch) {}
-        Time(const Time& time) : timeVal_(time.timeVal_) {}
-        Time(const Time&& time) : timeVal_(time.timeVal_) {}
-        Time& operator=(const Time& time)
+{
+
+	const char days[12] = { 31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31 };
+
+	class Time
+	{
+	public:
+		Time(int64_t msSinceEpoch) : _timeVal(msSinceEpoch) {}
+
+		Time(const Time& time) { _timeVal = time._timeVal; }
+
+		Time(const Time&& time) { _timeVal = time._timeVal; }
+
+		Time& operator=(const Time& time)
 		{
-			timeVal_ = time.timeVal_;
+			_timeVal = time._timeVal;
 			return *this;
 		}
-        ~Time() {}
-        static Time now();
-        int64_t getTimeVal() { return timeVal_; }
-        struct timespec timeIntervalFromNow();
-    private:
-        int64_t timeVal_;
 
-    };
-    inline bool operator < (Time lhs, Time rhs)
-    {
-        return lhs.getTimeVal() < rhs.getTimeVal();
-    }
+		~Time() {}
 
-    inline bool operator <= (Time lhs, Time rhs)
-    {
-        return lhs.getTimeVal() <= rhs.getTimeVal();
-    }
+		static Time now();
 
-    inline bool operator > (Time lhs, Time rhs)
-    {
-        return lhs.getTimeVal() > rhs.getTimeVal();
-    }
+		static time_t nowSec();
 
-    inline bool operator >= (Time lhs, Time rhs)
-    {
-        return lhs.getTimeVal() >= rhs.getTimeVal();
-    }
+		static void toLocalTime(time_t second, long timezone, struct tm* tm_time);
 
-    inline bool operator == (Time lhs, Time rhs)
-    {
-        return lhs.getTimeVal() == rhs.getTimeVal();
-    }
+		struct timespec timeIntervalFromNow();
+
+		int64_t getTimeVal() { return _timeVal; }
+
+	private:
+		int64_t _timeVal;
+	};
+
+	inline bool operator < (Time lhs, Time rhs)
+	{
+		return lhs.getTimeVal() < rhs.getTimeVal();
+	}
+
+	inline bool operator <= (Time lhs, Time rhs)
+	{
+		return lhs.getTimeVal() <= rhs.getTimeVal();
+	}
+
+	inline bool operator > (Time lhs, Time rhs)
+	{
+		return lhs.getTimeVal() > rhs.getTimeVal();
+	}
+
+	inline bool operator >= (Time lhs, Time rhs)
+	{
+		return lhs.getTimeVal() >= rhs.getTimeVal();
+	}
+
+	inline bool operator == (Time lhs, Time rhs)
+	{
+		return lhs.getTimeVal() == rhs.getTimeVal();
+	}
+
 }
