@@ -58,3 +58,9 @@ NETCO_LOG_FMT_XXLEVEL(mylog, "%s", "hello myargs"); //格式化输出XXLEVEL级�
 ![log drawio](https://github.com/bobobobn/libNetCo/assets/145976151/6cda3728-0b86-438c-a443-b8eaac114f2a)
 ### netco协程库
 ![netco drawio](https://github.com/bobobobn/libNetCo/assets/145976151/c3603d48-9697-4596-aec0-cada6e540b3d)
+
+## 压力测试
+---
+tcpserver构建的ECHO服务器，QPS4万多
+![image](https://github.com/bobobobn/libNetCo-RPC/assets/145976151/d975a3f0-f439-490a-b87f-0ed3171951d2)
+
