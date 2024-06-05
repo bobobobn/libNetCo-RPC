@@ -11,7 +11,8 @@ Linux 下 C++ 基于 `ucontext` 库实现轻量级对称协程，HOOK 了常用 
 * 实现了线程/协程调度器，自带负载均衡，同时支持用户指定 CPU 核心数和特定 CPU 核心来运行任务
 * 可根据实际需要动态配置协程栈大小，同时配置了内存池提升多协程的调度速度
 * 将复杂的异步处理流程隐藏在框架底层，通过类似 Golang 接口的 `netco::co_go()` 完成协程接口封装，上层用户可以使用业务同步开发的方式获得异步的高性能，避免了异步回调和回调分离引发的代码支离破碎
-* HOOK 了 SOCKET 类，用户可以使用同步开发的方式调用非阻塞的 `Socket::send`, `Socket::read`, `Socket::accept`, `Socket::connect` 方法，同时实现了非阻塞的协程 TCP 服务器
+* HOOK 了 SOCKET 类，用户可以使用同步开发的方式调用非阻塞的 `Socket::send`, `Socket::read`, `Socket::accept`, `Socket::connect` 方法
+* 上层提供支持TCP连接和json协议约定的RPC服务
 
 ## 使用
 ---
