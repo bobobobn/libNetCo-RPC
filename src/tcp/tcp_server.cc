@@ -32,6 +32,7 @@ TcpServer::conn_callback default_connection(
             //{
             //    break;
             //}
+            break;
             NETCO_LOG()<<("--------finish one read-write process loop------------");
         }
     }
@@ -52,7 +53,7 @@ void TcpServer::start(const char* ip,int port)
     _listen_fd = new netco::Socket();
     if(_listen_fd->isUseful())
     {
-        NETCO_LOG()<<("the server listen fd %d is useful",_listen_fd);
+        NETCO_LOG_FMT("the server listen fd %d is useful",_listen_fd);
         _listen_fd->setTcpNoDelay(true);
         _listen_fd->setReuseAddr(true);
         _listen_fd->setReusePort(true);
@@ -72,8 +73,8 @@ void TcpServer::start(const char* ip,int port)
             server_ip = "any address";
         }
         server_port = port;
-        NETCO_LOG()<<("server ip is %s",server_ip);
-        NETCO_LOG()<<("server port is %d",server_port);
+        NETCO_LOG_FMT("server ip is %s",server_ip);
+        NETCO_LOG_FMT("server port is %d",server_port);
     }
     /** 开始运行server loop*/
     auto loop = std::bind(&TcpServer::server_loop,this);
@@ -133,7 +134,7 @@ void TcpServer::server_loop()
         /** conn即可以用来进行fd通信*/
         NETCO_LOG()<<("block in server_loop,has no new client accept");
         netco::Socket* conn = new netco::Socket(_listen_fd->accept());
-        NETCO_LOG()<<("unblock,the server add a new tcpclient connection,the connect fd is %d",conn->fd());
+        NETCO_LOG_FMT("unblock,the server add a new tcpclient connection,the connect fd is %d",conn->fd());
         conn->setTcpNoDelay(true);
         /** 
          *运行绑定的用户工作函数

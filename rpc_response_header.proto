@@ -1,0 +1,14 @@
+syntax = "proto3";
+
+enum ErrorCode {
+    SUCCESS = 0;
+    UNKNOWN_ERROR = 1;
+    INVALID_REQUEST = 2;
+    AUTH_FAILED = 3;
+    PERMISSION_DENIED = 4;
+}
+message RpcResponseHeader {
+    ErrorCode status = 1;
+    string message = 2;
+    int32 args_size = 3;
+}

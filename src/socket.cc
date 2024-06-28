@@ -149,7 +149,10 @@ ssize_t Socket::read(void* buf, size_t count)
 	}
 	// 还没有数据可读 将socket加入epoll监听池并切出所属的协程，等有数据两再回来读
 	//NETCO_LOG()<<("the coroutine yield");
+
+	NETCO_LOG()<<"the read coroutine yield";
 	netco::Scheduler::getScheduler()->getProcessor(threadIdx)->waitEvent(_sockfd, EPOLLIN | EPOLLPRI | EPOLLRDHUP | EPOLLHUP);
+	NETCO_LOG()<<"the read coroutine wake";
 	//NETCO_LOG()<<("the coroutine wake");
 	// Modify: 当前协程恢复运行 那么就继续读
 	//return ::read(_sockfd, buf, count);
