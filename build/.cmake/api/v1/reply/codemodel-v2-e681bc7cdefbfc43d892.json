@@ -1,0 +1,137 @@
+{
+	"configurations" : 
+	[
+		{
+			"directories" : 
+			[
+				{
+					"build" : ".",
+					"jsonFile" : "directory-.-Debug-f5ebdc15457944623624.json",
+					"projectIndex" : 0,
+					"source" : ".",
+					"targetIndexes" : 
+					[
+						0,
+						1,
+						2,
+						3,
+						4,
+						5,
+						6,
+						7,
+						8,
+						9
+					]
+				}
+			],
+			"name" : "Debug",
+			"projects" : 
+			[
+				{
+					"directoryIndexes" : 
+					[
+						0
+					],
+					"name" : "libnetco",
+					"targetIndexes" : 
+					[
+						0,
+						1,
+						2,
+						3,
+						4,
+						5,
+						6,
+						7,
+						8,
+						9
+					]
+				}
+			],
+			"targets" : 
+			[
+				{
+					"directoryIndex" : 0,
+					"id" : "libnetco::@6890427a1f51a3e7e1df",
+					"jsonFile" : "target-libnetco-Debug-f7e1d93ccb88663e2e10.json",
+					"name" : "libnetco",
+					"projectIndex" : 0
+				},
+				{
+					"directoryIndex" : 0,
+					"id" : "log_test::@6890427a1f51a3e7e1df",
+					"jsonFile" : "target-log_test-Debug-08628ec1cac5d9b74dbc.json",
+					"name" : "log_test",
+					"projectIndex" : 0
+				},
+				{
+					"directoryIndex" : 0,
+					"id" : "method_test::@6890427a1f51a3e7e1df",
+					"jsonFile" : "target-method_test-Debug-396432f8602180dab1aa.json",
+					"name" : "method_test",
+					"projectIndex" : 0
+				},
+				{
+					"directoryIndex" : 0,
+					"id" : "rpc_client_pb_test::@6890427a1f51a3e7e1df",
+					"jsonFile" : "target-rpc_client_pb_test-Debug-79045b63188d868ef108.json",
+					"name" : "rpc_client_pb_test",
+					"projectIndex" : 0
+				},
+				{
+					"directoryIndex" : 0,
+					"id" : "rpc_client_test::@6890427a1f51a3e7e1df",
+					"jsonFile" : "target-rpc_client_test-Debug-b57af0b1e523404f7139.json",
+					"name" : "rpc_client_test",
+					"projectIndex" : 0
+				},
+				{
+					"directoryIndex" : 0,
+					"id" : "rpc_server_pb_test::@6890427a1f51a3e7e1df",
+					"jsonFile" : "target-rpc_server_pb_test-Debug-62dde4fa671b0453ed92.json",
+					"name" : "rpc_server_pb_test",
+					"projectIndex" : 0
+				},
+				{
+					"directoryIndex" : 0,
+					"id" : "rpc_server_test::@6890427a1f51a3e7e1df",
+					"jsonFile" : "target-rpc_server_test-Debug-7f5c6c7b453f9a4065af.json",
+					"name" : "rpc_server_test",
+					"projectIndex" : 0
+				},
+				{
+					"directoryIndex" : 0,
+					"id" : "tcp_client_test::@6890427a1f51a3e7e1df",
+					"jsonFile" : "target-tcp_client_test-Debug-182fe99873e461f74f95.json",
+					"name" : "tcp_client_test",
+					"projectIndex" : 0
+				},
+				{
+					"directoryIndex" : 0,
+					"id" : "tcp_server_test::@6890427a1f51a3e7e1df",
+					"jsonFile" : "target-tcp_server_test-Debug-4db47cb15d91f454ee6a.json",
+					"name" : "tcp_server_test",
+					"projectIndex" : 0
+				},
+				{
+					"directoryIndex" : 0,
+					"id" : "zkTest::@6890427a1f51a3e7e1df",
+					"jsonFile" : "target-zkTest-Debug-008c21eb8a8694072598.json",
+					"name" : "zkTest",
+					"projectIndex" : 0
+				}
+			]
+		}
+	],
+	"kind" : "codemodel",
+	"paths" : 
+	{
+		"build" : "/home/bob/libNetCo/build",
+		"source" : "/home/bob/libNetCo"
+	},
+	"version" : 
+	{
+		"major" : 2,
+		"minor" : 3
+	}
+}

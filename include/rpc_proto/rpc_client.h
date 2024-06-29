@@ -2,6 +2,7 @@
 
 #include "rpc_client_stub.h"
 #include "rpc_response_header.pb.h"
+#include "../parameter.h"
 
 /**
  * rpc客户端，其功能必须要在一个协程中运行

@@ -14,6 +14,7 @@ namespace netco
 		constexpr static unsigned backLog = 4096;
 
 		static constexpr size_t memPoolMallocObjCnt = 40;
+		static const char* zkServerAddr = "127.0.0.1:2181";
 	}
 	
 }

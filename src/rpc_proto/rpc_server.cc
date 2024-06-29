@@ -24,6 +24,7 @@ namespace netco{
         /** register the connection callback*/
         m_rpc_server_stub->register_connection(on_connection);
         NETCO_LOG()<<("register the rpc-server-stub connection callback");
+        /** register the service on zookeeper */
 
         m_rpc_server_stub->start(ip,port);
     }

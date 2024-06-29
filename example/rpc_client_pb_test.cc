@@ -6,11 +6,13 @@
 #include "../include/rpc_proto/rpc_client.h"
 #include "../include/rpc_proto/int_message.pb.h"
 #include "../include/rpc_proto/rpc_response_header.pb.h"
+#include "../include/zk_client.h"
+#include "../include/parameter.h"
+
 
 
 void rpc_client_worker(netco::RpcClient& rpc_client, int loop_time)
 {
-    rpc_client.connect("127.0.0.1",12345);
     IntMessage int_message;
     int_message.set_value(10);
     std::string buf;

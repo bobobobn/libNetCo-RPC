@@ -5,6 +5,7 @@
 #include <functional>
 #include <map>
 #include "../log.h"
+#include "../zk_client.h"
 
 namespace netco{
 
@@ -35,6 +36,13 @@ namespace netco{
             }
             NETCO_LOG()<<"find method "<<method_name<<" for service "<<m_service_name<<"calling...";
             return channel->second->callMethod(arg);
+        }
+        void registerAllMethodOnZk(ZkClient::Ptr zkClient, const std::string& ipPortAddr){
+            zkClient->create( ("/" + m_service_name).c_str(), nullptr, ZOO_PERSISTENT);
+            for(auto& channel : m_channels){
+                NETCO_LOG()<<"register method "<<channel.first<<" for service "<<m_service_name<<" on zk..."<<" method running on: "<< ipPortAddr;
+                zkClient->create(("/" + m_service_name + "/" + channel.first).c_str(), ipPortAddr.c_str(), ZOO_EPHEMERAL);
+            }
         }
 
     private:

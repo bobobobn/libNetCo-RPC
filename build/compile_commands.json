@@ -1,0 +1,177 @@
+[
+{
+  "directory": "/home/bob/libNetCo/build",
+  "command": "/usr/bin/c++ -DTHREADED -Dlibnetco_EXPORTS -I/home/bob/libNetCo/include -I/home/bob/libNetCo/include/rpc_proto -g -fPIC -std=gnu++11 -o CMakeFiles/libnetco.dir/src/context.o -c /home/bob/libNetCo/src/context.cc",
+  "file": "/home/bob/libNetCo/src/context.cc"
+},
+{
+  "directory": "/home/bob/libNetCo/build",
+  "command": "/usr/bin/c++ -DTHREADED -Dlibnetco_EXPORTS -I/home/bob/libNetCo/include -I/home/bob/libNetCo/include/rpc_proto -g -fPIC -std=gnu++11 -o CMakeFiles/libnetco.dir/src/coroutine.o -c /home/bob/libNetCo/src/coroutine.cc",
+  "file": "/home/bob/libNetCo/src/coroutine.cc"
+},
+{
+  "directory": "/home/bob/libNetCo/build",
+  "command": "/usr/bin/c++ -DTHREADED -Dlibnetco_EXPORTS -I/home/bob/libNetCo/include -I/home/bob/libNetCo/include/rpc_proto -g -fPIC -std=gnu++11 -o CMakeFiles/libnetco.dir/src/epoller.o -c /home/bob/libNetCo/src/epoller.cc",
+  "file": "/home/bob/libNetCo/src/epoller.cc"
+},
+{
+  "directory": "/home/bob/libNetCo/build",
+  "command": "/usr/bin/c++ -DTHREADED -Dlibnetco_EXPORTS -I/home/bob/libNetCo/include -I/home/bob/libNetCo/include/rpc_proto -g -fPIC -std=gnu++11 -o CMakeFiles/libnetco.dir/src/log.o -c /home/bob/libNetCo/src/log.cc",
+  "file": "/home/bob/libNetCo/src/log.cc"
+},
+{
+  "directory": "/home/bob/libNetCo/build",
+  "command": "/usr/bin/c++ -DTHREADED -Dlibnetco_EXPORTS -I/home/bob/libNetCo/include -I/home/bob/libNetCo/include/rpc_proto -g -fPIC -std=gnu++11 -o CMakeFiles/libnetco.dir/src/mstime.o -c /home/bob/libNetCo/src/mstime.cc",
+  "file": "/home/bob/libNetCo/src/mstime.cc"
+},
+{
+  "directory": "/home/bob/libNetCo/build",
+  "command": "/usr/bin/c++ -DTHREADED -Dlibnetco_EXPORTS -I/home/bob/libNetCo/include -I/home/bob/libNetCo/include/rpc_proto -g -fPIC -std=gnu++11 -o CMakeFiles/libnetco.dir/src/netco_api.o -c /home/bob/libNetCo/src/netco_api.cc",
+  "file": "/home/bob/libNetCo/src/netco_api.cc"
+},
+{
+  "directory": "/home/bob/libNetCo/build",
+  "command": "/usr/bin/c++ -DTHREADED -Dlibnetco_EXPORTS -I/home/bob/libNetCo/include -I/home/bob/libNetCo/include/rpc_proto -g -fPIC -std=gnu++11 -o CMakeFiles/libnetco.dir/src/processor.o -c /home/bob/libNetCo/src/processor.cc",
+  "file": "/home/bob/libNetCo/src/processor.cc"
+},
+{
+  "directory": "/home/bob/libNetCo/build",
+  "command": "/usr/bin/c++ -DTHREADED -Dlibnetco_EXPORTS -I/home/bob/libNetCo/include -I/home/bob/libNetCo/include/rpc_proto -g -fPIC -std=gnu++11 -o CMakeFiles/libnetco.dir/src/processor_selector.o -c /home/bob/libNetCo/src/processor_selector.cc",
+  "file": "/home/bob/libNetCo/src/processor_selector.cc"
+},
+{
+  "directory": "/home/bob/libNetCo/build",
+  "command": "/usr/bin/c++ -DTHREADED -Dlibnetco_EXPORTS -I/home/bob/libNetCo/include -I/home/bob/libNetCo/include/rpc_proto -g -fPIC -std=gnu++11 -o CMakeFiles/libnetco.dir/src/rpc/rpc_client.o -c /home/bob/libNetCo/src/rpc/rpc_client.cc",
+  "file": "/home/bob/libNetCo/src/rpc/rpc_client.cc"
+},
+{
+  "directory": "/home/bob/libNetCo/build",
+  "command": "/usr/bin/c++ -DTHREADED -Dlibnetco_EXPORTS -I/home/bob/libNetCo/include -I/home/bob/libNetCo/include/rpc_proto -g -fPIC -std=gnu++11 -o CMakeFiles/libnetco.dir/src/rpc/rpc_client_stub.o -c /home/bob/libNetCo/src/rpc/rpc_client_stub.cc",
+  "file": "/home/bob/libNetCo/src/rpc/rpc_client_stub.cc"
+},
+{
+  "directory": "/home/bob/libNetCo/build",
+  "command": "/usr/bin/c++ -DTHREADED -Dlibnetco_EXPORTS -I/home/bob/libNetCo/include -I/home/bob/libNetCo/include/rpc_proto -g -fPIC -std=gnu++11 -o CMakeFiles/libnetco.dir/src/rpc/rpc_header.o -c /home/bob/libNetCo/src/rpc/rpc_header.cc",
+  "file": "/home/bob/libNetCo/src/rpc/rpc_header.cc"
+},
+{
+  "directory": "/home/bob/libNetCo/build",
+  "command": "/usr/bin/c++ -DTHREADED -Dlibnetco_EXPORTS -I/home/bob/libNetCo/include -I/home/bob/libNetCo/include/rpc_proto -g -fPIC -std=gnu++11 -o CMakeFiles/libnetco.dir/src/rpc/rpc_server.o -c /home/bob/libNetCo/src/rpc/rpc_server.cc",
+  "file": "/home/bob/libNetCo/src/rpc/rpc_server.cc"
+},
+{
+  "directory": "/home/bob/libNetCo/build",
+  "command": "/usr/bin/c++ -DTHREADED -Dlibnetco_EXPORTS -I/home/bob/libNetCo/include -I/home/bob/libNetCo/include/rpc_proto -g -fPIC -std=gnu++11 -o CMakeFiles/libnetco.dir/src/rpc/rpc_server_stub.o -c /home/bob/libNetCo/src/rpc/rpc_server_stub.cc",
+  "file": "/home/bob/libNetCo/src/rpc/rpc_server_stub.cc"
+},
+{
+  "directory": "/home/bob/libNetCo/build",
+  "command": "/usr/bin/c++ -DTHREADED -Dlibnetco_EXPORTS -I/home/bob/libNetCo/include -I/home/bob/libNetCo/include/rpc_proto -g -fPIC -std=gnu++11 -o CMakeFiles/libnetco.dir/src/rpc_proto/int_message.pb.o -c /home/bob/libNetCo/src/rpc_proto/int_message.pb.cc",
+  "file": "/home/bob/libNetCo/src/rpc_proto/int_message.pb.cc"
+},
+{
+  "directory": "/home/bob/libNetCo/build",
+  "command": "/usr/bin/c++ -DTHREADED -Dlibnetco_EXPORTS -I/home/bob/libNetCo/include -I/home/bob/libNetCo/include/rpc_proto -g -fPIC -std=gnu++11 -o CMakeFiles/libnetco.dir/src/rpc_proto/rpc_client.o -c /home/bob/libNetCo/src/rpc_proto/rpc_client.cc",
+  "file": "/home/bob/libNetCo/src/rpc_proto/rpc_client.cc"
+},
+{
+  "directory": "/home/bob/libNetCo/build",
+  "command": "/usr/bin/c++ -DTHREADED -Dlibnetco_EXPORTS -I/home/bob/libNetCo/include -I/home/bob/libNetCo/include/rpc_proto -g -fPIC -std=gnu++11 -o CMakeFiles/libnetco.dir/src/rpc_proto/rpc_client_stub.o -c /home/bob/libNetCo/src/rpc_proto/rpc_client_stub.cc",
+  "file": "/home/bob/libNetCo/src/rpc_proto/rpc_client_stub.cc"
+},
+{
+  "directory": "/home/bob/libNetCo/build",
+  "command": "/usr/bin/c++ -DTHREADED -Dlibnetco_EXPORTS -I/home/bob/libNetCo/include -I/home/bob/libNetCo/include/rpc_proto -g -fPIC -std=gnu++11 -o CMakeFiles/libnetco.dir/src/rpc_proto/rpc_response_header.pb.o -c /home/bob/libNetCo/src/rpc_proto/rpc_response_header.pb.cc",
+  "file": "/home/bob/libNetCo/src/rpc_proto/rpc_response_header.pb.cc"
+},
+{
+  "directory": "/home/bob/libNetCo/build",
+  "command": "/usr/bin/c++ -DTHREADED -Dlibnetco_EXPORTS -I/home/bob/libNetCo/include -I/home/bob/libNetCo/include/rpc_proto -g -fPIC -std=gnu++11 -o CMakeFiles/libnetco.dir/src/rpc_proto/rpc_server.o -c /home/bob/libNetCo/src/rpc_proto/rpc_server.cc",
+  "file": "/home/bob/libNetCo/src/rpc_proto/rpc_server.cc"
+},
+{
+  "directory": "/home/bob/libNetCo/build",
+  "command": "/usr/bin/c++ -DTHREADED -Dlibnetco_EXPORTS -I/home/bob/libNetCo/include -I/home/bob/libNetCo/include/rpc_proto -g -fPIC -std=gnu++11 -o CMakeFiles/libnetco.dir/src/rpc_proto/rpc_server_stub.o -c /home/bob/libNetCo/src/rpc_proto/rpc_server_stub.cc",
+  "file": "/home/bob/libNetCo/src/rpc_proto/rpc_server_stub.cc"
+},
+{
+  "directory": "/home/bob/libNetCo/build",
+  "command": "/usr/bin/c++ -DTHREADED -Dlibnetco_EXPORTS -I/home/bob/libNetCo/include -I/home/bob/libNetCo/include/rpc_proto -g -fPIC -std=gnu++11 -o CMakeFiles/libnetco.dir/src/rpc_proto/rpcheader.pb.o -c /home/bob/libNetCo/src/rpc_proto/rpcheader.pb.cc",
+  "file": "/home/bob/libNetCo/src/rpc_proto/rpcheader.pb.cc"
+},
+{
+  "directory": "/home/bob/libNetCo/build",
+  "command": "/usr/bin/c++ -DTHREADED -Dlibnetco_EXPORTS -I/home/bob/libNetCo/include -I/home/bob/libNetCo/include/rpc_proto -g -fPIC -std=gnu++11 -o CMakeFiles/libnetco.dir/src/scheduler.o -c /home/bob/libNetCo/src/scheduler.cc",
+  "file": "/home/bob/libNetCo/src/scheduler.cc"
+},
+{
+  "directory": "/home/bob/libNetCo/build",
+  "command": "/usr/bin/c++ -DTHREADED -Dlibnetco_EXPORTS -I/home/bob/libNetCo/include -I/home/bob/libNetCo/include/rpc_proto -g -fPIC -std=gnu++11 -o CMakeFiles/libnetco.dir/src/socket.o -c /home/bob/libNetCo/src/socket.cc",
+  "file": "/home/bob/libNetCo/src/socket.cc"
+},
+{
+  "directory": "/home/bob/libNetCo/build",
+  "command": "/usr/bin/c++ -DTHREADED -Dlibnetco_EXPORTS -I/home/bob/libNetCo/include -I/home/bob/libNetCo/include/rpc_proto -g -fPIC -std=gnu++11 -o CMakeFiles/libnetco.dir/src/tcp/tcp_client.o -c /home/bob/libNetCo/src/tcp/tcp_client.cc",
+  "file": "/home/bob/libNetCo/src/tcp/tcp_client.cc"
+},
+{
+  "directory": "/home/bob/libNetCo/build",
+  "command": "/usr/bin/c++ -DTHREADED -Dlibnetco_EXPORTS -I/home/bob/libNetCo/include -I/home/bob/libNetCo/include/rpc_proto -g -fPIC -std=gnu++11 -o CMakeFiles/libnetco.dir/src/tcp/tcp_server.o -c /home/bob/libNetCo/src/tcp/tcp_server.cc",
+  "file": "/home/bob/libNetCo/src/tcp/tcp_server.cc"
+},
+{
+  "directory": "/home/bob/libNetCo/build",
+  "command": "/usr/bin/c++ -DTHREADED -Dlibnetco_EXPORTS -I/home/bob/libNetCo/include -I/home/bob/libNetCo/include/rpc_proto -g -fPIC -std=gnu++11 -o CMakeFiles/libnetco.dir/src/timer.o -c /home/bob/libNetCo/src/timer.cc",
+  "file": "/home/bob/libNetCo/src/timer.cc"
+},
+{
+  "directory": "/home/bob/libNetCo/build",
+  "command": "/usr/bin/c++ -DTHREADED -Dlibnetco_EXPORTS -I/home/bob/libNetCo/include -I/home/bob/libNetCo/include/rpc_proto -g -fPIC -std=gnu++11 -o CMakeFiles/libnetco.dir/src/zk_client.o -c /home/bob/libNetCo/src/zk_client.cc",
+  "file": "/home/bob/libNetCo/src/zk_client.cc"
+},
+{
+  "directory": "/home/bob/libNetCo/build",
+  "command": "/usr/bin/c++ -DTHREADED -I/home/bob/libNetCo/include -I/home/bob/libNetCo/include/rpc_proto -g -std=gnu++11 -o CMakeFiles/log_test.dir/example/log_test.o -c /home/bob/libNetCo/example/log_test.cc",
+  "file": "/home/bob/libNetCo/example/log_test.cc"
+},
+{
+  "directory": "/home/bob/libNetCo/build",
+  "command": "/usr/bin/c++ -DTHREADED -I/home/bob/libNetCo/include -I/home/bob/libNetCo/include/rpc_proto -g -std=gnu++11 -o CMakeFiles/method_test.dir/example/method_test.o -c /home/bob/libNetCo/example/method_test.cc",
+  "file": "/home/bob/libNetCo/example/method_test.cc"
+},
+{
+  "directory": "/home/bob/libNetCo/build",
+  "command": "/usr/bin/c++ -DTHREADED -I/home/bob/libNetCo/include -I/home/bob/libNetCo/include/rpc_proto -g -std=gnu++11 -o CMakeFiles/rpc_client_pb_test.dir/example/rpc_client_pb_test.o -c /home/bob/libNetCo/example/rpc_client_pb_test.cc",
+  "file": "/home/bob/libNetCo/example/rpc_client_pb_test.cc"
+},
+{
+  "directory": "/home/bob/libNetCo/build",
+  "command": "/usr/bin/c++ -DTHREADED -I/home/bob/libNetCo/include -I/home/bob/libNetCo/include/rpc_proto -g -std=gnu++11 -o CMakeFiles/rpc_client_test.dir/example/rpc_client_test.o -c /home/bob/libNetCo/example/rpc_client_test.cc",
+  "file": "/home/bob/libNetCo/example/rpc_client_test.cc"
+},
+{
+  "directory": "/home/bob/libNetCo/build",
+  "command": "/usr/bin/c++ -DTHREADED -I/home/bob/libNetCo/include -I/home/bob/libNetCo/include/rpc_proto -g -std=gnu++11 -o CMakeFiles/rpc_server_pb_test.dir/example/rpc_server_pb_test.o -c /home/bob/libNetCo/example/rpc_server_pb_test.cc",
+  "file": "/home/bob/libNetCo/example/rpc_server_pb_test.cc"
+},
+{
+  "directory": "/home/bob/libNetCo/build",
+  "command": "/usr/bin/c++ -DTHREADED -I/home/bob/libNetCo/include -I/home/bob/libNetCo/include/rpc_proto -g -std=gnu++11 -o CMakeFiles/rpc_server_test.dir/example/rpc_server_test.o -c /home/bob/libNetCo/example/rpc_server_test.cc",
+  "file": "/home/bob/libNetCo/example/rpc_server_test.cc"
+},
+{
+  "directory": "/home/bob/libNetCo/build",
+  "command": "/usr/bin/c++ -DTHREADED -I/home/bob/libNetCo/include -I/home/bob/libNetCo/include/rpc_proto -g -std=gnu++11 -o CMakeFiles/tcp_client_test.dir/example/tcp_client_test.o -c /home/bob/libNetCo/example/tcp_client_test.cc",
+  "file": "/home/bob/libNetCo/example/tcp_client_test.cc"
+},
+{
+  "directory": "/home/bob/libNetCo/build",
+  "command": "/usr/bin/c++ -DTHREADED -I/home/bob/libNetCo/include -I/home/bob/libNetCo/include/rpc_proto -g -std=gnu++11 -o CMakeFiles/tcp_server_test.dir/example/tcp_server_test.o -c /home/bob/libNetCo/example/tcp_server_test.cc",
+  "file": "/home/bob/libNetCo/example/tcp_server_test.cc"
+},
+{
+  "directory": "/home/bob/libNetCo/build",
+  "command": "/usr/bin/c++ -DTHREADED -I/home/bob/libNetCo/include -I/home/bob/libNetCo/include/rpc_proto -g -std=gnu++11 -o CMakeFiles/zkTest.dir/example/zkTest.o -c /home/bob/libNetCo/example/zkTest.cc",
+  "file": "/home/bob/libNetCo/example/zkTest.cc"
+}
+]

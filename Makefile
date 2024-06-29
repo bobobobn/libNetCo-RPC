@@ -233,6 +233,19 @@ tcp_server_test/fast:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/tcp_server_test.dir/build.make CMakeFiles/tcp_server_test.dir/build
 .PHONY : tcp_server_test/fast
 
+#=============================================================================
+# Target rules for targets named zkTest
+
+# Build rule for target.
+zkTest: cmake_check_build_system
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 zkTest
+.PHONY : zkTest
+
+# fast build rule for target.
+zkTest/fast:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/zkTest.dir/build.make CMakeFiles/zkTest.dir/build
+.PHONY : zkTest/fast
+
 # target to build an object file
 example/log_test.o:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/log_test.dir/build.make CMakeFiles/log_test.dir/example/log_test.o
@@ -352,6 +365,21 @@ example/tcp_server_test.i:
 example/tcp_server_test.s:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/tcp_server_test.dir/build.make CMakeFiles/tcp_server_test.dir/example/tcp_server_test.s
 .PHONY : example/tcp_server_test.s
+
+# target to build an object file
+example/zkTest.o:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/zkTest.dir/build.make CMakeFiles/zkTest.dir/example/zkTest.o
+.PHONY : example/zkTest.o
+
+# target to preprocess a source file
+example/zkTest.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/zkTest.dir/build.make CMakeFiles/zkTest.dir/example/zkTest.i
+.PHONY : example/zkTest.i
+
+# target to generate assembly for a file
+example/zkTest.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/zkTest.dir/build.make CMakeFiles/zkTest.dir/example/zkTest.s
+.PHONY : example/zkTest.s
 
 # target to build an object file
 src/context.o:
@@ -728,6 +756,21 @@ src/timer.s:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/libnetco.dir/build.make CMakeFiles/libnetco.dir/src/timer.s
 .PHONY : src/timer.s
 
+# target to build an object file
+src/zk_client.o:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/libnetco.dir/build.make CMakeFiles/libnetco.dir/src/zk_client.o
+.PHONY : src/zk_client.o
+
+# target to preprocess a source file
+src/zk_client.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/libnetco.dir/build.make CMakeFiles/libnetco.dir/src/zk_client.i
+.PHONY : src/zk_client.i
+
+# target to generate assembly for a file
+src/zk_client.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/libnetco.dir/build.make CMakeFiles/libnetco.dir/src/zk_client.s
+.PHONY : src/zk_client.s
+
 # Help Target
 help:
 	@echo "The following are some of the valid targets for this Makefile:"
@@ -745,6 +788,7 @@ help:
 	@echo "... rpc_server_test"
 	@echo "... tcp_client_test"
 	@echo "... tcp_server_test"
+	@echo "... zkTest"
 	@echo "... example/log_test.o"
 	@echo "... example/log_test.i"
 	@echo "... example/log_test.s"
@@ -769,6 +813,9 @@ help:
 	@echo "... example/tcp_server_test.o"
 	@echo "... example/tcp_server_test.i"
 	@echo "... example/tcp_server_test.s"
+	@echo "... example/zkTest.o"
+	@echo "... example/zkTest.i"
+	@echo "... example/zkTest.s"
 	@echo "... src/context.o"
 	@echo "... src/context.i"
 	@echo "... src/context.s"
@@ -844,6 +891,9 @@ help:
 	@echo "... src/timer.o"
 	@echo "... src/timer.i"
 	@echo "... src/timer.s"
+	@echo "... src/zk_client.o"
+	@echo "... src/zk_client.i"
+	@echo "... src/zk_client.s"
 .PHONY : help
 
 

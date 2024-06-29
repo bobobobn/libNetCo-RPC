@@ -1,0 +1,1 @@
+/usr/bin/c++ -rdynamic CMakeFiles/method_test.dir/example/method_test.o -o bin/method_test   -L/home/bob/libNetCo  -L/usr/local/lib  -Wl,-rpath,/home/bob/libNetCo:/usr/local/lib liblibnetco.so -lpthread /usr/local/lib/libprotobuf.so /usr/local/lib/libzookeeper_mt.so 

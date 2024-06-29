@@ -3,6 +3,7 @@
 #include "rpcheader.pb.h"
 #include "rpc_response_header.pb.h"
 #include "../../include/tcp/tcp_client.h"
+#include "../zk_client.h"
 
 #include <memory>
 
@@ -15,7 +16,7 @@ namespace netco{
     public:
         DISALLOW_COPY_MOVE_AND_ASSIGN(RpcClientStub);
 
-        RpcClientStub() : m_tcp_client(new TcpClient())
+        RpcClientStub() : m_tcp_client(new TcpClient()), m_zk_client(new ZkClient(parameter::zkServerAddr))
         {
             NETCO_LOG()<<("rpc client constructor a tcp client");
         }
@@ -38,6 +39,7 @@ namespace netco{
         void call(const std::string& service_name, const std::string& method_name, const std::string& args, std::string& response, RpcResponseHeader& header);
     private:
         std::unique_ptr<TcpClient> m_tcp_client;
+        ZkClient::Ptr m_zk_client;
         std::vector<char> buf;
     };
 }

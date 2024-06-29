@@ -1,0 +1,1 @@
+/usr/bin/c++ -g -rdynamic CMakeFiles/rpc_client_test.dir/example/rpc_client_test.o -o ../bin/rpc_client_test   -L/home/bob/libNetCo/build  -L/usr/local/lib  -Wl,-rpath,/home/bob/libNetCo/build:/usr/local/lib liblibnetco.so -lpthread /usr/local/lib/libprotobuf.so /usr/local/lib/libzookeeper_mt.so 

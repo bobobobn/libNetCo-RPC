@@ -17,13 +17,33 @@
 namespace netco{
     void RpcServerStub::start(const char* ip,int port)
     {
+        // register service on zookeeper
+        std::string addr_str;
+        if(nullptr == ip){
+            addr_str = "127.0.0.1";
+        }
+        else{
+            addr_str = ip;
+        }
+        addr_str += ":" + std::to_string(port);
+        registerAllServiceOnZk(m_zk_client, addr_str);
         /** 开启tcp服务器运行*/
         m_tcp_server->start(ip,port); 
         NETCO_LOG()<<("rpc-server-stub start run the tcp-server loop");
     }
 
     void RpcServerStub::start_multi(const char* ip,int port)
-    {
+    {        
+        // register service on zookeeper        
+        std::string addr_str;
+        if(nullptr == ip){
+            addr_str = "127.0.0.1";
+        }
+        else{
+            addr_str = ip;
+        }
+        addr_str += ":" + std::to_string(port);
+        registerAllServiceOnZk(m_zk_client, addr_str);
         m_tcp_server->start_multi(ip,port);
         NETCO_LOG()<<("rpc-server-stub start run the tcp-server multi loop");
     }
@@ -91,5 +111,10 @@ namespace netco{
         write_buffer.append(response_header_str); // write response header
         write_buffer.append(response); // write responses
     }
-
+    void RpcServerStub::registerAllServiceOnZk(ZkClient::Ptr zkClient, const std::string& ipPortAddr){
+        for(auto& service_pair : m_service_map){
+            RpcSerivce::Ptr service = service_pair.second;
+            service->registerAllMethodOnZk(zkClient, ipPortAddr);
+        }
+    }
 }
