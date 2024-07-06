@@ -10,7 +10,7 @@
 /**
  * need server-stub and client-stub
 */
-int main()
+int main(int argc, char* argv[])
 {
     NETCO_LOG()<<("test: start the server");
 	/** test the tcp client and server  result : success*/
@@ -18,9 +18,15 @@ int main()
 	// s.start(nullptr,12345);
 
 	/** test the rpc client and server*/
+	if(argc!= 2)
+	{
+		std::cout << "Usage: " << argv[0] << " <port>" << std::endl;
+		return 1;
+	}
+	int port = std::stoi(argv[1]);
 	netco::RpcServer rpc_server;
 	rpc_server.add_service("test", "factorial", &netco::factorial);	
-	rpc_server.start(nullptr, 12345);
+	rpc_server.start(nullptr, port);
 	netco::sche_join(); 
 	std::cout << "end" << std::endl;
 	return 0;

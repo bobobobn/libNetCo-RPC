@@ -39,9 +39,11 @@ namespace netco{
         }
         void registerAllMethodOnZk(ZkClient::Ptr zkClient, const std::string& ipPortAddr){
             zkClient->create( ("/" + m_service_name).c_str(), nullptr, ZOO_PERSISTENT);
+            zkClient->create( ("/" + m_service_name + "/provider").c_str(), nullptr, ZOO_PERSISTENT);
+            zkClient->create( ("/" + m_service_name + "/consumer").c_str(), nullptr, ZOO_PERSISTENT);
             for(auto& channel : m_channels){
                 NETCO_LOG()<<"register method "<<channel.first<<" for service "<<m_service_name<<" on zk..."<<" method running on: "<< ipPortAddr;
-                zkClient->create(("/" + m_service_name + "/" + channel.first).c_str(), ipPortAddr.c_str(), ZOO_EPHEMERAL);
+                zkClient->create(("/" + m_service_name + "/provider/" + channel.first + "_").c_str(), ipPortAddr.c_str(), ZOO_EPHEMERAL_SEQUENTIAL);
             }
         }
 

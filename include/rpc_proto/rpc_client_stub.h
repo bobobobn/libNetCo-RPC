@@ -37,9 +37,14 @@ namespace netco{
             return m_tcp_client->disconnect();
         }
         void call(const std::string& service_name, const std::string& method_name, const std::string& args, std::string& response, RpcResponseHeader& header);
+        void update_service_map(const std::string& service_name);
+    private:
+        void watch_service(const std::string& service_name);
     private:
         std::unique_ptr<TcpClient> m_tcp_client;
         ZkClient::Ptr m_zk_client;
         std::vector<char> buf;
+        // service_name -> method_name -> set<ipPort>
+        std::map<std::string, std::map<std::string, std::set<std::string> > > m_service_method_map;
     };
 }

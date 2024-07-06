@@ -20,6 +20,7 @@ namespace netco{
         int getAcl(const char* path, struct ACL_vector** acl, struct Stat* stat);
         int setAcl(const char* path, int version, const struct ACL_vector* acl);
         int addAuth(const char* scheme, const char* auth);
+        void list_children(const char *path, String_vector*, void *);
     private:
         zhandle_t* zh_;
     };

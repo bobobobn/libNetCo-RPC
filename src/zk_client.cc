@@ -1,6 +1,7 @@
 #pragma once
 #include "../include/zk_client.h"
 #include "../include/log.h"
+#include "../include/rpc_proto/rpc_client.h"
 #include <semaphore.h>
 
 namespace netco{
@@ -53,7 +54,7 @@ namespace netco{
         if(nullptr != data){
             data_len = strlen(data);
         }
-        if(zoo_exists(zh_, path, 0, nullptr) == ZNONODE){
+        if(flags==ZOO_EPHEMERAL_SEQUENTIAL || flags == ZOO_PERSISTENT_SEQUENTIAL || flags == ZOO_PERSISTENT_SEQUENTIAL_WITH_TTL ||zoo_exists(zh_, path, 0, nullptr) == ZNONODE){
             if(zoo_create(zh_, path, data, data_len, acl, flags, nullptr, 0) == ZOK)
             {
                 NETCO_LOG_FMT("Node %s created successfully", path);
@@ -97,4 +98,30 @@ namespace netco{
         }
     }
     
+    static void watcher_chld(zhandle_t *zh, int type, int state, const char *path, void *context) {
+        if(state == ZOO_CHILD_EVENT){
+            RpcClientStub* stub = (RpcClientStub*)context;
+            int service_len;
+            for(service_len = 1; service_len < strlen(path); service_len++){
+                if(path[service_len] == '/'){
+                    service_len--;
+                    break;
+                }
+            }
+            std::string service_name(path + 1, service_len);
+            NETCO_LOG_FMT("Service %s has changed", service_name.c_str());
+            if(stub!= nullptr){
+                stub->update_service_map(service_name);
+            }
+            NETCO_LOG_FMT("Watcher callback called with type %d, state %d, path %s\n", type, state, path);
+        }
+    }
+    void ZkClient::list_children (const char* path, struct String_vector* children, void* client_stub){
+        int res = zoo_wget_children(zh_, path, watcher_chld, client_stub, children);
+        if (res == ZOK) {
+            NETCO_LOG_FMT("children of %s: get ok", path);
+        } else {
+            std::cerr << "Error getting children of " << path << ": " << zerror(res) << std::endl;
+        }
+    }
 }
