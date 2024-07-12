@@ -20,10 +20,14 @@ void rpc_client_worker(netco::RpcClient& rpc_client, int loop_time)
     NETCO_LOG()<<"client call factorial method";
     std::string result;
     RpcResponseHeader header;
-    rpc_client.call("test", "factorial", buf, result, header);
-    IntMessage int_result;
-    int_result.ParseFromString(result);
-    NETCO_LOG()<<("client recv factorial result: %d",int_result.value());
+    for(int i=0;i<loop_time;i++){
+        rpc_client.call("test", "factorial", buf, result, header);
+        IntMessage int_result;
+        int_result.ParseFromString(result);
+        NETCO_LOG()<<("client recv factorial result: %d",int_result.value());
+        NETCO_LOG_FMT("the %d loop", i);
+        netco::co_sleep(1000);
+    }
 }
 
 int main()
@@ -31,7 +35,7 @@ int main()
     NETCO_LOG()<<("test: add one rpc client");
     //TcpClient tcp_client_test;
     netco::RpcClient rpc_client_test;
-    int loop_time = 100;
+    int loop_time = 10;
 	netco::co_go([&rpc_client_test,&loop_time](){
 		rpc_client_worker(rpc_client_test,loop_time);
 	});

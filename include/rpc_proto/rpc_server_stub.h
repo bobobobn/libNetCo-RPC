@@ -1,10 +1,10 @@
 #pragma once
 
-#include "rpc_channel.h"
+#include "rpc_method.h"
 #include "rpc_service.h"
 #include "../../include/tcp/tcp_server.h"
 #include "../spinlock_guard.h"
-#include "../../include/zk_client.h"
+#include "name_service_register.h"
 #include "../parameter.h"
 
 
@@ -20,20 +20,22 @@ namespace netco{
 
     class RpcServerStub{
     public:
-        RpcServerStub() : m_tcp_server(new TcpServer()), m_zk_client(new ZkClient(parameter::zkServerAddr)){}
+        RpcServerStub() : m_tcp_server(new TcpServer()), m_name_service_register(nullptr){}
+        RpcServerStub(NameServiceRegister::Ptr name_service_register) 
+            : m_tcp_server(new TcpServer()), m_name_service_register(name_service_register){}
         ~RpcServerStub(){}
-        
-        void RegisterService(const std::string& service_name, const std::string& method_name, RpcChannel::method_callback_t callback);
+        void SetNameServiceRegister(NameServiceRegister::Ptr name_service_register) { m_name_service_register = name_service_register; }
+        void RegisterService(const std::string& service_name, const std::string& method_name, RpcMethod::method_callback_t callback);
         void process_request(const std::string& read_buffer, std::string& write_buffer);
         void start(const char* ip,int port);
         void start_multi(const char* ip,int port);
         void register_connection(std::function<void(netco::Socket*)>& conn);
-        void registerAllServiceOnZk(ZkClient::Ptr, const std::string& ipPortAddr);
+        void registerAllService(const std::string& ipPortAddr);
 
     private:
-        std::map<std::string, RpcSerivce::Ptr> m_service_map;
+        std::map<std::string, RpcService::Ptr> m_service_map;
         Spinlock m_lock;
         std::unique_ptr<TcpServer> m_tcp_server;
-        ZkClient::Ptr m_zk_client;
+        NameServiceRegister::Ptr m_name_service_register;
     };
 }

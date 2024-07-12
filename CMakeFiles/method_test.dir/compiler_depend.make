@@ -178,7 +178,7 @@ CMakeFiles/method_test.dir/example/method_test.o: example/method_test.cc \
   /usr/include/c++/11/bits/ostream.tcc \
   /usr/include/c++/11/istream \
   /usr/include/c++/11/bits/istream.tcc \
-  include/rpc_proto/rpc_channel.h \
+  include/rpc_proto/rpc_method.h \
   include/rpc_proto/rpcheader.pb.h \
   /usr/local/include/google/protobuf/stubs/common.h \
   /usr/local/include/google/protobuf/stubs/port.h \
@@ -559,8 +559,6 @@ example/method_test.cc:
 
 /usr/include/x86_64-linux-gnu/bits/libc-header-start.h:
 
-/usr/include/x86_64-linux-gnu/bits/time64.h:
-
 /usr/include/x86_64-linux-gnu/bits/endianness.h:
 
 /usr/local/include/google/protobuf/stubs/scoped_ptr.h:
@@ -646,8 +644,6 @@ example/method_test.cc:
 /usr/local/include/google/protobuf/has_bits.h:
 
 /usr/include/c++/11/bits/nested_exception.h:
-
-include/rpc_proto/rpc_channel.h:
 
 /usr/include/x86_64-linux-gnu/bits/types/clock_t.h:
 
@@ -834,6 +830,10 @@ include/rpc_proto/method_callback_example.h:
 /usr/include/c++/11/istream:
 
 /usr/include/c++/11/bits/istream.tcc:
+
+/usr/include/x86_64-linux-gnu/bits/time64.h:
+
+include/rpc_proto/rpc_method.h:
 
 /usr/include/c++/11/stdlib.h:
 

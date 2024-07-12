@@ -1,4 +1,3 @@
-#pragma once
 #include "../include/zk_client.h"
 #include "../include/log.h"
 #include "../include/rpc_proto/rpc_client.h"
@@ -97,27 +96,71 @@ namespace netco{
             return -1;
         }
     }
-    
-    static void watcher_chld(zhandle_t *zh, int type, int state, const char *path, void *context) {
-        if(state == ZOO_CHILD_EVENT){
-            RpcClientStub* stub = (RpcClientStub*)context;
-            int service_len;
-            for(service_len = 1; service_len < strlen(path); service_len++){
-                if(path[service_len] == '/'){
-                    service_len--;
-                    break;
-                }
-            }
-            std::string service_name(path + 1, service_len);
-            NETCO_LOG_FMT("Service %s has changed", service_name.c_str());
-            if(stub!= nullptr){
-                stub->update_service_map(service_name);
-            }
-            NETCO_LOG_FMT("Watcher callback called with type %d, state %d, path %s\n", type, state, path);
-        }
+    // static void child_watch_cb(zhandle_t *zh, int type, int state, const char *path, void *context) {
+    //     NETCO_LOG()<< "watcher_chld called with type " << type << " state " << state << " path " << path;
+    //     NETCO_LOG()<< " ZOO_CHILD_EVENT:"<<ZOO_CHILD_EVENT<<" ZOO_SESSION_EVENT:"<<ZOO_SESSION_EVENT<<" ZOO_CREATED_EVENT:"<<ZOO_CREATED_EVENT<<" ZOO_DELETED_EVENT:"<<ZOO_DELETED_EVENT<<" ZOO_CHANGED_EVENT:"<<ZOO_CHANGED_EVENT<<" ZOO_CHILD_EVENT:"<<ZOO_CHILD_EVENT<<" ZOO_NOTWATCHING_EVENT:"<<ZOO_NOTWATCHING_EVENT;
+    //     if(type == ZOO_CHILD_EVENT){
+    //         RpcClientStub* stub = (RpcClientStub*)context;
+    //         int service_len;
+    //         for(service_len = 1; service_len < strlen(path); service_len++){
+    //             if(path[service_len] == '/'){
+    //                 service_len--;
+    //                 break;
+    //             }
+    //         }
+    //         std::string service_name(path + 1, service_len);
+    //         NETCO_LOG_FMT("Service %s has changed", service_name.c_str());
+    //         if(stub!= nullptr){
+    //             stub->RunNs(service_name.c_str(), );
+    //         }
+    //         else{
+    //             NETCO_LOG() << "reset child watcher";
+    //             zoo_wget_children(zh, path, child_watch_cb, context, nullptr);
+    //         }
+    //         NETCO_LOG_FMT("Watcher callback called with type %d, state %d, path %s\n", type, state, path);
+    //     }
+    // }
+
+    // static void watcher_node(zhandle_t *zh, int type, int state, const char *path, void *context) {
+    //     NETCO_LOG()<< "watcher_node called with type " << type << " state " << state << " path " << path;
+    //     // NETCO_LOG()<< " ZOO_CHILD_EVENT:"<<ZOO_CHILD_EVENT<<" ZOO_SESSION_EVENT:"<<ZOO_SESSION_EVENT<<" ZOO_CREATED_EVENT:"<<ZOO_CREATED_EVENT<<" ZOO_DELETED_EVENT:"<<ZOO_DELETED_EVENT<<" ZOO_CHANGED_EVENT:"<<ZOO_CHANGED_EVENT<<" ZOO_CHILD_EVENT:"<<ZOO_CHILD_EVENT<<" ZOO_NOTWATCHING_EVENT:"<<ZOO_NOTWATCHING_EVENT;
+    //     if(type == ZOO_CHANGED_EVENT){
+    //         RpcClientStub* stub = (RpcClientStub*)context;
+    //         NETCO_LOG_FMT("data of node %s has changed", path);
+    //         if(stub!= nullptr){
+    //             stub->update_node(std::string(path));
+    //         }
+    //         else{
+    //             zoo_wexists(zh, path, watcher_node, context, nullptr);
+    //         }
+    //         NETCO_LOG_FMT("Watcher callback called with type %d, state %d, path %s\n", type, state, path);
+    //     }
+    //     else{
+    //         zoo_wexists(zh, path, watcher_node, context, nullptr);
+    //     }
+
+    // }
+
+    // std::string ZkClient::get_watch(const char* path, struct Stat* stat, void* stub){
+    //     char buffer[64];
+    //     int buffer_len = sizeof(buffer);
+    //     int rc = zoo_wget(zh_, path, watcher_node, stub, buffer, &buffer_len, stat);
+    //     NETCO_LOG()<<"data: "<<buffer;
+    //     if(rc == ZOK){
+    //         NETCO_LOG_FMT("Node %s value retrieved successfully", path);
+    //         return std::string(buffer);
+    //     }
+    //     else{
+    //         NETCO_LOG_FMT("Failed to retrieve node %s value", path);
+    //         return nullptr;
+    //     }
+    // }     
+    int ZkClient::delete_node_no_version_check(const char* path){
+        int rc = zoo_delete(zh_, path, -1);
+        return rc;
     }
-    void ZkClient::list_children (const char* path, struct String_vector* children, void* client_stub){
-        int res = zoo_wget_children(zh_, path, watcher_chld, client_stub, children);
+    void ZkClient::list_children_and_watch (const char* path, struct String_vector* children, watcher_fn child_watch_cb,void* client_stub){
+        int res = zoo_wget_children(zh_, path, child_watch_cb, client_stub, children);
         if (res == ZOK) {
             NETCO_LOG_FMT("children of %s: get ok", path);
         } else {

@@ -308,7 +308,7 @@ CMakeFiles/rpc_server_pb_test.dir/example/rpc_server_pb_test.o: example/rpc_serv
   include/mstime.h \
   include/processor_selector.h \
   include/rpc_proto/rpc_server_stub.h \
-  include/rpc_proto/rpc_channel.h \
+  include/rpc_proto/rpc_method.h \
   include/rpc_proto/rpcheader.pb.h \
   /usr/local/include/google/protobuf/stubs/common.h \
   /usr/local/include/google/protobuf/stubs/port.h \
@@ -382,21 +382,29 @@ CMakeFiles/rpc_server_pb_test.dir/example/rpc_server_pb_test.o: example/rpc_serv
   /usr/local/include/google/protobuf/stubs/casts.h \
   /usr/local/include/google/protobuf/extension_set.h \
   include/rpc_proto/rpc_service.h \
-  include/zk_client.h \
-  /usr/local/include/zookeeper/zookeeper.h \
-  /usr/include/x86_64-linux-gnu/sys/time.h \
-  /usr/local/include/zookeeper/proto.h \
-  /usr/local/include/zookeeper/zookeeper_version.h \
-  /usr/local/include/zookeeper/recordio.h \
-  /usr/local/include/zookeeper/zookeeper.jute.h \
+  include/rpc_proto/name_service_register.h \
   include/json.h \
   /usr/include/c++/11/algorithm \
   /usr/include/c++/11/bits/stl_algo.h \
   /usr/include/c++/11/bits/algorithmfwd.h \
   /usr/include/c++/11/bits/uniform_int_dist.h \
   include/rpc_proto/method_callback_example.h \
-  include/rpc_proto/int_message.pb.h
+  include/rpc_proto/int_message.pb.h \
+  include/rpc_proto/zk_name_service_register.h \
+  include/zk_client.h \
+  /usr/local/include/zookeeper/zookeeper.h \
+  /usr/include/x86_64-linux-gnu/sys/time.h \
+  /usr/local/include/zookeeper/proto.h \
+  /usr/local/include/zookeeper/zookeeper_version.h \
+  /usr/local/include/zookeeper/recordio.h \
+  /usr/local/include/zookeeper/zookeeper.jute.h
 
+
+/usr/local/include/zookeeper/zookeeper_version.h:
+
+/usr/include/x86_64-linux-gnu/sys/time.h:
+
+include/rpc_proto/zk_name_service_register.h:
 
 /usr/include/c++/11/bits/algorithmfwd.h:
 
@@ -404,9 +412,7 @@ CMakeFiles/rpc_server_pb_test.dir/example/rpc_server_pb_test.o: example/rpc_serv
 
 include/json.h:
 
-/usr/local/include/zookeeper/zookeeper_version.h:
-
-/usr/include/x86_64-linux-gnu/sys/time.h:
+include/rpc_proto/name_service_register.h:
 
 include/rpc_proto/rpc_service.h:
 
@@ -768,6 +774,8 @@ include/processor_selector.h:
 
 /usr/include/x86_64-linux-gnu/gnu/stubs-64.h:
 
+include/rpc_proto/rpc_method.h:
+
 /usr/include/x86_64-linux-gnu/bits/time64.h:
 
 /usr/include/c++/11/ext/type_traits.h:
@@ -863,8 +871,6 @@ include/scheduler.h:
 /usr/local/include/google/protobuf/has_bits.h:
 
 /usr/include/c++/11/bits/nested_exception.h:
-
-include/rpc_proto/rpc_channel.h:
 
 /usr/include/x86_64-linux-gnu/bits/types/clock_t.h:
 

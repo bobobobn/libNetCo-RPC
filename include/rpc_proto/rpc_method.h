@@ -6,13 +6,13 @@
 #include <memory>
 
 namespace netco{
-    class RpcChannel{
+    class RpcMethod{
     public:
-        using Ptr = std::shared_ptr<RpcChannel>;
+        using Ptr = std::shared_ptr<RpcMethod>;
         using method_callback_t = std::function<std::string(const std::string&)>;
-        RpcChannel(std::string method_name, method_callback_t method_callback):
+        RpcMethod(std::string method_name, method_callback_t method_callback):
             m_method_name(method_name), m_method_callback(method_callback){}
-        ~RpcChannel(){}
+        ~RpcMethod(){}
         std::string callMethod(const std::string& arg){
             return m_method_callback(arg);
         }

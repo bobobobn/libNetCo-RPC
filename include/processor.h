@@ -19,10 +19,10 @@
  * @param[in] removedCo_ 被移除的协程队列.执行完的协程会首先放到该队列中,在一次循环的最后被统一清理
  * @detail 主循环执行顺序：timer->new->act->remove
  */
-extern __thread int threadIdx;		
-
 namespace netco
 {
+
+	extern __thread int threadIdx;		
 
 	enum processerStatus
 	{

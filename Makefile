@@ -130,6 +130,19 @@ libnetco/fast:
 .PHONY : libnetco/fast
 
 #=============================================================================
+# Target rules for targets named doubly_buffer_test
+
+# Build rule for target.
+doubly_buffer_test: cmake_check_build_system
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 doubly_buffer_test
+.PHONY : doubly_buffer_test
+
+# fast build rule for target.
+doubly_buffer_test/fast:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/doubly_buffer_test.dir/build.make CMakeFiles/doubly_buffer_test.dir/build
+.PHONY : doubly_buffer_test/fast
+
+#=============================================================================
 # Target rules for targets named log_test
 
 # Build rule for target.
@@ -156,6 +169,19 @@ method_test/fast:
 .PHONY : method_test/fast
 
 #=============================================================================
+# Target rules for targets named name_service_test
+
+# Build rule for target.
+name_service_test: cmake_check_build_system
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 name_service_test
+.PHONY : name_service_test
+
+# fast build rule for target.
+name_service_test/fast:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/name_service_test.dir/build.make CMakeFiles/name_service_test.dir/build
+.PHONY : name_service_test/fast
+
+#=============================================================================
 # Target rules for targets named rpc_client_pb_test
 
 # Build rule for target.
@@ -169,19 +195,6 @@ rpc_client_pb_test/fast:
 .PHONY : rpc_client_pb_test/fast
 
 #=============================================================================
-# Target rules for targets named rpc_client_test
-
-# Build rule for target.
-rpc_client_test: cmake_check_build_system
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 rpc_client_test
-.PHONY : rpc_client_test
-
-# fast build rule for target.
-rpc_client_test/fast:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/rpc_client_test.dir/build.make CMakeFiles/rpc_client_test.dir/build
-.PHONY : rpc_client_test/fast
-
-#=============================================================================
 # Target rules for targets named rpc_server_pb_test
 
 # Build rule for target.
@@ -193,19 +206,6 @@ rpc_server_pb_test: cmake_check_build_system
 rpc_server_pb_test/fast:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/rpc_server_pb_test.dir/build.make CMakeFiles/rpc_server_pb_test.dir/build
 .PHONY : rpc_server_pb_test/fast
-
-#=============================================================================
-# Target rules for targets named rpc_server_test
-
-# Build rule for target.
-rpc_server_test: cmake_check_build_system
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 rpc_server_test
-.PHONY : rpc_server_test
-
-# fast build rule for target.
-rpc_server_test/fast:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/rpc_server_test.dir/build.make CMakeFiles/rpc_server_test.dir/build
-.PHONY : rpc_server_test/fast
 
 #=============================================================================
 # Target rules for targets named tcp_client_test
@@ -247,6 +247,21 @@ zkTest/fast:
 .PHONY : zkTest/fast
 
 # target to build an object file
+example/doubly_buffer_test.o:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/doubly_buffer_test.dir/build.make CMakeFiles/doubly_buffer_test.dir/example/doubly_buffer_test.o
+.PHONY : example/doubly_buffer_test.o
+
+# target to preprocess a source file
+example/doubly_buffer_test.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/doubly_buffer_test.dir/build.make CMakeFiles/doubly_buffer_test.dir/example/doubly_buffer_test.i
+.PHONY : example/doubly_buffer_test.i
+
+# target to generate assembly for a file
+example/doubly_buffer_test.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/doubly_buffer_test.dir/build.make CMakeFiles/doubly_buffer_test.dir/example/doubly_buffer_test.s
+.PHONY : example/doubly_buffer_test.s
+
+# target to build an object file
 example/log_test.o:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/log_test.dir/build.make CMakeFiles/log_test.dir/example/log_test.o
 .PHONY : example/log_test.o
@@ -277,6 +292,21 @@ example/method_test.s:
 .PHONY : example/method_test.s
 
 # target to build an object file
+example/name_service_test.o:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/name_service_test.dir/build.make CMakeFiles/name_service_test.dir/example/name_service_test.o
+.PHONY : example/name_service_test.o
+
+# target to preprocess a source file
+example/name_service_test.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/name_service_test.dir/build.make CMakeFiles/name_service_test.dir/example/name_service_test.i
+.PHONY : example/name_service_test.i
+
+# target to generate assembly for a file
+example/name_service_test.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/name_service_test.dir/build.make CMakeFiles/name_service_test.dir/example/name_service_test.s
+.PHONY : example/name_service_test.s
+
+# target to build an object file
 example/rpc_client_pb_test.o:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/rpc_client_pb_test.dir/build.make CMakeFiles/rpc_client_pb_test.dir/example/rpc_client_pb_test.o
 .PHONY : example/rpc_client_pb_test.o
@@ -292,21 +322,6 @@ example/rpc_client_pb_test.s:
 .PHONY : example/rpc_client_pb_test.s
 
 # target to build an object file
-example/rpc_client_test.o:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/rpc_client_test.dir/build.make CMakeFiles/rpc_client_test.dir/example/rpc_client_test.o
-.PHONY : example/rpc_client_test.o
-
-# target to preprocess a source file
-example/rpc_client_test.i:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/rpc_client_test.dir/build.make CMakeFiles/rpc_client_test.dir/example/rpc_client_test.i
-.PHONY : example/rpc_client_test.i
-
-# target to generate assembly for a file
-example/rpc_client_test.s:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/rpc_client_test.dir/build.make CMakeFiles/rpc_client_test.dir/example/rpc_client_test.s
-.PHONY : example/rpc_client_test.s
-
-# target to build an object file
 example/rpc_server_pb_test.o:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/rpc_server_pb_test.dir/build.make CMakeFiles/rpc_server_pb_test.dir/example/rpc_server_pb_test.o
 .PHONY : example/rpc_server_pb_test.o
@@ -320,21 +335,6 @@ example/rpc_server_pb_test.i:
 example/rpc_server_pb_test.s:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/rpc_server_pb_test.dir/build.make CMakeFiles/rpc_server_pb_test.dir/example/rpc_server_pb_test.s
 .PHONY : example/rpc_server_pb_test.s
-
-# target to build an object file
-example/rpc_server_test.o:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/rpc_server_test.dir/build.make CMakeFiles/rpc_server_test.dir/example/rpc_server_test.o
-.PHONY : example/rpc_server_test.o
-
-# target to preprocess a source file
-example/rpc_server_test.i:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/rpc_server_test.dir/build.make CMakeFiles/rpc_server_test.dir/example/rpc_server_test.i
-.PHONY : example/rpc_server_test.i
-
-# target to generate assembly for a file
-example/rpc_server_test.s:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/rpc_server_test.dir/build.make CMakeFiles/rpc_server_test.dir/example/rpc_server_test.s
-.PHONY : example/rpc_server_test.s
 
 # target to build an object file
 example/tcp_client_test.o:
@@ -502,81 +502,6 @@ src/processor_selector.s:
 .PHONY : src/processor_selector.s
 
 # target to build an object file
-src/rpc/rpc_client.o:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/libnetco.dir/build.make CMakeFiles/libnetco.dir/src/rpc/rpc_client.o
-.PHONY : src/rpc/rpc_client.o
-
-# target to preprocess a source file
-src/rpc/rpc_client.i:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/libnetco.dir/build.make CMakeFiles/libnetco.dir/src/rpc/rpc_client.i
-.PHONY : src/rpc/rpc_client.i
-
-# target to generate assembly for a file
-src/rpc/rpc_client.s:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/libnetco.dir/build.make CMakeFiles/libnetco.dir/src/rpc/rpc_client.s
-.PHONY : src/rpc/rpc_client.s
-
-# target to build an object file
-src/rpc/rpc_client_stub.o:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/libnetco.dir/build.make CMakeFiles/libnetco.dir/src/rpc/rpc_client_stub.o
-.PHONY : src/rpc/rpc_client_stub.o
-
-# target to preprocess a source file
-src/rpc/rpc_client_stub.i:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/libnetco.dir/build.make CMakeFiles/libnetco.dir/src/rpc/rpc_client_stub.i
-.PHONY : src/rpc/rpc_client_stub.i
-
-# target to generate assembly for a file
-src/rpc/rpc_client_stub.s:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/libnetco.dir/build.make CMakeFiles/libnetco.dir/src/rpc/rpc_client_stub.s
-.PHONY : src/rpc/rpc_client_stub.s
-
-# target to build an object file
-src/rpc/rpc_header.o:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/libnetco.dir/build.make CMakeFiles/libnetco.dir/src/rpc/rpc_header.o
-.PHONY : src/rpc/rpc_header.o
-
-# target to preprocess a source file
-src/rpc/rpc_header.i:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/libnetco.dir/build.make CMakeFiles/libnetco.dir/src/rpc/rpc_header.i
-.PHONY : src/rpc/rpc_header.i
-
-# target to generate assembly for a file
-src/rpc/rpc_header.s:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/libnetco.dir/build.make CMakeFiles/libnetco.dir/src/rpc/rpc_header.s
-.PHONY : src/rpc/rpc_header.s
-
-# target to build an object file
-src/rpc/rpc_server.o:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/libnetco.dir/build.make CMakeFiles/libnetco.dir/src/rpc/rpc_server.o
-.PHONY : src/rpc/rpc_server.o
-
-# target to preprocess a source file
-src/rpc/rpc_server.i:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/libnetco.dir/build.make CMakeFiles/libnetco.dir/src/rpc/rpc_server.i
-.PHONY : src/rpc/rpc_server.i
-
-# target to generate assembly for a file
-src/rpc/rpc_server.s:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/libnetco.dir/build.make CMakeFiles/libnetco.dir/src/rpc/rpc_server.s
-.PHONY : src/rpc/rpc_server.s
-
-# target to build an object file
-src/rpc/rpc_server_stub.o:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/libnetco.dir/build.make CMakeFiles/libnetco.dir/src/rpc/rpc_server_stub.o
-.PHONY : src/rpc/rpc_server_stub.o
-
-# target to preprocess a source file
-src/rpc/rpc_server_stub.i:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/libnetco.dir/build.make CMakeFiles/libnetco.dir/src/rpc/rpc_server_stub.i
-.PHONY : src/rpc/rpc_server_stub.i
-
-# target to generate assembly for a file
-src/rpc/rpc_server_stub.s:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/libnetco.dir/build.make CMakeFiles/libnetco.dir/src/rpc/rpc_server_stub.s
-.PHONY : src/rpc/rpc_server_stub.s
-
-# target to build an object file
 src/rpc_proto/int_message.pb.o:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/libnetco.dir/build.make CMakeFiles/libnetco.dir/src/rpc_proto/int_message.pb.o
 .PHONY : src/rpc_proto/int_message.pb.o
@@ -590,6 +515,21 @@ src/rpc_proto/int_message.pb.i:
 src/rpc_proto/int_message.pb.s:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/libnetco.dir/build.make CMakeFiles/libnetco.dir/src/rpc_proto/int_message.pb.s
 .PHONY : src/rpc_proto/int_message.pb.s
+
+# target to build an object file
+src/rpc_proto/load_balancer.o:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/libnetco.dir/build.make CMakeFiles/libnetco.dir/src/rpc_proto/load_balancer.o
+.PHONY : src/rpc_proto/load_balancer.o
+
+# target to preprocess a source file
+src/rpc_proto/load_balancer.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/libnetco.dir/build.make CMakeFiles/libnetco.dir/src/rpc_proto/load_balancer.i
+.PHONY : src/rpc_proto/load_balancer.i
+
+# target to generate assembly for a file
+src/rpc_proto/load_balancer.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/libnetco.dir/build.make CMakeFiles/libnetco.dir/src/rpc_proto/load_balancer.s
+.PHONY : src/rpc_proto/load_balancer.s
 
 # target to build an object file
 src/rpc_proto/rpc_client.o:
@@ -680,6 +620,21 @@ src/rpc_proto/rpcheader.pb.i:
 src/rpc_proto/rpcheader.pb.s:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/libnetco.dir/build.make CMakeFiles/libnetco.dir/src/rpc_proto/rpcheader.pb.s
 .PHONY : src/rpc_proto/rpcheader.pb.s
+
+# target to build an object file
+src/rpc_proto/zk_naming_service.o:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/libnetco.dir/build.make CMakeFiles/libnetco.dir/src/rpc_proto/zk_naming_service.o
+.PHONY : src/rpc_proto/zk_naming_service.o
+
+# target to preprocess a source file
+src/rpc_proto/zk_naming_service.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/libnetco.dir/build.make CMakeFiles/libnetco.dir/src/rpc_proto/zk_naming_service.i
+.PHONY : src/rpc_proto/zk_naming_service.i
+
+# target to generate assembly for a file
+src/rpc_proto/zk_naming_service.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/libnetco.dir/build.make CMakeFiles/libnetco.dir/src/rpc_proto/zk_naming_service.s
+.PHONY : src/rpc_proto/zk_naming_service.s
 
 # target to build an object file
 src/scheduler.o:
@@ -779,34 +734,34 @@ help:
 	@echo "... depend"
 	@echo "... edit_cache"
 	@echo "... rebuild_cache"
+	@echo "... doubly_buffer_test"
 	@echo "... libnetco"
 	@echo "... log_test"
 	@echo "... method_test"
+	@echo "... name_service_test"
 	@echo "... rpc_client_pb_test"
-	@echo "... rpc_client_test"
 	@echo "... rpc_server_pb_test"
-	@echo "... rpc_server_test"
 	@echo "... tcp_client_test"
 	@echo "... tcp_server_test"
 	@echo "... zkTest"
+	@echo "... example/doubly_buffer_test.o"
+	@echo "... example/doubly_buffer_test.i"
+	@echo "... example/doubly_buffer_test.s"
 	@echo "... example/log_test.o"
 	@echo "... example/log_test.i"
 	@echo "... example/log_test.s"
 	@echo "... example/method_test.o"
 	@echo "... example/method_test.i"
 	@echo "... example/method_test.s"
+	@echo "... example/name_service_test.o"
+	@echo "... example/name_service_test.i"
+	@echo "... example/name_service_test.s"
 	@echo "... example/rpc_client_pb_test.o"
 	@echo "... example/rpc_client_pb_test.i"
 	@echo "... example/rpc_client_pb_test.s"
-	@echo "... example/rpc_client_test.o"
-	@echo "... example/rpc_client_test.i"
-	@echo "... example/rpc_client_test.s"
 	@echo "... example/rpc_server_pb_test.o"
 	@echo "... example/rpc_server_pb_test.i"
 	@echo "... example/rpc_server_pb_test.s"
-	@echo "... example/rpc_server_test.o"
-	@echo "... example/rpc_server_test.i"
-	@echo "... example/rpc_server_test.s"
 	@echo "... example/tcp_client_test.o"
 	@echo "... example/tcp_client_test.i"
 	@echo "... example/tcp_client_test.s"
@@ -840,24 +795,12 @@ help:
 	@echo "... src/processor_selector.o"
 	@echo "... src/processor_selector.i"
 	@echo "... src/processor_selector.s"
-	@echo "... src/rpc/rpc_client.o"
-	@echo "... src/rpc/rpc_client.i"
-	@echo "... src/rpc/rpc_client.s"
-	@echo "... src/rpc/rpc_client_stub.o"
-	@echo "... src/rpc/rpc_client_stub.i"
-	@echo "... src/rpc/rpc_client_stub.s"
-	@echo "... src/rpc/rpc_header.o"
-	@echo "... src/rpc/rpc_header.i"
-	@echo "... src/rpc/rpc_header.s"
-	@echo "... src/rpc/rpc_server.o"
-	@echo "... src/rpc/rpc_server.i"
-	@echo "... src/rpc/rpc_server.s"
-	@echo "... src/rpc/rpc_server_stub.o"
-	@echo "... src/rpc/rpc_server_stub.i"
-	@echo "... src/rpc/rpc_server_stub.s"
 	@echo "... src/rpc_proto/int_message.pb.o"
 	@echo "... src/rpc_proto/int_message.pb.i"
 	@echo "... src/rpc_proto/int_message.pb.s"
+	@echo "... src/rpc_proto/load_balancer.o"
+	@echo "... src/rpc_proto/load_balancer.i"
+	@echo "... src/rpc_proto/load_balancer.s"
 	@echo "... src/rpc_proto/rpc_client.o"
 	@echo "... src/rpc_proto/rpc_client.i"
 	@echo "... src/rpc_proto/rpc_client.s"
@@ -876,6 +819,9 @@ help:
 	@echo "... src/rpc_proto/rpcheader.pb.o"
 	@echo "... src/rpc_proto/rpcheader.pb.i"
 	@echo "... src/rpc_proto/rpcheader.pb.s"
+	@echo "... src/rpc_proto/zk_naming_service.o"
+	@echo "... src/rpc_proto/zk_naming_service.i"
+	@echo "... src/rpc_proto/zk_naming_service.s"
 	@echo "... src/scheduler.o"
 	@echo "... src/scheduler.i"
 	@echo "... src/scheduler.s"

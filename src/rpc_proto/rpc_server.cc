@@ -1,5 +1,3 @@
-#pragma once
-
 #include "../../include/rpc_proto/rpc_server_stub.h"
 #include "../../include/rpc_proto/rpc_server.h"
 #include "../../include/rpc_proto/rpc_response_header.pb.h"

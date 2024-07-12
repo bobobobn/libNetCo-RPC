@@ -174,6 +174,7 @@ void Socket::connect(const char* ip, int port)
 	if(ret == -1 && errno == EINTR){
 		return connect(ip, port);
 	}
+	NETCO_LOG_FMT("connect to %s:%d failed, errno=%d", ip, port, errno);
 	netco::Scheduler::getScheduler()->getProcessor(threadIdx)->waitEvent(_sockfd, EPOLLOUT);
 	return connect(ip, port);
 }

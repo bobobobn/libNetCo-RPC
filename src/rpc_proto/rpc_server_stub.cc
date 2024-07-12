@@ -1,5 +1,3 @@
-#pragma once
-
 #include "../../include/rpc_proto/rpc_server_stub.h"
 #include "../../include/rpc_proto/rpc_response_header.pb.h"
 #include <string>
@@ -26,7 +24,7 @@ namespace netco{
             addr_str = ip;
         }
         addr_str += ":" + std::to_string(port);
-        registerAllServiceOnZk(m_zk_client, addr_str);
+        registerAllService(addr_str);
         /** 开启tcp服务器运行*/
         m_tcp_server->start(ip,port); 
         NETCO_LOG()<<("rpc-server-stub start run the tcp-server loop");
@@ -43,7 +41,7 @@ namespace netco{
             addr_str = ip;
         }
         addr_str += ":" + std::to_string(port);
-        registerAllServiceOnZk(m_zk_client, addr_str);
+        registerAllService(addr_str);
         m_tcp_server->start_multi(ip,port);
         NETCO_LOG()<<("rpc-server-stub start run the tcp-server multi loop");
     }
@@ -52,12 +50,12 @@ namespace netco{
     {
         m_tcp_server->register_connection(conn);
     }
-    void RpcServerStub::RegisterService(const std::string& service_name, const std::string& method_name, RpcChannel::method_callback_t callback){
+    void RpcServerStub::RegisterService(const std::string& service_name, const std::string& method_name, RpcMethod::method_callback_t callback){
         SpinlockGuard guard(m_lock);
         if(m_service_map.find(service_name) == m_service_map.end()){
             // register new service
             NETCO_LOG()<<"register new service:"<<service_name;
-            m_service_map[service_name] = std::make_shared<RpcSerivce>(service_name);
+            m_service_map[service_name] = std::make_shared<RpcService>(service_name);
             m_service_map[service_name]->register_method(method_name, callback);
         }
         else{
@@ -88,7 +86,7 @@ namespace netco{
         }        
         else{
             // handle request
-            RpcSerivce::Ptr service = m_service_map[service_name];
+            RpcService::Ptr service = m_service_map[service_name];
             if(service->has_method(method_name)){
                 NETCO_LOG()<<"calling method:"<<method_name;
                 response = service->call_method(method_name, read_buffer.substr(sizeof(head_size) + head_size, args_size));
@@ -111,10 +109,10 @@ namespace netco{
         write_buffer.append(response_header_str); // write response header
         write_buffer.append(response); // write responses
     }
-    void RpcServerStub::registerAllServiceOnZk(ZkClient::Ptr zkClient, const std::string& ipPortAddr){
+    void RpcServerStub::registerAllService(const std::string& ipPortAddr){
         for(auto& service_pair : m_service_map){
-            RpcSerivce::Ptr service = service_pair.second;
-            service->registerAllMethodOnZk(zkClient, ipPortAddr);
+            RpcService::Ptr service = service_pair.second;
+            service->registerAllMethod(m_name_service_register, ipPortAddr);
         }
     }
 }

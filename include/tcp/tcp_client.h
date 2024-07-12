@@ -30,7 +30,7 @@ public:
     }
     
     void connect(const char* ip,int port);
-
+    void reset_socket();
     /** return 0 is success -1 is error*/
     int disconnect();
     size_t recv(void* buf,size_t count);

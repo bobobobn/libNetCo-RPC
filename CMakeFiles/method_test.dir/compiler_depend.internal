@@ -179,7 +179,7 @@ CMakeFiles/method_test.dir/example/method_test.o
  /usr/include/c++/11/bits/ostream.tcc
  /usr/include/c++/11/istream
  /usr/include/c++/11/bits/istream.tcc
- /home/bob/libNetCo/include/rpc_proto/rpc_channel.h
+ /home/bob/libNetCo/include/rpc_proto/rpc_method.h
  /home/bob/libNetCo/include/rpc_proto/rpcheader.pb.h
  /usr/local/include/google/protobuf/stubs/common.h
  /usr/local/include/google/protobuf/stubs/port.h

@@ -1,54 +1,54 @@
 #pragma once
 
-#include "rpc_channel.h"
+#include "rpc_method.h"
 #include <string>
 #include <functional>
 #include <map>
 #include "../log.h"
-#include "../zk_client.h"
+#include "name_service_register.h"
 
 namespace netco{
 
-    class RpcSerivce {
+    class RpcService {
     public:
-        using Ptr = std::shared_ptr<RpcSerivce>;
-        RpcSerivce(std::string service_name) : m_service_name(service_name) {}
-        ~RpcSerivce() {}
+        using Ptr = std::shared_ptr<RpcService>;
+        RpcService(std::string service_name) : m_service_name(service_name) {}
+        ~RpcService() {}
 
-        bool register_method(std::string method_name, typename netco::RpcChannel::method_callback_t method_callback) {
+        bool register_method(std::string method_name, typename netco::RpcMethod::method_callback_t method_callback) {
             NETCO_LOG()<<"register method "<<method_name<<" for service "<<m_service_name;
-            typename netco::RpcChannel::Ptr channel = std::make_shared<netco::RpcChannel>(method_name, method_callback);
-            return register_method(channel);
+            typename netco::RpcMethod::Ptr method = std::make_shared<netco::RpcMethod>(method_name, method_callback);
+            return register_method(method);
         }
         
-        bool register_method(typename netco::RpcChannel::Ptr channel) {
-            std::string method_name = channel->get_method_name();
-            if(channel->get_method_name().empty())
+        bool register_method(typename netco::RpcMethod::Ptr method) {
+            std::string method_name = method->get_method_name();
+            if(method->get_method_name().empty())
                 return false;
-            m_channels[method_name] = channel;
+            m_methods[method_name] = method;
             return true;
         }
-        bool has_method(std::string method_name) { return m_channels.find(method_name)!= m_channels.end(); }        
+        bool has_method(std::string method_name) { return m_methods.find(method_name)!= m_methods.end(); }        
         std::string call_method(std::string method_name, const std::string& arg) {
-            auto channel = m_channels.find(method_name);
-            if (channel == m_channels.end()) {
+            auto method = m_methods.find(method_name);
+            if (method == m_methods.end()) {
                 return nullptr;
             }
             NETCO_LOG()<<"find method "<<method_name<<" for service "<<m_service_name<<"calling...";
-            return channel->second->callMethod(arg);
+            return method->second->callMethod(arg);
         }
-        void registerAllMethodOnZk(ZkClient::Ptr zkClient, const std::string& ipPortAddr){
-            zkClient->create( ("/" + m_service_name).c_str(), nullptr, ZOO_PERSISTENT);
-            zkClient->create( ("/" + m_service_name + "/provider").c_str(), nullptr, ZOO_PERSISTENT);
-            zkClient->create( ("/" + m_service_name + "/consumer").c_str(), nullptr, ZOO_PERSISTENT);
-            for(auto& channel : m_channels){
-                NETCO_LOG()<<"register method "<<channel.first<<" for service "<<m_service_name<<" on zk..."<<" method running on: "<< ipPortAddr;
-                zkClient->create(("/" + m_service_name + "/provider/" + channel.first + "_").c_str(), ipPortAddr.c_str(), ZOO_EPHEMERAL_SEQUENTIAL);
+        void registerAllMethod(NameServiceRegister::Ptr ns_register, const std::string& ipPortAddr){
+            if(ns_register == nullptr){
+                NETCO_LOG()<<"ns_register is nullptr";
+                exit(1);
+            }
+            for(auto& method : m_methods){
+                ns_register->RegisterMethod(m_service_name.c_str(), method.first.c_str(), ipPortAddr.c_str());
             }
         }
 
     private:
         std::string m_service_name;
-        std::map<std::string, netco::RpcChannel::Ptr> m_channels;
+        std::map<std::string, netco::RpcMethod::Ptr> m_methods;
     };
 }

@@ -1,0 +1,197 @@
+#pragma once
+#include <pthread.h>
+#include <atomic>
+#include <memory>
+#include <map>
+#include <cassert>
+#include "../mutex_guard.h"
+
+namespace netco{
+    extern __thread int threadIdx;
+    /**
+     * @brief A thread-safe data structure that provides two views of the same data, 
+     * allowing concurrent reads and writes, 
+     * based on the threadlocal mutex locks.
+     * @tparam T The type of the data to be stored.
+     */
+    template<typename T>
+    class DoublyBufferedData{
+    public:
+        class Wrapper;
+        class ScopePtr;
+        DoublyBufferedData() : _index(0) {
+            _data[0] = T();
+            _data[1] = T();
+            pthread_mutex_init(&_wrappers_mutex, nullptr);
+            pthread_mutex_init(&_modify_mutex, nullptr);
+        }
+        ~DoublyBufferedData(){
+            pthread_mutex_destroy(&_wrappers_mutex);
+            pthread_mutex_destroy(&_modify_mutex);
+        }
+        void Read(ScopePtr& s_ptr);
+        template<typename Fn>
+        void Modify(Fn&& fn);
+        template<typename Fn, typename Arg1>
+        void Modify(Fn&& fn, Arg1&& arg1);
+        template<typename Fn, typename Arg1, typename Arg2>
+        void Modify(Fn&& fn, Arg1&& arg1, Arg2&& arg2);
+        
+
+    private:
+        template<typename Fn, typename Arg1>
+        struct Closure1{
+            Closure1(Fn&& fn, Arg1&& arg1) : _fn(std::forward<Fn>(fn)), _arg1(std::forward<Arg1>(arg1)){}
+            size_t operator()(T& data){
+                return _fn(data, _arg1);
+            }
+        private:
+            Fn _fn;
+            Arg1 _arg1;
+        };
+        template<typename Fn, typename Arg1, typename Arg2>
+        struct Closure2{
+            Closure2(Fn&& fn, Arg1&& arg1, Arg2&& arg2) : _fn(std::forward<Fn>(fn)), _arg1(std::forward<Arg1>(arg1)), _arg2(std::forward<Arg2>(arg2)){}
+            size_t operator()(T& data){
+                return _fn(data, _arg1, _arg2);
+            }
+        private:
+            Fn _fn;
+            Arg1 _arg1;
+            Arg2 _arg2;
+        };
+        const T* UnsafeRead();
+        std::shared_ptr<Wrapper> create_or_get_wrapper();
+        void RemoveWrapper(std::shared_ptr<Wrapper>);
+
+    private:
+        T _data[2];
+        std::atomic<int> _index;
+        std::map<int, std::shared_ptr<Wrapper>> _wrappers_map;
+        pthread_mutex_t _wrappers_mutex;
+        pthread_mutex_t _modify_mutex;
+
+    };
+
+
+    template<typename T>
+    class DoublyBufferedData<T>::Wrapper : public std::enable_shared_from_this<typename DoublyBufferedData<T>::Wrapper> {
+    friend class DoublyBufferedData;
+    public:
+        explicit Wrapper() : _control(nullptr) {
+            pthread_mutex_init(&_mutex, nullptr);
+        }
+        ~Wrapper(){
+            if(_control)
+                _control->RemoveWrapper(std::enable_shared_from_this<typename DoublyBufferedData<T>::Wrapper>::shared_from_this());
+            pthread_mutex_destroy(&_mutex);
+        }
+        inline std::shared_ptr<Wrapper> get_shared_from_this() {
+            return std::enable_shared_from_this<typename DoublyBufferedData<T>::Wrapper>::shared_from_this();
+        }
+        void StartRead() {
+            pthread_mutex_lock(&_mutex);
+        }
+        void EndRead() {
+            pthread_mutex_unlock(&_mutex);
+        }
+        inline void WaitReadDone() {
+            MutexGuard guard(_mutex);
+        }
+
+    private:
+        DoublyBufferedData* _control;        
+        pthread_mutex_t _mutex;
+    };
+
+    template<typename T>
+    class DoublyBufferedData<T>::ScopePtr
+    {
+    friend class DoublyBufferedData;
+    public:
+        ScopePtr() : _ptr(nullptr) {}
+        ~ScopePtr(){
+            if(_wrapper)
+            {
+                _wrapper->EndRead();
+            }
+        }
+        const T* get() const { return _ptr; }
+        const T& operator*() const { return *_ptr; }
+        const T* operator->() const { return _ptr; }
+    private:
+        const T* _ptr;
+        std::shared_ptr<Wrapper> _wrapper;
+    };
+
+
+    template<typename T>
+    void DoublyBufferedData<T>::Read(ScopePtr& s_ptr) {
+        std::shared_ptr<Wrapper> wrapper = create_or_get_wrapper();
+        wrapper->StartRead();
+        s_ptr._wrapper = wrapper;
+        s_ptr._ptr = UnsafeRead();        
+    }
+
+    template<typename T>
+    const T* DoublyBufferedData<T>::UnsafeRead() {
+        int idx = _index.load(std::memory_order_relaxed);
+        return &_data[idx];
+    }
+
+    template<typename T>
+    std::shared_ptr<typename DoublyBufferedData<T>::Wrapper> DoublyBufferedData<T>::create_or_get_wrapper() {
+        int idx = threadIdx;
+        MutexGuard lock(_wrappers_mutex);
+        auto it = _wrappers_map.find(idx);
+        if(it != _wrappers_map.end())
+            return it->second;
+        std::shared_ptr<typename DoublyBufferedData<T>::Wrapper> wrapper = std::make_shared<typename DoublyBufferedData<T>::Wrapper>();
+        wrapper->_control = this;
+        _wrappers_map[idx] = wrapper;
+        return wrapper;
+    }
+
+    template<typename T>
+    void DoublyBufferedData<T>::RemoveWrapper(std::shared_ptr<Wrapper> wrapper) {
+        for(auto it = _wrappers_map.begin(); it != _wrappers_map.end(); ++it){
+            if(it->second == wrapper)
+            {
+                _wrappers_map.erase(it);
+                return;
+            }
+        }
+    }
+
+    template<typename T>
+    template<typename Fn>
+    void DoublyBufferedData<T>::Modify(Fn&& fn) {
+        MutexGuard lock(_modify_mutex);
+        int bg_idx = !_index.load(std::memory_order_relaxed);
+        size_t ret0 = fn(_data[bg_idx]);
+        _index.store(bg_idx, std::memory_order_relaxed);
+        {      
+            MutexGuard lock(_wrappers_mutex);          
+            for(auto it = _wrappers_map.begin(); it != _wrappers_map.end(); ++it){
+                it->second->WaitReadDone();
+            }
+        }
+        bg_idx = !bg_idx;
+        size_t ret1 = fn(_data[bg_idx]);
+        assert(ret0 == ret1);
+    }
+
+    template<typename T>
+    template<typename Fn, typename Arg1>
+    void DoublyBufferedData<T>::Modify(Fn&& fn, Arg1&& arg1) {
+        Closure1<Fn, Arg1> closure(std::forward<Fn>(fn), std::forward<Arg1>(arg1));
+        Modify(std::move(closure));
+    }
+
+    template<typename T>
+    template<typename Fn, typename Arg1, typename Arg2>
+    void DoublyBufferedData<T>::Modify(Fn&& fn, Arg1&& arg1, Arg2&& arg2) {
+        Closure2<Fn, Arg1, Arg2> closure(std::forward<Fn>(fn), std::forward<Arg1>(arg1), std::forward<Arg2>(arg2));
+        Modify(std::move(closure));
+    }
+}

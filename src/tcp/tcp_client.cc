@@ -27,9 +27,7 @@ size_t TcpClient::send(const void* buf, size_t count)
 
 
 
-
-
-
-
-
+void TcpClient::reset_socket(){
+    m_client_socket = new netco::Socket();
+}
 
