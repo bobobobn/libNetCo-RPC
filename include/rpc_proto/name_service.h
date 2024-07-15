@@ -6,21 +6,23 @@
 
 namespace netco{
     struct ServerNode {
-        std::string ipPort;
-        ServerNode(const std::string& ipPort) : ipPort(ipPort) {}
+        std::string ipPort_;
+        int weight_;
+        ServerNode(const std::string& ipPort) : ipPort_(ipPort), weight_(1) {}
+        ServerNode(const std::string& ipPort, int weight) : ipPort_(ipPort), weight_(weight) {}
         bool operator==(const ServerNode& other) const {
-            return ipPort == other.ipPort;
+            return ipPort_ == other.ipPort_;
         }
 
         bool operator!=(const ServerNode& other) const {
-            return ipPort != other.ipPort;
+            return ipPort_ != other.ipPort_;
         }
         bool operator<(const ServerNode& other) const {
-            return ipPort < other.ipPort;
+            return ipPort_ < other.ipPort_;
         }
 
         bool operator>(const ServerNode& other) const {
-            return ipPort > other.ipPort;
+            return ipPort_ > other.ipPort_;
         }
     };
 

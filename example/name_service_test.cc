@@ -9,7 +9,7 @@ int main() {
         auto data = ns->GetServerListPtr("test", "factorial");
         if(data){
             for(auto&it : **data){
-                std::cout <<"server: " <<it.ipPort.c_str() << std::endl;
+                std::cout <<"server: " <<it.ipPort_.c_str() << std::endl;
             }
 
         }
