@@ -19,6 +19,8 @@ file(REMOVE_RECURSE
   "CMakeFiles/libnetco.dir/src/rpc_proto/int_message.pb.o.d"
   "CMakeFiles/libnetco.dir/src/rpc_proto/load_balancer.o"
   "CMakeFiles/libnetco.dir/src/rpc_proto/load_balancer.o.d"
+  "CMakeFiles/libnetco.dir/src/rpc_proto/locality_aware_load_balancer.o"
+  "CMakeFiles/libnetco.dir/src/rpc_proto/locality_aware_load_balancer.o.d"
   "CMakeFiles/libnetco.dir/src/rpc_proto/rpc_client.o"
   "CMakeFiles/libnetco.dir/src/rpc_proto/rpc_client.o.d"
   "CMakeFiles/libnetco.dir/src/rpc_proto/rpc_client_stub.o"

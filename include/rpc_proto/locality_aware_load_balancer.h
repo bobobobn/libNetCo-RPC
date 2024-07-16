@@ -1,27 +1,17 @@
-#pragma once
+#ifndef LOCALITY_AWARE_LOAD_BALANCER_H_
+#define LOCALITY_AWARE_LOAD_BALANCER_H_
 #include <random>
 #include <unordered_map>
 #include <vector>
 #include <atomic>
 #include "load_balancer.h"
 #include "../container/doubly_buffered_data.h"
+#include "../container/bounded_queue.h"
+#include "socket_channel.h"
+#include "../utils.h"
 
 
 namespace netco{
-    static const int64_t DEFAULT_QPS = 1;
-    static const size_t INITIAL_WEIGHT_TREE_SIZE = 128;
-    // 1008680231, 放大系数，为了让整数存储权值
-    static const int64_t WEIGHT_SCALE =
-    std::numeric_limits<int64_t>::max() / 72000000 / (INITIAL_WEIGHT_TREE_SIZE - 1);
-
-    // get int random number in [1,n]
-    static int64_t getRand(int64_t n){
-        std::random_device rd;                             // 生成随机数种子
-        std::mt19937 gen(rd());                            // 定义随机数生成引擎
-        std::uniform_int_distribution<int64_t> distrib_int(1, n); // 定义随机数分布，生成在[1,n]之间的的均匀分布整数
-        return distrib_int(gen);
-    }
-
     using ServerName = std::string;
     /**
      * @brief Locality Aware Load Balancer, a automatically adjusted weighted random load balancer based on QPS and latency.
@@ -32,14 +22,26 @@ namespace netco{
      * 删除：基于DoublyBufferedData实现，将目标节点的字段值与末尾结点交换，然后删除末尾结点，向上更新权重值之和
      * server_map保留了server_name与weight_tree的下标映射关系
      */
-    class LocalityAwareLoadBalancer : public LoadBalancer<ServerName> {
+    class LocalityAwareLoadBalancer : public LoadBalancer {
         public:
+            LocalityAwareLoadBalancer(SocketChannel::NewFn channel_factory) : _channel_factory(channel_factory), server_map_(), total_weight_(0) { }
+            virtual ~LocalityAwareLoadBalancer() = default;
             void add_server(const ServerName& server) override;
             void remove_server(const ServerName& server) override;
             int select_server(const SelectIn& in, SelectOut* out) override;
-        
-        private:
+            size_t AddServersInBatch(const std::vector<ServerName>& servers) override;
+            size_t RemoveServersInBatch(const std::vector<ServerName>& servers) override;
+            void Feedback(const CallInfo& info) override;
+            static LoadBalancer::UniquePtr New(SocketChannel::NewFn channel_factory) {
+                return std::unique_ptr<LocalityAwareLoadBalancer>(new LocalityAwareLoadBalancer(channel_factory));
+            }
 
+        private:
+            SocketChannel::NewFn _channel_factory;
+            struct TimeInfo {
+                int64_t latency_sum;         // microseconds
+                int64_t end_time_us;
+            };
             class Weight{
             public:
                 struct AddInflightResult
@@ -47,6 +49,9 @@ namespace netco{
                     bool chosen;
                     int64_t weight_diff;
                 };
+                // Called in Feedback() to recalculate _weight.
+                // Returns diff of _weight.
+                int64_t Update(const CallInfo&, size_t index);
                 // call ResetWeight to update the current node, and return a struct 
                 // containing {boolean chosen, int64_t weight_diff}
                 // chosen: whether the node is still satisfied to the dice
@@ -56,12 +61,13 @@ namespace netco{
                 int64_t ResetWeight(size_t index, int64_t now_us);
                 // Set weight_base to avg_weight, and return the diff of weight
                 int64_t MarkFailed(size_t index, int64_t avg_weight);
+                // Mark where the index of this node is going to be used in the future, and return the weight before
+                int64_t MarkOld(size_t index);
+                std::pair<int64_t, int64_t> ClearOld();
                 // Set weight_base to 0, and return the weight before
-                int64_t Disable() { 
-                    MutexGuard lock(_mutex);
-                    auto ret = _weight; 
-                    _base_weight = -1, _weight = 0;
-                    return ret;
+                int64_t Disable();
+                bool Disabled() const { 
+                    return _base_weight < 0;
                 }
                 // Weight of self. Notice that this value may change at any time.
                 int64_t volatile_value() const { return _weight; }
@@ -80,7 +86,7 @@ namespace netco{
                 size_t _old_index;
                 int64_t _old_weight;
                 // // 采样窗口，计算延时和QPS, TODO: BoundedQueue
-                // BoundedQueue<TimeInfo> _time_q;      
+                BoundedQueue<TimeInfo> _time_q;      
                 MutexLock _mutex;  
             };
 
@@ -100,10 +106,19 @@ namespace netco{
                 std::unordered_map<ServerName, size_t> server_map;
                 // Add diff to left_weight of all parent nodes of node `index'.
                 // Not require position `index' to exist.
-                void UpdateParentWeight(int64_t diff, size_t index);
+                void UpdateParentWeight(int64_t diff, size_t index) const {
+                    while (index != 0) {
+                        const size_t parent_index = (index - 1) >> 1;
+                        if ((parent_index << 1) + 1 == index) {  // left child
+                            weight_tree[parent_index].left->fetch_add(
+                                diff, std::memory_order_relaxed);
+                        }
+                        index = parent_index;
+                    }
+                }
             };
 
-            static size_t Add(Servers& bg, const Servers& fg , const ServerName server_name, LocalityAwareLoadBalancer* balancer);
+            static size_t Add(Servers& bg, const Servers& fg , const ServerName& server_name, LocalityAwareLoadBalancer* balancer);
             static size_t Remove(Servers& servers, const ServerName& server_name, LocalityAwareLoadBalancer* balancer);
 
             DoublyBufferedData<Servers> servers_dbd_;
@@ -112,150 +127,5 @@ namespace netco{
             MutexLock server_map_mutex_;
             std::atomic<int64_t> total_weight_;
     };
-    size_t LocalityAwareLoadBalancer::Add(Servers& bg, const Servers& fg , const ServerName server_name, LocalityAwareLoadBalancer* balancer)
-    {
-        //TODO: ADD a NEW SERVER
-        auto fg_it = fg.server_map.find(node.server_name);
-        if(fg_it != fg.server_map.end()){
-            // fg has it, add it to bg, only change the structure of bg, weight has been changed by fg
-            bg.server_map[node.server_name] = fg.server_map[node.server_name];
-            bg.weight_tree.push_back(fg.weight_tree[fg_it->second]);
-        }
-        else{
-            // fg doesn't have it, add it to bg, need to create a new node
-            size_t n = bg.weight_tree.size();
-            ServerInfo node(server_name);
-            bg.server_map[node.server_name] = n;
-            bg.weight_tree.push_back(node);
-            auto diff = node.weight->volatile_value();
-            if(diff){
-                bg.UpdateParentWeight(diff, n);
-                balancer->total_weight_.fetch_add(diff, std::memory_order_relaxed);
-            }
-        }
-        return 0;
-    }
-
-    size_t LocalityAwareLoadBalancer::Remove(Servers& bg, const Servers& fg, const ServerName& server_name, LocalityAwareLoadBalancer* balancer) {
-        //TODO: REMOVE a EXISTING SERVER
-        size_t index = bg.server_map[server_name];
-        bg.server_map.erase(server_name);
-        auto weight_ptr_to_delete = bg.weight_tree[index].weight;
-        const auto weight_rm = weight_ptr_to_delete->Disable();
-        if(index + 1 == bg.weight_tree.size()){
-            // remove the last node
-            bg.weight_tree.pop_back();
-            if(weight_rm){
-                bg.UpdateParentWeight(-weight_rm, index);
-                balancer->total_weight_.fetch_add(-weight_rm, std::memory_order_relaxed);
-            }
-        }
-        else{
-            // swap the last node with the target node, and delete the last node
-            auto weight_ptr_to_swap = bg.weight_tree.back().weight; // previously back()
-            bg.weight_tree[index].weight = bg.weight_tree.back().weight;
-            bg.weight_tree[index].server_name = bg.weight_tree.back().server_name;
-            bg.server_map[bg.weight_tree.back().server_name] = index;
-            bg.weight_tree.pop_back();
-            
-        }
-         
-    }
-
-    void LocalityAwareLoadBalancer::add_server(const ServerName& server_name) {
-        {
-            MutexGuard lock(server_map_mutex_);
-            if(++server_map_[server_map_] != 1){
-                // server already exists
-                return;
-            }
-        }
-        servers_dbd_.ModifyWithForeground(Add, server_name, this);
-    }
-    
-    void LocalityAwareLoadBalancer::remove_server(const ServerName& server_name) {
-        {
-            MutexGuard lock(server_map_mutex_);
-            if(!server_map_.erase(server_name)){
-                return;
-            }
-        }
-        servers_dbd_.ModifyWithForeground(Remove, server_name, this);
-    }
-    
-    int LocalityAwareLoadBalancer::select_server(const SelectIn& in, SelectOut* out) {
-        auto servers_scope_ptr_ptr = servers_dbd_.GetDataPtr();
-        auto& servers = **servers_scope_ptr_ptr;
-        const size_t n = servers.weight_tree.size();
-        size_t n_try = 0;
-        int64_t total_weight = total_weight_.load(std::memory_order_relaxed);    
-        int64_t dice = getRand(total_weight);
-        int64_t self;
-        
-        int index = 0;
-        while(total_weight > 0){
-            const auto& node = servers.weight_tree[index];
-            const int64_t left = node.left->load(std::memory_order_relaxed);
-            if(dice < left){
-                // dice落在左子树
-                index = 2 * index + 1;
-            }
-            else if(dice >= left + (self = node.weight->volatile_value()))
-            {
-                // dice落在右子树
-                index = 2 * index + 2;
-                dice -= left + self;
-                if(index < n){
-                    continue;
-                }
-            }
-            else if(1/*TODO: the server of this node is available*/){
-                const auto result = node.weight->AddInflight(in, index, dice-left);
-                if(result.weight_diff){
-                    // 权值变化，更新父节点权值
-                    servers.UpdateParentWeight(result.weight_diff, index);
-                    total_weight_.fetch_add(result.weight_diff, std::memory_order_relaxed);
-                }
-                if(result.chosen){
-                    out->need_feedback = true;
-                    
-                    return 0;
-                }
-                // 权值更新后不符合选择条件，重新搜索
-                if(++n_try >= n){
-                    break;
-                }
-            }
-            // 节点服务器连接失败，标记为不可用
-            // TODO: 标记为不可用后，需要更新父节点权值
-            // TODO: 标记为不可用后，需要更新子节点权值
-            else{
-                auto diff = node.weight->MarkFailed(index, total_weight / n);
-                if(diff){
-                    servers.UpdateParentWeight(diff, index);
-                    total_weight_.fetch_add(diff, std::memory_order_relaxed);
-                }
-                if(dice >= left + self + diff){
-                    index = 2 * index + 2;
-                    dice -= left + self + diff;                
-                }
-                else{
-                    index = 2 * index + 1;
-                    dice = getRand(left);
-                }
-
-                if(index < n){
-                    continue;
-                }
-            }
-            // 重新搜索
-            if(++n_try >= n){
-                break;
-            }
-            total_weight = total_weight_.load(std::memory_order_relaxed);
-            dice = getRand(total_weight);
-            index = 0;
-        }
-    }
-
 }
+#endif

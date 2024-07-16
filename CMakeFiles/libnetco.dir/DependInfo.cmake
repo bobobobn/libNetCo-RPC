@@ -18,6 +18,7 @@ set(CMAKE_DEPENDS_DEPENDENCY_FILES
   "/home/bob/libNetCo/src/processor_selector.cc" "CMakeFiles/libnetco.dir/src/processor_selector.o" "gcc" "CMakeFiles/libnetco.dir/src/processor_selector.o.d"
   "/home/bob/libNetCo/src/rpc_proto/int_message.pb.cc" "CMakeFiles/libnetco.dir/src/rpc_proto/int_message.pb.o" "gcc" "CMakeFiles/libnetco.dir/src/rpc_proto/int_message.pb.o.d"
   "/home/bob/libNetCo/src/rpc_proto/load_balancer.cc" "CMakeFiles/libnetco.dir/src/rpc_proto/load_balancer.o" "gcc" "CMakeFiles/libnetco.dir/src/rpc_proto/load_balancer.o.d"
+  "/home/bob/libNetCo/src/rpc_proto/locality_aware_load_balancer.cc" "CMakeFiles/libnetco.dir/src/rpc_proto/locality_aware_load_balancer.o" "gcc" "CMakeFiles/libnetco.dir/src/rpc_proto/locality_aware_load_balancer.o.d"
   "/home/bob/libNetCo/src/rpc_proto/rpc_client.cc" "CMakeFiles/libnetco.dir/src/rpc_proto/rpc_client.o" "gcc" "CMakeFiles/libnetco.dir/src/rpc_proto/rpc_client.o.d"
   "/home/bob/libNetCo/src/rpc_proto/rpc_client_stub.cc" "CMakeFiles/libnetco.dir/src/rpc_proto/rpc_client_stub.o" "gcc" "CMakeFiles/libnetco.dir/src/rpc_proto/rpc_client_stub.o.d"
   "/home/bob/libNetCo/src/rpc_proto/rpc_response_header.pb.cc" "CMakeFiles/libnetco.dir/src/rpc_proto/rpc_response_header.pb.o" "gcc" "CMakeFiles/libnetco.dir/src/rpc_proto/rpc_response_header.pb.o.d"

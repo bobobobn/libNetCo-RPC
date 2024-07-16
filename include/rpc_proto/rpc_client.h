@@ -13,20 +13,12 @@ namespace netco{
     public:
       DISALLOW_COPY_MOVE_AND_ASSIGN(RpcClient);
 
-      RpcClient() : m_rpc_client_stub(new RpcClientStub())
+      RpcClient() : m_rpc_client_stub()
       {
-        NETCO_LOG()<<("rpc_client constructor a rpc-client-stub");
       }
     
       ~RpcClient()
       {
-        m_rpc_client_stub = nullptr;
-        NETCO_LOG()<<("rpc_client destructor a rpc-client-stub");
-      }
-
-      void connect(const char* ip,int port)
-      {
-        return m_rpc_client_stub->connect(ip,port);
       }
       /**
        * @brief 进行一次rpc请求
@@ -41,13 +33,8 @@ namespace netco{
       /** 客户端心跳检测*/
       void ping();
 
-      /** close the rpcclient function*/
-      int close()
-      {
-        return m_rpc_client_stub->close();
-      }
     
     private:
-      std::unique_ptr<RpcClientStub> m_rpc_client_stub;
+      RpcClientStub m_rpc_client_stub;
   };
 }

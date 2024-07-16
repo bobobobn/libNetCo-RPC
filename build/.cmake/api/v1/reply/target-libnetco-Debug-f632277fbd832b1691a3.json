@@ -63,9 +63,6 @@
 			[
 				{
 					"fragment" : "-g -fPIC"
-				},
-				{
-					"fragment" : "-std=gnu++11"
 				}
 			],
 			"defines" : 
@@ -96,7 +93,7 @@
 				[
 					1
 				],
-				"standard" : "11"
+				"standard" : "17"
 			},
 			"sourceIndexes" : 
 			[
@@ -122,10 +119,7 @@
 				19,
 				20,
 				21,
-				22,
-				23,
-				24,
-				25
+				22
 			]
 		}
 	],
@@ -199,10 +193,7 @@
 				19,
 				20,
 				21,
-				22,
-				23,
-				24,
-				25
+				22
 			]
 		}
 	],
@@ -259,37 +250,13 @@
 		{
 			"backtrace" : 1,
 			"compileGroupIndex" : 0,
-			"path" : "src/rpc/rpc_client.cc",
-			"sourceGroupIndex" : 0
-		},
-		{
-			"backtrace" : 1,
-			"compileGroupIndex" : 0,
-			"path" : "src/rpc/rpc_client_stub.cc",
-			"sourceGroupIndex" : 0
-		},
-		{
-			"backtrace" : 1,
-			"compileGroupIndex" : 0,
-			"path" : "src/rpc/rpc_header.cc",
-			"sourceGroupIndex" : 0
-		},
-		{
-			"backtrace" : 1,
-			"compileGroupIndex" : 0,
-			"path" : "src/rpc/rpc_server.cc",
-			"sourceGroupIndex" : 0
-		},
-		{
-			"backtrace" : 1,
-			"compileGroupIndex" : 0,
-			"path" : "src/rpc/rpc_server_stub.cc",
-			"sourceGroupIndex" : 0
-		},
-		{
-			"backtrace" : 1,
-			"compileGroupIndex" : 0,
 			"path" : "src/rpc_proto/int_message.pb.cc",
+			"sourceGroupIndex" : 0
+		},
+		{
+			"backtrace" : 1,
+			"compileGroupIndex" : 0,
+			"path" : "src/rpc_proto/load_balancer.cc",
 			"sourceGroupIndex" : 0
 		},
 		{
@@ -326,6 +293,12 @@
 			"backtrace" : 1,
 			"compileGroupIndex" : 0,
 			"path" : "src/rpc_proto/rpcheader.pb.cc",
+			"sourceGroupIndex" : 0
+		},
+		{
+			"backtrace" : 1,
+			"compileGroupIndex" : 0,
+			"path" : "src/rpc_proto/zk_naming_service.cc",
 			"sourceGroupIndex" : 0
 		},
 		{

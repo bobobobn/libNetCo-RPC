@@ -12,7 +12,7 @@ namespace netco{
         std::uniform_int_distribution<> distrib_int(1, n); // 定义随机数分布，生成在[1,n]之间的的均匀分布整数
         return distrib_int(gen);
     }
-    class WeightedRandomLoadBalancer : public LoadBalancer<ServerNode> {
+    class WeightedRandomLoadBalancer : public LoadBalancer {
         public:
             void add_server(const vector<ServerNode>& servers) override;
             void remove_server(const vector<ServerNode>& servers) override;

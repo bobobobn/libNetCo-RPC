@@ -85,7 +85,7 @@ namespace netco
 		ssize_t read(void* buf, size_t count);
 
 		/** 当前Socket连接到指定地址*/
-		void connect(const char* ip, int port);
+		int connect(const char* ip, int port);
 
 		/** 协程化改造-当前Socket发送数据*/
 		ssize_t send(const void* buf, size_t count);

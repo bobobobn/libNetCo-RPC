@@ -2,29 +2,7 @@
 #include <pthread.h>
 #include "utils.h"
 
-namespace netco {
-	class MutexLock;
-	class MutexGuard
-	{
-	public:
-		MutexGuard(MutexLock& l)
-			: lock_(l)
-		{
-			lock_.lock();
-		}
-
-		~MutexGuard()
-		{
-			lock_.unlock();
-		}
-
-		DISALLOW_COPY_MOVE_AND_ASSIGN(MutexGuard);
-
-	private:
-		MutexLock& lock_;
-
-	};
-
+namespace netco {	
 	class MutexLock{
 		public:
 			MutexLock()
@@ -47,6 +25,27 @@ namespace netco {
 		private:
 			pthread_mutex_t lock_;
 	};
+
+	class MutexGuard
+	{
+	public:
+		MutexGuard(MutexLock& l)
+			: lock_(l)
+		{
+			lock_.lock();
+		}
+
+		~MutexGuard()
+		{
+			lock_.unlock();
+		}
+
+		DISALLOW_COPY_MOVE_AND_ASSIGN(MutexGuard);
+
+	private:
+		MutexLock& lock_;
+	};
+
 	
 
 }

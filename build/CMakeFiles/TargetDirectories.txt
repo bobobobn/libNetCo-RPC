@@ -1,10 +1,10 @@
 /home/bob/libNetCo/build/CMakeFiles/libnetco.dir
+/home/bob/libNetCo/build/CMakeFiles/doubly_buffer_test.dir
 /home/bob/libNetCo/build/CMakeFiles/log_test.dir
 /home/bob/libNetCo/build/CMakeFiles/method_test.dir
+/home/bob/libNetCo/build/CMakeFiles/name_service_test.dir
 /home/bob/libNetCo/build/CMakeFiles/rpc_client_pb_test.dir
-/home/bob/libNetCo/build/CMakeFiles/rpc_client_test.dir
 /home/bob/libNetCo/build/CMakeFiles/rpc_server_pb_test.dir
-/home/bob/libNetCo/build/CMakeFiles/rpc_server_test.dir
 /home/bob/libNetCo/build/CMakeFiles/tcp_client_test.dir
 /home/bob/libNetCo/build/CMakeFiles/tcp_server_test.dir
 /home/bob/libNetCo/build/CMakeFiles/zkTest.dir

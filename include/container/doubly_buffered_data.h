@@ -70,7 +70,7 @@ namespace netco{
         };
         template<typename Fn>
         struct WithFg0{
-            WithFgs0(Fn&& fn, T* data) : _fn(std::forward<Fn>(fn)), _data(data){}
+            WithFg0(Fn&& fn, T* data) : _fn(std::forward<Fn>(fn)), _data(data){}
             size_t operator()(T& bg){
                 return _fn(bg, (const T&)_data[&bg != _data]);
             }
@@ -236,19 +236,19 @@ namespace netco{
     template<typename T>
     template<typename Fn>
     void DoublyBufferedData<T>::ModifyWithForeground(Fn&& fn) {
-        WithFg0<Fn> closure(std::forward<Fn>(fn), &_data);
+        WithFg0<Fn> closure(std::forward<Fn>(fn), _data);
         Modify(std::move(closure));
     }
     template<typename T>
     template<typename Fn, typename Arg1>
     void DoublyBufferedData<T>::ModifyWithForeground(Fn&& fn, Arg1&& arg1) {
-        WithFg1<Fn, Arg1> closure(std::forward<Fn>(fn), &_data, std::forward<Arg1>(arg1));
+        WithFg1<Fn, Arg1> closure(std::forward<Fn>(fn), _data, std::forward<Arg1>(arg1));
         Modify(std::move(closure));
     }
     template<typename T>
     template<typename Fn, typename Arg1, typename Arg2>
     void DoublyBufferedData<T>::ModifyWithForeground(Fn&& fn, Arg1&& arg1, Arg2&& arg2) {
-        WithFg2<Fn, Arg1, Arg2> closure(std::forward<Fn>(fn), &_data, std::forward<Arg1>(arg1), std::forward<Arg2>(arg2));
+        WithFg2<Fn, Arg1, Arg2> closure(std::forward<Fn>(fn), _data, std::forward<Arg1>(arg1), std::forward<Arg2>(arg2));
         Modify(std::move(closure));
     }
 }

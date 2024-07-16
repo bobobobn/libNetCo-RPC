@@ -50,23 +50,21 @@ namespace netco{
     void ZKNamingService::RunNS(const char* service_name, const char* method_name){
         std::vector<ServerNode> presence_servers;
         GetServers(service_name, method_name, &presence_servers);
-        char service_method_key[1024];
-        snprintf(service_method_key, sizeof(service_method_key), "%s_%s", service_name, method_name);
+        std::string service_method_key = std::string(service_name) + "_" + std::string(method_name);
         auto it = _actions.find(service_method_key);
-        if(it == _actions.end()){
-            NETCO_LOG_FMT("RpcClientStub::update_service_map: service_name: %s, method_name: %s, presence_servers: %s", service_name, method_name, presence_servers.empty() ? "empty" : "not empty");
-            _actions[service_method_key] = std::make_shared<NameServiceActionImpl>();
-            auto action = _actions[service_method_key];
+        if(it == _actions.end()){            
+            NameServiceActionImpl::UniquePtr action = std::make_unique<NameServiceActionImpl>();
             action->ResetServers(presence_servers);
+            _actions[service_method_key] = std::move(action);
         }
         else{
-            NETCO_LOG_FMT("RpcClientStub::update_service_map: service_name: %s, method_name: %s, presence_servers: %s", service_name, method_name, presence_servers.empty() ? "empty" : "not empty");
             it->second->ResetServers(presence_servers);
         }
     }
 
     size_t ResetFn(std::vector<ServerNode>& last_servers, NameServiceActionImpl* action, std::vector<ServerNode>& new_servers){
         if( !action->_servers_to_add.empty() || !action->_servers_to_remove.empty() || action->_servers_list_changed){
+            // the second buffer
             action->AddServers(last_servers);
             action->RemoveServers(last_servers);
             action->_servers_to_add.clear();
@@ -74,6 +72,7 @@ namespace netco{
             action->_servers_list_changed = 0;
         }
         else{
+            //the first_buffer
             std::sort(last_servers.begin(), last_servers.end());
             std::sort(new_servers.begin(), new_servers.end());
             std::set_difference(last_servers.begin(), last_servers.end(), 
@@ -87,6 +86,7 @@ namespace netco{
                 action->AddServers(last_servers);
                 action->RemoveServers(last_servers);
             }
+            action->LoadBalancerReset();
         }
         return 0;
     }
@@ -98,7 +98,9 @@ namespace netco{
     void NameServiceActionImpl::AddServers(std::vector<ServerNode>& last_servers){
         for(auto& server : _servers_to_add){
             last_servers.push_back(server);
+            
         }
+        
     }
 
     void NameServiceActionImpl::RemoveServers(std::vector<ServerNode>& last_servers){

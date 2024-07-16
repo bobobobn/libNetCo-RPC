@@ -181,80 +181,10 @@ CMakeFiles/libnetco.dir/src/processor_selector.s: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling CXX source to assembly CMakeFiles/libnetco.dir/src/processor_selector.s"
 	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /home/bob/libNetCo/src/processor_selector.cc -o CMakeFiles/libnetco.dir/src/processor_selector.s
 
-CMakeFiles/libnetco.dir/src/rpc/rpc_client.o: CMakeFiles/libnetco.dir/flags.make
-CMakeFiles/libnetco.dir/src/rpc/rpc_client.o: ../src/rpc/rpc_client.cc
-CMakeFiles/libnetco.dir/src/rpc/rpc_client.o: CMakeFiles/libnetco.dir/compiler_depend.ts
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/bob/libNetCo/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_9) "Building CXX object CMakeFiles/libnetco.dir/src/rpc/rpc_client.o"
-	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -MD -MT CMakeFiles/libnetco.dir/src/rpc/rpc_client.o -MF CMakeFiles/libnetco.dir/src/rpc/rpc_client.o.d -o CMakeFiles/libnetco.dir/src/rpc/rpc_client.o -c /home/bob/libNetCo/src/rpc/rpc_client.cc
-
-CMakeFiles/libnetco.dir/src/rpc/rpc_client.i: cmake_force
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing CXX source to CMakeFiles/libnetco.dir/src/rpc/rpc_client.i"
-	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /home/bob/libNetCo/src/rpc/rpc_client.cc > CMakeFiles/libnetco.dir/src/rpc/rpc_client.i
-
-CMakeFiles/libnetco.dir/src/rpc/rpc_client.s: cmake_force
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling CXX source to assembly CMakeFiles/libnetco.dir/src/rpc/rpc_client.s"
-	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /home/bob/libNetCo/src/rpc/rpc_client.cc -o CMakeFiles/libnetco.dir/src/rpc/rpc_client.s
-
-CMakeFiles/libnetco.dir/src/rpc/rpc_client_stub.o: CMakeFiles/libnetco.dir/flags.make
-CMakeFiles/libnetco.dir/src/rpc/rpc_client_stub.o: ../src/rpc/rpc_client_stub.cc
-CMakeFiles/libnetco.dir/src/rpc/rpc_client_stub.o: CMakeFiles/libnetco.dir/compiler_depend.ts
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/bob/libNetCo/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_10) "Building CXX object CMakeFiles/libnetco.dir/src/rpc/rpc_client_stub.o"
-	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -MD -MT CMakeFiles/libnetco.dir/src/rpc/rpc_client_stub.o -MF CMakeFiles/libnetco.dir/src/rpc/rpc_client_stub.o.d -o CMakeFiles/libnetco.dir/src/rpc/rpc_client_stub.o -c /home/bob/libNetCo/src/rpc/rpc_client_stub.cc
-
-CMakeFiles/libnetco.dir/src/rpc/rpc_client_stub.i: cmake_force
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing CXX source to CMakeFiles/libnetco.dir/src/rpc/rpc_client_stub.i"
-	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /home/bob/libNetCo/src/rpc/rpc_client_stub.cc > CMakeFiles/libnetco.dir/src/rpc/rpc_client_stub.i
-
-CMakeFiles/libnetco.dir/src/rpc/rpc_client_stub.s: cmake_force
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling CXX source to assembly CMakeFiles/libnetco.dir/src/rpc/rpc_client_stub.s"
-	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /home/bob/libNetCo/src/rpc/rpc_client_stub.cc -o CMakeFiles/libnetco.dir/src/rpc/rpc_client_stub.s
-
-CMakeFiles/libnetco.dir/src/rpc/rpc_header.o: CMakeFiles/libnetco.dir/flags.make
-CMakeFiles/libnetco.dir/src/rpc/rpc_header.o: ../src/rpc/rpc_header.cc
-CMakeFiles/libnetco.dir/src/rpc/rpc_header.o: CMakeFiles/libnetco.dir/compiler_depend.ts
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/bob/libNetCo/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_11) "Building CXX object CMakeFiles/libnetco.dir/src/rpc/rpc_header.o"
-	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -MD -MT CMakeFiles/libnetco.dir/src/rpc/rpc_header.o -MF CMakeFiles/libnetco.dir/src/rpc/rpc_header.o.d -o CMakeFiles/libnetco.dir/src/rpc/rpc_header.o -c /home/bob/libNetCo/src/rpc/rpc_header.cc
-
-CMakeFiles/libnetco.dir/src/rpc/rpc_header.i: cmake_force
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing CXX source to CMakeFiles/libnetco.dir/src/rpc/rpc_header.i"
-	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /home/bob/libNetCo/src/rpc/rpc_header.cc > CMakeFiles/libnetco.dir/src/rpc/rpc_header.i
-
-CMakeFiles/libnetco.dir/src/rpc/rpc_header.s: cmake_force
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling CXX source to assembly CMakeFiles/libnetco.dir/src/rpc/rpc_header.s"
-	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /home/bob/libNetCo/src/rpc/rpc_header.cc -o CMakeFiles/libnetco.dir/src/rpc/rpc_header.s
-
-CMakeFiles/libnetco.dir/src/rpc/rpc_server.o: CMakeFiles/libnetco.dir/flags.make
-CMakeFiles/libnetco.dir/src/rpc/rpc_server.o: ../src/rpc/rpc_server.cc
-CMakeFiles/libnetco.dir/src/rpc/rpc_server.o: CMakeFiles/libnetco.dir/compiler_depend.ts
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/bob/libNetCo/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_12) "Building CXX object CMakeFiles/libnetco.dir/src/rpc/rpc_server.o"
-	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -MD -MT CMakeFiles/libnetco.dir/src/rpc/rpc_server.o -MF CMakeFiles/libnetco.dir/src/rpc/rpc_server.o.d -o CMakeFiles/libnetco.dir/src/rpc/rpc_server.o -c /home/bob/libNetCo/src/rpc/rpc_server.cc
-
-CMakeFiles/libnetco.dir/src/rpc/rpc_server.i: cmake_force
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing CXX source to CMakeFiles/libnetco.dir/src/rpc/rpc_server.i"
-	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /home/bob/libNetCo/src/rpc/rpc_server.cc > CMakeFiles/libnetco.dir/src/rpc/rpc_server.i
-
-CMakeFiles/libnetco.dir/src/rpc/rpc_server.s: cmake_force
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling CXX source to assembly CMakeFiles/libnetco.dir/src/rpc/rpc_server.s"
-	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /home/bob/libNetCo/src/rpc/rpc_server.cc -o CMakeFiles/libnetco.dir/src/rpc/rpc_server.s
-
-CMakeFiles/libnetco.dir/src/rpc/rpc_server_stub.o: CMakeFiles/libnetco.dir/flags.make
-CMakeFiles/libnetco.dir/src/rpc/rpc_server_stub.o: ../src/rpc/rpc_server_stub.cc
-CMakeFiles/libnetco.dir/src/rpc/rpc_server_stub.o: CMakeFiles/libnetco.dir/compiler_depend.ts
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/bob/libNetCo/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_13) "Building CXX object CMakeFiles/libnetco.dir/src/rpc/rpc_server_stub.o"
-	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -MD -MT CMakeFiles/libnetco.dir/src/rpc/rpc_server_stub.o -MF CMakeFiles/libnetco.dir/src/rpc/rpc_server_stub.o.d -o CMakeFiles/libnetco.dir/src/rpc/rpc_server_stub.o -c /home/bob/libNetCo/src/rpc/rpc_server_stub.cc
-
-CMakeFiles/libnetco.dir/src/rpc/rpc_server_stub.i: cmake_force
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing CXX source to CMakeFiles/libnetco.dir/src/rpc/rpc_server_stub.i"
-	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /home/bob/libNetCo/src/rpc/rpc_server_stub.cc > CMakeFiles/libnetco.dir/src/rpc/rpc_server_stub.i
-
-CMakeFiles/libnetco.dir/src/rpc/rpc_server_stub.s: cmake_force
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling CXX source to assembly CMakeFiles/libnetco.dir/src/rpc/rpc_server_stub.s"
-	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /home/bob/libNetCo/src/rpc/rpc_server_stub.cc -o CMakeFiles/libnetco.dir/src/rpc/rpc_server_stub.s
-
 CMakeFiles/libnetco.dir/src/rpc_proto/int_message.pb.o: CMakeFiles/libnetco.dir/flags.make
 CMakeFiles/libnetco.dir/src/rpc_proto/int_message.pb.o: ../src/rpc_proto/int_message.pb.cc
 CMakeFiles/libnetco.dir/src/rpc_proto/int_message.pb.o: CMakeFiles/libnetco.dir/compiler_depend.ts
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/bob/libNetCo/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_14) "Building CXX object CMakeFiles/libnetco.dir/src/rpc_proto/int_message.pb.o"
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/bob/libNetCo/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_9) "Building CXX object CMakeFiles/libnetco.dir/src/rpc_proto/int_message.pb.o"
 	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -MD -MT CMakeFiles/libnetco.dir/src/rpc_proto/int_message.pb.o -MF CMakeFiles/libnetco.dir/src/rpc_proto/int_message.pb.o.d -o CMakeFiles/libnetco.dir/src/rpc_proto/int_message.pb.o -c /home/bob/libNetCo/src/rpc_proto/int_message.pb.cc
 
 CMakeFiles/libnetco.dir/src/rpc_proto/int_message.pb.i: cmake_force
@@ -265,10 +195,24 @@ CMakeFiles/libnetco.dir/src/rpc_proto/int_message.pb.s: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling CXX source to assembly CMakeFiles/libnetco.dir/src/rpc_proto/int_message.pb.s"
 	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /home/bob/libNetCo/src/rpc_proto/int_message.pb.cc -o CMakeFiles/libnetco.dir/src/rpc_proto/int_message.pb.s
 
+CMakeFiles/libnetco.dir/src/rpc_proto/load_balancer.o: CMakeFiles/libnetco.dir/flags.make
+CMakeFiles/libnetco.dir/src/rpc_proto/load_balancer.o: ../src/rpc_proto/load_balancer.cc
+CMakeFiles/libnetco.dir/src/rpc_proto/load_balancer.o: CMakeFiles/libnetco.dir/compiler_depend.ts
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/bob/libNetCo/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_10) "Building CXX object CMakeFiles/libnetco.dir/src/rpc_proto/load_balancer.o"
+	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -MD -MT CMakeFiles/libnetco.dir/src/rpc_proto/load_balancer.o -MF CMakeFiles/libnetco.dir/src/rpc_proto/load_balancer.o.d -o CMakeFiles/libnetco.dir/src/rpc_proto/load_balancer.o -c /home/bob/libNetCo/src/rpc_proto/load_balancer.cc
+
+CMakeFiles/libnetco.dir/src/rpc_proto/load_balancer.i: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing CXX source to CMakeFiles/libnetco.dir/src/rpc_proto/load_balancer.i"
+	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /home/bob/libNetCo/src/rpc_proto/load_balancer.cc > CMakeFiles/libnetco.dir/src/rpc_proto/load_balancer.i
+
+CMakeFiles/libnetco.dir/src/rpc_proto/load_balancer.s: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling CXX source to assembly CMakeFiles/libnetco.dir/src/rpc_proto/load_balancer.s"
+	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /home/bob/libNetCo/src/rpc_proto/load_balancer.cc -o CMakeFiles/libnetco.dir/src/rpc_proto/load_balancer.s
+
 CMakeFiles/libnetco.dir/src/rpc_proto/rpc_client.o: CMakeFiles/libnetco.dir/flags.make
 CMakeFiles/libnetco.dir/src/rpc_proto/rpc_client.o: ../src/rpc_proto/rpc_client.cc
 CMakeFiles/libnetco.dir/src/rpc_proto/rpc_client.o: CMakeFiles/libnetco.dir/compiler_depend.ts
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/bob/libNetCo/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_15) "Building CXX object CMakeFiles/libnetco.dir/src/rpc_proto/rpc_client.o"
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/bob/libNetCo/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_11) "Building CXX object CMakeFiles/libnetco.dir/src/rpc_proto/rpc_client.o"
 	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -MD -MT CMakeFiles/libnetco.dir/src/rpc_proto/rpc_client.o -MF CMakeFiles/libnetco.dir/src/rpc_proto/rpc_client.o.d -o CMakeFiles/libnetco.dir/src/rpc_proto/rpc_client.o -c /home/bob/libNetCo/src/rpc_proto/rpc_client.cc
 
 CMakeFiles/libnetco.dir/src/rpc_proto/rpc_client.i: cmake_force
@@ -282,7 +226,7 @@ CMakeFiles/libnetco.dir/src/rpc_proto/rpc_client.s: cmake_force
 CMakeFiles/libnetco.dir/src/rpc_proto/rpc_client_stub.o: CMakeFiles/libnetco.dir/flags.make
 CMakeFiles/libnetco.dir/src/rpc_proto/rpc_client_stub.o: ../src/rpc_proto/rpc_client_stub.cc
 CMakeFiles/libnetco.dir/src/rpc_proto/rpc_client_stub.o: CMakeFiles/libnetco.dir/compiler_depend.ts
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/bob/libNetCo/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_16) "Building CXX object CMakeFiles/libnetco.dir/src/rpc_proto/rpc_client_stub.o"
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/bob/libNetCo/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_12) "Building CXX object CMakeFiles/libnetco.dir/src/rpc_proto/rpc_client_stub.o"
 	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -MD -MT CMakeFiles/libnetco.dir/src/rpc_proto/rpc_client_stub.o -MF CMakeFiles/libnetco.dir/src/rpc_proto/rpc_client_stub.o.d -o CMakeFiles/libnetco.dir/src/rpc_proto/rpc_client_stub.o -c /home/bob/libNetCo/src/rpc_proto/rpc_client_stub.cc
 
 CMakeFiles/libnetco.dir/src/rpc_proto/rpc_client_stub.i: cmake_force
@@ -296,7 +240,7 @@ CMakeFiles/libnetco.dir/src/rpc_proto/rpc_client_stub.s: cmake_force
 CMakeFiles/libnetco.dir/src/rpc_proto/rpc_response_header.pb.o: CMakeFiles/libnetco.dir/flags.make
 CMakeFiles/libnetco.dir/src/rpc_proto/rpc_response_header.pb.o: ../src/rpc_proto/rpc_response_header.pb.cc
 CMakeFiles/libnetco.dir/src/rpc_proto/rpc_response_header.pb.o: CMakeFiles/libnetco.dir/compiler_depend.ts
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/bob/libNetCo/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_17) "Building CXX object CMakeFiles/libnetco.dir/src/rpc_proto/rpc_response_header.pb.o"
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/bob/libNetCo/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_13) "Building CXX object CMakeFiles/libnetco.dir/src/rpc_proto/rpc_response_header.pb.o"
 	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -MD -MT CMakeFiles/libnetco.dir/src/rpc_proto/rpc_response_header.pb.o -MF CMakeFiles/libnetco.dir/src/rpc_proto/rpc_response_header.pb.o.d -o CMakeFiles/libnetco.dir/src/rpc_proto/rpc_response_header.pb.o -c /home/bob/libNetCo/src/rpc_proto/rpc_response_header.pb.cc
 
 CMakeFiles/libnetco.dir/src/rpc_proto/rpc_response_header.pb.i: cmake_force
@@ -310,7 +254,7 @@ CMakeFiles/libnetco.dir/src/rpc_proto/rpc_response_header.pb.s: cmake_force
 CMakeFiles/libnetco.dir/src/rpc_proto/rpc_server.o: CMakeFiles/libnetco.dir/flags.make
 CMakeFiles/libnetco.dir/src/rpc_proto/rpc_server.o: ../src/rpc_proto/rpc_server.cc
 CMakeFiles/libnetco.dir/src/rpc_proto/rpc_server.o: CMakeFiles/libnetco.dir/compiler_depend.ts
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/bob/libNetCo/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_18) "Building CXX object CMakeFiles/libnetco.dir/src/rpc_proto/rpc_server.o"
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/bob/libNetCo/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_14) "Building CXX object CMakeFiles/libnetco.dir/src/rpc_proto/rpc_server.o"
 	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -MD -MT CMakeFiles/libnetco.dir/src/rpc_proto/rpc_server.o -MF CMakeFiles/libnetco.dir/src/rpc_proto/rpc_server.o.d -o CMakeFiles/libnetco.dir/src/rpc_proto/rpc_server.o -c /home/bob/libNetCo/src/rpc_proto/rpc_server.cc
 
 CMakeFiles/libnetco.dir/src/rpc_proto/rpc_server.i: cmake_force
@@ -324,7 +268,7 @@ CMakeFiles/libnetco.dir/src/rpc_proto/rpc_server.s: cmake_force
 CMakeFiles/libnetco.dir/src/rpc_proto/rpc_server_stub.o: CMakeFiles/libnetco.dir/flags.make
 CMakeFiles/libnetco.dir/src/rpc_proto/rpc_server_stub.o: ../src/rpc_proto/rpc_server_stub.cc
 CMakeFiles/libnetco.dir/src/rpc_proto/rpc_server_stub.o: CMakeFiles/libnetco.dir/compiler_depend.ts
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/bob/libNetCo/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_19) "Building CXX object CMakeFiles/libnetco.dir/src/rpc_proto/rpc_server_stub.o"
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/bob/libNetCo/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_15) "Building CXX object CMakeFiles/libnetco.dir/src/rpc_proto/rpc_server_stub.o"
 	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -MD -MT CMakeFiles/libnetco.dir/src/rpc_proto/rpc_server_stub.o -MF CMakeFiles/libnetco.dir/src/rpc_proto/rpc_server_stub.o.d -o CMakeFiles/libnetco.dir/src/rpc_proto/rpc_server_stub.o -c /home/bob/libNetCo/src/rpc_proto/rpc_server_stub.cc
 
 CMakeFiles/libnetco.dir/src/rpc_proto/rpc_server_stub.i: cmake_force
@@ -338,7 +282,7 @@ CMakeFiles/libnetco.dir/src/rpc_proto/rpc_server_stub.s: cmake_force
 CMakeFiles/libnetco.dir/src/rpc_proto/rpcheader.pb.o: CMakeFiles/libnetco.dir/flags.make
 CMakeFiles/libnetco.dir/src/rpc_proto/rpcheader.pb.o: ../src/rpc_proto/rpcheader.pb.cc
 CMakeFiles/libnetco.dir/src/rpc_proto/rpcheader.pb.o: CMakeFiles/libnetco.dir/compiler_depend.ts
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/bob/libNetCo/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_20) "Building CXX object CMakeFiles/libnetco.dir/src/rpc_proto/rpcheader.pb.o"
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/bob/libNetCo/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_16) "Building CXX object CMakeFiles/libnetco.dir/src/rpc_proto/rpcheader.pb.o"
 	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -MD -MT CMakeFiles/libnetco.dir/src/rpc_proto/rpcheader.pb.o -MF CMakeFiles/libnetco.dir/src/rpc_proto/rpcheader.pb.o.d -o CMakeFiles/libnetco.dir/src/rpc_proto/rpcheader.pb.o -c /home/bob/libNetCo/src/rpc_proto/rpcheader.pb.cc
 
 CMakeFiles/libnetco.dir/src/rpc_proto/rpcheader.pb.i: cmake_force
@@ -349,10 +293,24 @@ CMakeFiles/libnetco.dir/src/rpc_proto/rpcheader.pb.s: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling CXX source to assembly CMakeFiles/libnetco.dir/src/rpc_proto/rpcheader.pb.s"
 	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /home/bob/libNetCo/src/rpc_proto/rpcheader.pb.cc -o CMakeFiles/libnetco.dir/src/rpc_proto/rpcheader.pb.s
 
+CMakeFiles/libnetco.dir/src/rpc_proto/zk_naming_service.o: CMakeFiles/libnetco.dir/flags.make
+CMakeFiles/libnetco.dir/src/rpc_proto/zk_naming_service.o: ../src/rpc_proto/zk_naming_service.cc
+CMakeFiles/libnetco.dir/src/rpc_proto/zk_naming_service.o: CMakeFiles/libnetco.dir/compiler_depend.ts
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/bob/libNetCo/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_17) "Building CXX object CMakeFiles/libnetco.dir/src/rpc_proto/zk_naming_service.o"
+	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -MD -MT CMakeFiles/libnetco.dir/src/rpc_proto/zk_naming_service.o -MF CMakeFiles/libnetco.dir/src/rpc_proto/zk_naming_service.o.d -o CMakeFiles/libnetco.dir/src/rpc_proto/zk_naming_service.o -c /home/bob/libNetCo/src/rpc_proto/zk_naming_service.cc
+
+CMakeFiles/libnetco.dir/src/rpc_proto/zk_naming_service.i: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing CXX source to CMakeFiles/libnetco.dir/src/rpc_proto/zk_naming_service.i"
+	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /home/bob/libNetCo/src/rpc_proto/zk_naming_service.cc > CMakeFiles/libnetco.dir/src/rpc_proto/zk_naming_service.i
+
+CMakeFiles/libnetco.dir/src/rpc_proto/zk_naming_service.s: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling CXX source to assembly CMakeFiles/libnetco.dir/src/rpc_proto/zk_naming_service.s"
+	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /home/bob/libNetCo/src/rpc_proto/zk_naming_service.cc -o CMakeFiles/libnetco.dir/src/rpc_proto/zk_naming_service.s
+
 CMakeFiles/libnetco.dir/src/scheduler.o: CMakeFiles/libnetco.dir/flags.make
 CMakeFiles/libnetco.dir/src/scheduler.o: ../src/scheduler.cc
 CMakeFiles/libnetco.dir/src/scheduler.o: CMakeFiles/libnetco.dir/compiler_depend.ts
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/bob/libNetCo/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_21) "Building CXX object CMakeFiles/libnetco.dir/src/scheduler.o"
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/bob/libNetCo/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_18) "Building CXX object CMakeFiles/libnetco.dir/src/scheduler.o"
 	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -MD -MT CMakeFiles/libnetco.dir/src/scheduler.o -MF CMakeFiles/libnetco.dir/src/scheduler.o.d -o CMakeFiles/libnetco.dir/src/scheduler.o -c /home/bob/libNetCo/src/scheduler.cc
 
 CMakeFiles/libnetco.dir/src/scheduler.i: cmake_force
@@ -366,7 +324,7 @@ CMakeFiles/libnetco.dir/src/scheduler.s: cmake_force
 CMakeFiles/libnetco.dir/src/socket.o: CMakeFiles/libnetco.dir/flags.make
 CMakeFiles/libnetco.dir/src/socket.o: ../src/socket.cc
 CMakeFiles/libnetco.dir/src/socket.o: CMakeFiles/libnetco.dir/compiler_depend.ts
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/bob/libNetCo/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_22) "Building CXX object CMakeFiles/libnetco.dir/src/socket.o"
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/bob/libNetCo/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_19) "Building CXX object CMakeFiles/libnetco.dir/src/socket.o"
 	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -MD -MT CMakeFiles/libnetco.dir/src/socket.o -MF CMakeFiles/libnetco.dir/src/socket.o.d -o CMakeFiles/libnetco.dir/src/socket.o -c /home/bob/libNetCo/src/socket.cc
 
 CMakeFiles/libnetco.dir/src/socket.i: cmake_force
@@ -380,7 +338,7 @@ CMakeFiles/libnetco.dir/src/socket.s: cmake_force
 CMakeFiles/libnetco.dir/src/tcp/tcp_client.o: CMakeFiles/libnetco.dir/flags.make
 CMakeFiles/libnetco.dir/src/tcp/tcp_client.o: ../src/tcp/tcp_client.cc
 CMakeFiles/libnetco.dir/src/tcp/tcp_client.o: CMakeFiles/libnetco.dir/compiler_depend.ts
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/bob/libNetCo/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_23) "Building CXX object CMakeFiles/libnetco.dir/src/tcp/tcp_client.o"
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/bob/libNetCo/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_20) "Building CXX object CMakeFiles/libnetco.dir/src/tcp/tcp_client.o"
 	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -MD -MT CMakeFiles/libnetco.dir/src/tcp/tcp_client.o -MF CMakeFiles/libnetco.dir/src/tcp/tcp_client.o.d -o CMakeFiles/libnetco.dir/src/tcp/tcp_client.o -c /home/bob/libNetCo/src/tcp/tcp_client.cc
 
 CMakeFiles/libnetco.dir/src/tcp/tcp_client.i: cmake_force
@@ -394,7 +352,7 @@ CMakeFiles/libnetco.dir/src/tcp/tcp_client.s: cmake_force
 CMakeFiles/libnetco.dir/src/tcp/tcp_server.o: CMakeFiles/libnetco.dir/flags.make
 CMakeFiles/libnetco.dir/src/tcp/tcp_server.o: ../src/tcp/tcp_server.cc
 CMakeFiles/libnetco.dir/src/tcp/tcp_server.o: CMakeFiles/libnetco.dir/compiler_depend.ts
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/bob/libNetCo/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_24) "Building CXX object CMakeFiles/libnetco.dir/src/tcp/tcp_server.o"
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/bob/libNetCo/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_21) "Building CXX object CMakeFiles/libnetco.dir/src/tcp/tcp_server.o"
 	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -MD -MT CMakeFiles/libnetco.dir/src/tcp/tcp_server.o -MF CMakeFiles/libnetco.dir/src/tcp/tcp_server.o.d -o CMakeFiles/libnetco.dir/src/tcp/tcp_server.o -c /home/bob/libNetCo/src/tcp/tcp_server.cc
 
 CMakeFiles/libnetco.dir/src/tcp/tcp_server.i: cmake_force
@@ -408,7 +366,7 @@ CMakeFiles/libnetco.dir/src/tcp/tcp_server.s: cmake_force
 CMakeFiles/libnetco.dir/src/timer.o: CMakeFiles/libnetco.dir/flags.make
 CMakeFiles/libnetco.dir/src/timer.o: ../src/timer.cc
 CMakeFiles/libnetco.dir/src/timer.o: CMakeFiles/libnetco.dir/compiler_depend.ts
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/bob/libNetCo/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_25) "Building CXX object CMakeFiles/libnetco.dir/src/timer.o"
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/bob/libNetCo/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_22) "Building CXX object CMakeFiles/libnetco.dir/src/timer.o"
 	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -MD -MT CMakeFiles/libnetco.dir/src/timer.o -MF CMakeFiles/libnetco.dir/src/timer.o.d -o CMakeFiles/libnetco.dir/src/timer.o -c /home/bob/libNetCo/src/timer.cc
 
 CMakeFiles/libnetco.dir/src/timer.i: cmake_force
@@ -422,7 +380,7 @@ CMakeFiles/libnetco.dir/src/timer.s: cmake_force
 CMakeFiles/libnetco.dir/src/zk_client.o: CMakeFiles/libnetco.dir/flags.make
 CMakeFiles/libnetco.dir/src/zk_client.o: ../src/zk_client.cc
 CMakeFiles/libnetco.dir/src/zk_client.o: CMakeFiles/libnetco.dir/compiler_depend.ts
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/bob/libNetCo/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_26) "Building CXX object CMakeFiles/libnetco.dir/src/zk_client.o"
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/bob/libNetCo/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_23) "Building CXX object CMakeFiles/libnetco.dir/src/zk_client.o"
 	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -MD -MT CMakeFiles/libnetco.dir/src/zk_client.o -MF CMakeFiles/libnetco.dir/src/zk_client.o.d -o CMakeFiles/libnetco.dir/src/zk_client.o -c /home/bob/libNetCo/src/zk_client.cc
 
 CMakeFiles/libnetco.dir/src/zk_client.i: cmake_force
@@ -443,18 +401,15 @@ libnetco_OBJECTS = \
 "CMakeFiles/libnetco.dir/src/netco_api.o" \
 "CMakeFiles/libnetco.dir/src/processor.o" \
 "CMakeFiles/libnetco.dir/src/processor_selector.o" \
-"CMakeFiles/libnetco.dir/src/rpc/rpc_client.o" \
-"CMakeFiles/libnetco.dir/src/rpc/rpc_client_stub.o" \
-"CMakeFiles/libnetco.dir/src/rpc/rpc_header.o" \
-"CMakeFiles/libnetco.dir/src/rpc/rpc_server.o" \
-"CMakeFiles/libnetco.dir/src/rpc/rpc_server_stub.o" \
 "CMakeFiles/libnetco.dir/src/rpc_proto/int_message.pb.o" \
+"CMakeFiles/libnetco.dir/src/rpc_proto/load_balancer.o" \
 "CMakeFiles/libnetco.dir/src/rpc_proto/rpc_client.o" \
 "CMakeFiles/libnetco.dir/src/rpc_proto/rpc_client_stub.o" \
 "CMakeFiles/libnetco.dir/src/rpc_proto/rpc_response_header.pb.o" \
 "CMakeFiles/libnetco.dir/src/rpc_proto/rpc_server.o" \
 "CMakeFiles/libnetco.dir/src/rpc_proto/rpc_server_stub.o" \
 "CMakeFiles/libnetco.dir/src/rpc_proto/rpcheader.pb.o" \
+"CMakeFiles/libnetco.dir/src/rpc_proto/zk_naming_service.o" \
 "CMakeFiles/libnetco.dir/src/scheduler.o" \
 "CMakeFiles/libnetco.dir/src/socket.o" \
 "CMakeFiles/libnetco.dir/src/tcp/tcp_client.o" \
@@ -473,18 +428,15 @@ liblibnetco.so: CMakeFiles/libnetco.dir/src/mstime.o
 liblibnetco.so: CMakeFiles/libnetco.dir/src/netco_api.o
 liblibnetco.so: CMakeFiles/libnetco.dir/src/processor.o
 liblibnetco.so: CMakeFiles/libnetco.dir/src/processor_selector.o
-liblibnetco.so: CMakeFiles/libnetco.dir/src/rpc/rpc_client.o
-liblibnetco.so: CMakeFiles/libnetco.dir/src/rpc/rpc_client_stub.o
-liblibnetco.so: CMakeFiles/libnetco.dir/src/rpc/rpc_header.o
-liblibnetco.so: CMakeFiles/libnetco.dir/src/rpc/rpc_server.o
-liblibnetco.so: CMakeFiles/libnetco.dir/src/rpc/rpc_server_stub.o
 liblibnetco.so: CMakeFiles/libnetco.dir/src/rpc_proto/int_message.pb.o
+liblibnetco.so: CMakeFiles/libnetco.dir/src/rpc_proto/load_balancer.o
 liblibnetco.so: CMakeFiles/libnetco.dir/src/rpc_proto/rpc_client.o
 liblibnetco.so: CMakeFiles/libnetco.dir/src/rpc_proto/rpc_client_stub.o
 liblibnetco.so: CMakeFiles/libnetco.dir/src/rpc_proto/rpc_response_header.pb.o
 liblibnetco.so: CMakeFiles/libnetco.dir/src/rpc_proto/rpc_server.o
 liblibnetco.so: CMakeFiles/libnetco.dir/src/rpc_proto/rpc_server_stub.o
 liblibnetco.so: CMakeFiles/libnetco.dir/src/rpc_proto/rpcheader.pb.o
+liblibnetco.so: CMakeFiles/libnetco.dir/src/rpc_proto/zk_naming_service.o
 liblibnetco.so: CMakeFiles/libnetco.dir/src/scheduler.o
 liblibnetco.so: CMakeFiles/libnetco.dir/src/socket.o
 liblibnetco.so: CMakeFiles/libnetco.dir/src/tcp/tcp_client.o
@@ -495,7 +447,7 @@ liblibnetco.so: CMakeFiles/libnetco.dir/build.make
 liblibnetco.so: /usr/local/lib/libprotobuf.so
 liblibnetco.so: /usr/local/lib/libzookeeper_mt.so
 liblibnetco.so: CMakeFiles/libnetco.dir/link.txt
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --bold --progress-dir=/home/bob/libNetCo/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_27) "Linking CXX shared library liblibnetco.so"
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --bold --progress-dir=/home/bob/libNetCo/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_24) "Linking CXX shared library liblibnetco.so"
 	$(CMAKE_COMMAND) -E cmake_link_script CMakeFiles/libnetco.dir/link.txt --verbose=$(VERBOSE)
 
 # Rule to build all files generated by this target.

@@ -1,7 +1,7 @@
 #include "../../include/tcp/tcp_client.h"
 
 /** 客户端的核心连接函数 需要用一个协程去连接 防止本函数阻塞*/
-void TcpClient::connect(const char* ip,int port)
+int TcpClient::connect(const char* ip,int port)
 {
     /** 调用client_socket的连接函数*/
     NETCO_LOG()<<("the client connection to the server");

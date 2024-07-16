@@ -63,9 +63,6 @@
 			[
 				{
 					"fragment" : "-g"
-				},
-				{
-					"fragment" : "-std=gnu++11"
 				}
 			],
 			"defines" : 
@@ -93,7 +90,7 @@
 				[
 					1
 				],
-				"standard" : "11"
+				"standard" : "17"
 			},
 			"sourceIndexes" : 
 			[

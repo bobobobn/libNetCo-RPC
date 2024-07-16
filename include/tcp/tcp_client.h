@@ -29,7 +29,7 @@ public:
         NETCO_LOG_FMT("%s", "tcpclient destructor itself and the connection socket");
     }
     
-    void connect(const char* ip,int port);
+    int connect(const char* ip,int port);
     void reset_socket();
     /** return 0 is success -1 is error*/
     int disconnect();

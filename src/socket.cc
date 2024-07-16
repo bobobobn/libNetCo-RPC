@@ -159,7 +159,7 @@ ssize_t Socket::read(void* buf, size_t count)
 	return read(buf,count);
 }
 
-void Socket::connect(const char* ip, int port)
+int Socket::connect(const char* ip, int port)
 {
 	struct sockaddr_in addr = {0};
 	addr.sin_family= AF_INET;
@@ -169,12 +169,15 @@ void Socket::connect(const char* ip, int port)
 	_port = port;
 	auto ret = ::connect(_sockfd, (struct sockaddr*)&addr, sizeof(sockaddr_in));
 	if(ret == 0){
-		return;
+		return 0;
 	}
 	if(ret == -1 && errno == EINTR){
 		return connect(ip, port);
 	}
 	NETCO_LOG_FMT("connect to %s:%d failed, errno=%d", ip, port, errno);
+	if(ret == -1 && errno == ENETUNREACH){
+		return -1;
+	}
 	netco::Scheduler::getScheduler()->getProcessor(threadIdx)->waitEvent(_sockfd, EPOLLOUT);
 	return connect(ip, port);
 }
