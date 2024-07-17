@@ -51,6 +51,11 @@
 },
 {
   "directory": "/home/bob/libNetCo/build",
+  "command": "/usr/bin/c++ -DTHREADED -Dlibnetco_EXPORTS -I/home/bob/libNetCo/include -I/home/bob/libNetCo/include/rpc_proto -g -fPIC -o CMakeFiles/libnetco.dir/src/rpc_proto/locality_aware_load_balancer.o -c /home/bob/libNetCo/src/rpc_proto/locality_aware_load_balancer.cc",
+  "file": "/home/bob/libNetCo/src/rpc_proto/locality_aware_load_balancer.cc"
+},
+{
+  "directory": "/home/bob/libNetCo/build",
   "command": "/usr/bin/c++ -DTHREADED -Dlibnetco_EXPORTS -I/home/bob/libNetCo/include -I/home/bob/libNetCo/include/rpc_proto -g -fPIC -o CMakeFiles/libnetco.dir/src/rpc_proto/rpc_client.o -c /home/bob/libNetCo/src/rpc_proto/rpc_client.cc",
   "file": "/home/bob/libNetCo/src/rpc_proto/rpc_client.cc"
 },

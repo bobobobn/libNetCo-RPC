@@ -532,6 +532,21 @@ src/rpc_proto/load_balancer.s:
 .PHONY : src/rpc_proto/load_balancer.s
 
 # target to build an object file
+src/rpc_proto/locality_aware_load_balancer.o:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/libnetco.dir/build.make CMakeFiles/libnetco.dir/src/rpc_proto/locality_aware_load_balancer.o
+.PHONY : src/rpc_proto/locality_aware_load_balancer.o
+
+# target to preprocess a source file
+src/rpc_proto/locality_aware_load_balancer.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/libnetco.dir/build.make CMakeFiles/libnetco.dir/src/rpc_proto/locality_aware_load_balancer.i
+.PHONY : src/rpc_proto/locality_aware_load_balancer.i
+
+# target to generate assembly for a file
+src/rpc_proto/locality_aware_load_balancer.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/libnetco.dir/build.make CMakeFiles/libnetco.dir/src/rpc_proto/locality_aware_load_balancer.s
+.PHONY : src/rpc_proto/locality_aware_load_balancer.s
+
+# target to build an object file
 src/rpc_proto/rpc_client.o:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/libnetco.dir/build.make CMakeFiles/libnetco.dir/src/rpc_proto/rpc_client.o
 .PHONY : src/rpc_proto/rpc_client.o
@@ -801,6 +816,9 @@ help:
 	@echo "... src/rpc_proto/load_balancer.o"
 	@echo "... src/rpc_proto/load_balancer.i"
 	@echo "... src/rpc_proto/load_balancer.s"
+	@echo "... src/rpc_proto/locality_aware_load_balancer.o"
+	@echo "... src/rpc_proto/locality_aware_load_balancer.i"
+	@echo "... src/rpc_proto/locality_aware_load_balancer.s"
 	@echo "... src/rpc_proto/rpc_client.o"
 	@echo "... src/rpc_proto/rpc_client.i"
 	@echo "... src/rpc_proto/rpc_client.s"

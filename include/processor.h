@@ -3,6 +3,7 @@
 #include <set>
 #include <mutex>
 #include <thread>
+#include <semaphore.h>
 #include "objpool.h"
 #include "spinlock.h"
 #include "context.h"
@@ -64,7 +65,12 @@ namespace netco
 		/** 停止线程循环*/
 		void stop();
 		void join();
-
+		void wait_thread_ready(){
+			sem_wait(&sem_thread_started_);
+		}
+		void thread_started(){
+			sem_post(&sem_thread_started_);
+		}
 		/** 等待fd上的ev事件返回*/
 		void waitEvent(int fd, int ev);
 
@@ -75,7 +81,10 @@ namespace netco
 		inline Context* getMainCtx() { return &mainCtx_; }
 
 		/** 获取当前处理器存在的协程总数量*/
-		inline size_t getCoCnt() { return coSet_.size(); }
+		inline size_t getCoCnt() { 
+			SpinlockGuard lock(coSetLock_);
+			return coSet_.size(); 
+		}
 
 		/** 运行一个指定的协程*/
 		void goCo(Coroutine* co);
@@ -99,6 +108,7 @@ namespace netco
 		/** 处理器对应线程*/
 		std::thread* pLoop_;
 
+		sem_t sem_thread_started_;
 		/** 
 		 * @brief 双缓冲任务队列
 		 * 一个队列存放新加入的协程，另一个用于执行存放的协程
@@ -114,6 +124,9 @@ namespace netco
 
 		/** 自旋锁，用于对象池操作*/
 		Spinlock coPoolLock_;
+
+		/** 自旋锁，用于对象池操作*/
+		Spinlock coSetLock_;
 
 		/** 被epoll激活的协程任务队列*/
 		std::vector<Coroutine*> actCoroutines_;

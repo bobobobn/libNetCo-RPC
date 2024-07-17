@@ -44,7 +44,6 @@ namespace netco{
             }
             NETCO_LOG_FMT("RpcClientStub::update_service_map: service_name: %s, method_name: %s, ipPort: %s", service_name, method_name, ipPort.c_str());
         }
-        deallocate_String_vector(&children);
     }
 
     void ZKNamingService::RunNS(const char* service_name, const char* method_name){
@@ -85,8 +84,8 @@ namespace netco{
                 action->_servers_list_changed = 1;
                 action->AddServers(last_servers);
                 action->RemoveServers(last_servers);
+                action->LoadBalancerReset();
             }
-            action->LoadBalancerReset();
         }
         return 0;
     }

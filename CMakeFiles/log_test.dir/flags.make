@@ -6,5 +6,5 @@ CXX_DEFINES = -DTHREADED
 
 CXX_INCLUDES = -I/home/bob/libNetCo/include -I/home/bob/libNetCo/include/rpc_proto
 
-CXX_FLAGS = 
+CXX_FLAGS = -g
 

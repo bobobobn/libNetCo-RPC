@@ -40,14 +40,11 @@ void Timer::getExpiredCoroutines(std::vector<Coroutine*>& expiredCoroutines)
 		expiredCoroutines.push_back(timerCoHeap_.top().second);
 		timerCoHeap_.pop();
 	}
-	if (!expiredCoroutines.empty())
-	{
-		ssize_t cnt = TIMER_DUMMYBUF_SIZE;
-		while (cnt >= TIMER_DUMMYBUF_SIZE)
-		{
-			cnt = ::read(timeFd_, dummyBuf_, TIMER_DUMMYBUF_SIZE);	
-		}
-	}
+
+	ssize_t cnt = TIMER_DUMMYBUF_SIZE;
+	uint64_t expirations;
+	cnt = ::read(timeFd_, &expirations, sizeof(uint64_t));
+	// cnt = ::read(timeFd_, dummyBuf_, TIMER_DUMMYBUF_SIZE);	
 	// 需要重新设置定时的时间，到期唤醒timerfd
 	if (!timerCoHeap_.empty())
 	{

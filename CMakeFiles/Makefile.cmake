@@ -53,6 +53,7 @@ set(CMAKE_MAKEFILE_PRODUCTS
 # Dependency information for all targets:
 set(CMAKE_DEPEND_INFO_FILES
   "CMakeFiles/libnetco.dir/DependInfo.cmake"
+  "CMakeFiles/co_go_test.dir/DependInfo.cmake"
   "CMakeFiles/doubly_buffer_test.dir/DependInfo.cmake"
   "CMakeFiles/log_test.dir/DependInfo.cmake"
   "CMakeFiles/method_test.dir/DependInfo.cmake"

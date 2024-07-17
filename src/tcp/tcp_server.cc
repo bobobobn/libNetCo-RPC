@@ -132,7 +132,6 @@ void TcpServer::server_loop()
     while(true)
     {
         /** conn即可以用来进行fd通信*/
-        NETCO_LOG()<<("block in server_loop,has no new client accept");
         netco::Socket* conn = new netco::Socket(_listen_fd->accept());
         NETCO_LOG_FMT("unblock,the server add a new tcpclient connection,the connect fd is %d",conn->fd());
         conn->setTcpNoDelay(true);

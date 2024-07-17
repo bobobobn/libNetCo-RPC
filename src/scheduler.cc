@@ -29,7 +29,8 @@ bool Scheduler::startScheduler(int threadCnt)
 	{
 		processors_.emplace_back(new Processor(i));
 		// 开启每个处理器的循环
-		processors_[i]->loop();                       
+		processors_[i]->loop();
+		processors_[i]->wait_thread_ready();		
 	}
 	return true;
 }

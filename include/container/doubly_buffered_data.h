@@ -93,7 +93,7 @@ namespace netco{
         struct WithFg2{
             WithFg2(Fn&& fn, T* data, Arg1&& arg1, Arg2&& arg2) : _fn(std::forward<Fn>(fn)), _data(data), _arg1(std::forward<Arg1>(arg1)), _arg2(std::forward<Arg2>(arg2)){}
             size_t operator()(T& bg){
-                return _fn(bg, (const T&)_data[&bg != _data], _arg1, _arg2);
+                return _fn(bg, (const T&)_data[&bg == _data], _arg1, _arg2);
             }
         private:
             Fn _fn;

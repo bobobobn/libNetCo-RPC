@@ -6,5 +6,5 @@ CXX_DEFINES = -DTHREADED -Dlibnetco_EXPORTS
 
 CXX_INCLUDES = -I/home/bob/libNetCo/include -I/home/bob/libNetCo/include/rpc_proto
 
-CXX_FLAGS = -fPIC
+CXX_FLAGS = -g -fPIC
 

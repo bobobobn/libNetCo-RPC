@@ -12,13 +12,16 @@
 #include <cstring>
 #include <map>
 
+namespace netco{
+    extern __thread int threadIdx;
+}
 /**
  * @brief 使用流式方式将日志级别level的日志写入到logger
  */
 #define NETCO_LOG_LEVEL(logger, level) \
     if(logger->getLevel() <= level) \
         netco::EventWraper(netco::LogEvent::Ptr(new netco::LogEvent(logger, level, \
-                        __FILE__, __LINE__, 0, -1,\
+                        __FILE__, __LINE__, 0, netco::threadIdx,\
                 -1, time(0)))).getSS()
 
 /**
@@ -52,7 +55,7 @@
 #define NETCO_LOG_FMT_LEVEL(logger, level, fmt, ...) \
     if(logger->getLevel() <= level) \
         netco::EventWraper(netco::LogEvent::Ptr(new netco::LogEvent(logger, level, \
-                        __FILE__, __LINE__, 0, -1,\
+                        __FILE__, __LINE__, 0, netco::threadIdx,\
                 -1, time(0)))).getEvent()->format(fmt, __VA_ARGS__)
 
 /**
@@ -190,7 +193,7 @@ namespace netco
     {
     public:
         using Ptr = std::shared_ptr<LoggerFormatter>;
-        LoggerFormatter(const std::string& format = "%d%T[%p]%T[%c]%T%f:%l%T%m%n");            
+        LoggerFormatter(const std::string& format = "%d%T[%p]%T[%t]%T%f:%l%T%m%n");            
         std::string format(LogEvent::Ptr);
         void format(std::ostream&, LogEvent::Ptr);
         void init();

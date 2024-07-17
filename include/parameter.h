@@ -5,7 +5,7 @@ namespace netco
 {
 	namespace parameter
 	{
-		const static size_t coroutineStackSize = 8 * 1024;
+		const static size_t coroutineStackSize = 128 * 1024;
 
 		static constexpr int epollerListFirstSize = 16;
 

@@ -305,6 +305,8 @@ CMakeFiles/tcp_server_test.dir/example/tcp_server_test.o: example/tcp_server_tes
   /usr/include/c++/11/thread \
   /usr/include/c++/11/bits/std_thread.h \
   /usr/include/c++/11/bits/this_thread_sleep.h \
+  /usr/include/semaphore.h \
+  /usr/include/x86_64-linux-gnu/bits/semaphore.h \
   include/objpool.h \
   include/mempool.h \
   include/context.h \
@@ -751,6 +753,8 @@ include/processor_selector.h:
 
 /usr/include/x86_64-linux-gnu/bits/byteswap.h:
 
+/usr/include/x86_64-linux-gnu/bits/semaphore.h:
+
 /usr/include/c++/11/bits/stl_construct.h:
 
 /usr/include/c++/11/bits/shared_ptr.h:
@@ -820,6 +824,8 @@ include/mempool.h:
 /usr/include/c++/11/bits/exception.h:
 
 /usr/include/c++/11/bits/locale_facets.h:
+
+/usr/include/semaphore.h:
 
 /usr/include/c++/11/cwctype:
 

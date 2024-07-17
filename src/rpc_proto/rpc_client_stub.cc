@@ -34,6 +34,9 @@ namespace netco{
         // send request to server and get response
         if (ret == 0){
             auto& socket_channel = out.ptr;
+            if(socket_channel == nullptr){
+                socket_channel = std::move(ShortSocketChannel::New(out.node));
+            }
             // request: --{header_len}{rpc_header}{args}--
             RpcHeader rpc_header;
             rpc_header.set_service_name(service_name);
@@ -60,6 +63,12 @@ namespace netco{
             <<"rpc response message:"<<rpc_response_header.message()
             <<"rpc response args size:"<<rpc_response_header.args_size();
 
+        }
+        else {
+            NETCO_LOG()<<"select server failed, ret="<<ret;
+            rpc_response_header.set_status(UNKNOWN_ERROR);
+            rpc_response_header.set_message("select server failed");
+            response.clear();
         }
     }
 }

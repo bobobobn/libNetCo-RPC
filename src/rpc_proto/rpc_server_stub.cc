@@ -114,5 +114,12 @@ namespace netco{
             RpcService::Ptr service = service_pair.second;
             service->registerAllMethod(m_name_service_register, ipPortAddr);
         }
+        m_ipPortAddr = ipPortAddr;
+    }
+    void RpcServerStub::UnregisterAll(){
+        for(auto& service_pair : m_service_map){
+            RpcService::Ptr service = service_pair.second;
+            service->UnregisterAllMethod(m_name_service_register, m_ipPortAddr);
+        }
     }
 }

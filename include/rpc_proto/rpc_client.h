@@ -3,6 +3,7 @@
 #include "rpc_client_stub.h"
 #include "rpc_response_header.pb.h"
 #include "../parameter.h"
+#include "zk_naming_service.h"
 
 /**
  * rpc客户端，其功能必须要在一个协程中运行
@@ -13,7 +14,7 @@ namespace netco{
     public:
       DISALLOW_COPY_MOVE_AND_ASSIGN(RpcClient);
 
-      RpcClient() : m_rpc_client_stub()
+      RpcClient() : m_rpc_client_stub(ZKNamingService::New())
       {
       }
     

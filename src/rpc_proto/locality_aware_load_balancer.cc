@@ -1,4 +1,5 @@
 #include "../../include/rpc_proto/locality_aware_load_balancer.h"
+#include "log.h"
 namespace netco{
     static const int64_t DEFAULT_QPS = 1;
     static const size_t INITIAL_WEIGHT_TREE_SIZE = 128;
@@ -28,7 +29,11 @@ namespace netco{
         else{
             // fg doesn't have it, add it to bg, need to create a new node
             size_t n = bg.weight_tree.size();
-            ServerInfo node(server_name);
+            int64_t inital_weight = WEIGHT_SCALE;
+            if(n != 0){
+                inital_weight = balancer->total_weight_.load(std::memory_order_relaxed) / n;
+            }
+            ServerInfo node(server_name, inital_weight);
             bg.server_map[server_name] = n;
             bg.weight_tree.push_back(node);
             auto diff = node.weight->volatile_value();
@@ -121,19 +126,21 @@ namespace netco{
         auto& servers = **servers_scope_ptr_ptr;
         const size_t n = servers.weight_tree.size();
         size_t n_try = 0;
-        int64_t total_weight = total_weight_.load(std::memory_order_relaxed);    
+        int64_t total_weight = total_weight_.load(std::memory_order_relaxed);   
+         
         int64_t dice = getRand(total_weight);
-        int64_t self;
-        
+        NETCO_LOG_FMT("dice: %lld, total_weight: %lld", dice, total_weight);
+        int64_t self = -1;
         int index = 0;
         while(total_weight > 0){
             const auto& node = servers.weight_tree[index];
             const int64_t left = node.left->load(std::memory_order_relaxed);
+            self = node.weight->volatile_value();
             if(dice < left){
                 // dice落在左子树
                 index = 2 * index + 1;
             }
-            else if(dice >= left + (self = node.weight->volatile_value()))
+            else if(dice >= left + self)
             {
                 // dice落在右子树
                 index = 2 * index + 2;
@@ -142,48 +149,25 @@ namespace netco{
                     continue;
                 }
             }
-            else{
-                out->ptr = std::move(_channel_factory(node.server_name));
-                if(out->ptr->is_connected()){ // the server is available
-                    const auto result = node.weight->AddInflight(in, index, dice-left);
-                    if(result.weight_diff){
-                        // 权值变化，更新父节点权值
-                        servers.UpdateParentWeight(result.weight_diff, index);
-                        total_weight_.fetch_add(result.weight_diff, std::memory_order_relaxed);
-                    }
-                    if(result.chosen){
-                        out->node = node.server_name;
-                        out->need_feedback = true;                        
-                        return 0;
-                    }
-                    // 权值更新后不符合选择条件，重新搜索
-                    if(++n_try >= n){
-                        break;
-                    }
-                }                
-                else{
-                    // 节点服务器连接失败，标记为不可用
-                    // TODO: 标记为不可用后，需要更新父节点权值
-                    // TODO: 标记为不可用后，需要更新子节点权值
-                    auto diff = node.weight->MarkFailed(index, total_weight / n);
-                    if(diff){
-                        servers.UpdateParentWeight(diff, index);
-                        total_weight_.fetch_add(diff, std::memory_order_relaxed);
-                    }
-                    if(dice >= left + self + diff){
-                        index = 2 * index + 2;
-                        dice -= left + self + diff;                
-                    }
-                    else{
-                        index = 2 * index + 1;
-                        dice = getRand(left);
-                    }
-
-                    if(index < n){
-                        continue;
-                    }
+            else
+            {
+                const auto result = node.weight->AddInflight(in, index, dice-left);
+                if(result.weight_diff){
+                    // 权值变化，更新父节点权值
+                    servers.UpdateParentWeight(result.weight_diff, index);
+                    total_weight_.fetch_add(result.weight_diff, std::memory_order_relaxed);
+                }
+                if(result.chosen){
+                    out->node = node.server_name;
+                    out->need_feedback = true;                        
+                    return 0;
+                }
+                // 权值更新后不符合选择条件，重新搜索
+                if(++n_try >= n){
+                    break;
                 }
             }
+            
             // 重新搜索
             if(++n_try >= n){
                 break;
@@ -295,6 +279,36 @@ namespace netco{
         } else {
             // TODO:出错情况的处理，以及(TODO:超时重试)
         }
+        const int64_t top_time_us = _time_q.top()->end_time_us;
+        const size_t n = _time_q.size();
+        int64_t scaled_qps = DEFAULT_QPS * WEIGHT_SCALE;
+        if (end_time_us > top_time_us) {        
+            // Only calculate scaled_qps when the queue is full or the elapse
+            // between bottom and top is reasonably large(so that error of the
+            // calculated QPS is probably smaller).
+            if (n == _time_q.capacity() ||
+                end_time_us >= top_time_us + 1000000L/*1s*/) { 
+                // will not overflow.
+                scaled_qps = (n - 1) * 1000000L * WEIGHT_SCALE / (end_time_us - top_time_us);
+                if (scaled_qps < WEIGHT_SCALE) {
+                    scaled_qps = WEIGHT_SCALE;
+                }
+            }
+            _avg_latency = (_time_q.bottom()->latency_sum -
+                            _time_q.top()->latency_sum) / (n - 1);
+        } else if (n == 1) {
+            _avg_latency = _time_q.bottom()->latency_sum;
+        } else {
+            // end_time_us <= top_time_us && n > 1: the QPS is so high that
+            // the time elapse between top and bottom is 0(possible in examples),
+            // or time skews, we don't update the weight for safety.
+            return 0;
+        }
+        if (_avg_latency == 0) {
+            return 0;
+        }
+        _base_weight = scaled_qps / _avg_latency;
+        return ResetWeight(index, end_time_us);
     }
     void LocalityAwareLoadBalancer::Feedback(const CallInfo& info){
         ServerName node_name = info.node;
@@ -307,8 +321,12 @@ namespace netco{
             // const类型的map，只能用find，不能用[]
             auto it = servers.server_map.find(node_name);
             const size_t index = it->second;
-            auto weight_ptr = servers.weight_tree[index].weight;
-            weight_ptr->Update(info, index);
+            auto weight_ptr = servers.weight_tree[index].weight;            
+            int64_t diff = weight_ptr->Update(info, index);
+            if (diff != 0) {
+                servers.UpdateParentWeight(diff, index);
+                total_weight_.fetch_add(diff, std::memory_order_relaxed);
+            }
         }
     }
 }

@@ -44,11 +44,23 @@ namespace netco{
             };
             class Weight{
             public:
+                static const int64_t RECV_QUEUE_SIZE = 128;
                 struct AddInflightResult
                 {
                     bool chosen;
                     int64_t weight_diff;
                 };
+                explicit Weight(int64_t initial_weight) :
+                _weight(initial_weight)
+                , _base_weight(initial_weight)
+                , _begin_time_sum(0)
+                , _begin_time_count(0)
+                , _old_diff_sum(0)
+                , _old_index((size_t)-1L)
+                , _old_weight(0)
+                , _avg_latency(0)
+                , _time_q(_time_q_items, sizeof(_time_q_items), netco::NOT_OWN_STORAGE)
+                { }
                 // Called in Feedback() to recalculate _weight.
                 // Returns diff of _weight.
                 int64_t Update(const CallInfo&, size_t index);
@@ -86,7 +98,8 @@ namespace netco{
                 size_t _old_index;
                 int64_t _old_weight;
                 // // 采样窗口，计算延时和QPS, TODO: BoundedQueue
-                BoundedQueue<TimeInfo> _time_q;      
+                BoundedQueue<TimeInfo> _time_q;    
+                TimeInfo _time_q_items[RECV_QUEUE_SIZE];  
                 MutexLock _mutex;  
             };
 
@@ -97,7 +110,7 @@ namespace netco{
                 AtomicIntPtr left;     // store the weight sum of the left subtree 
                 WeightPtr weight;                 // store the weight of the current node
 
-                ServerInfo(const ServerName& server_name) : server_name(server_name), left(new std::atomic<int64_t>(0)), weight(new Weight()) { }
+                ServerInfo(const ServerName& server_name, const int64_t& initial_weight) : server_name(server_name), left(new std::atomic<int64_t>(0)), weight(new Weight(initial_weight)) { }
             };
 
             class Servers{

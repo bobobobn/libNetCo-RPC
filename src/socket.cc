@@ -118,6 +118,8 @@ Socket Socket::accept()
 		return ret;
 	}
 	// 将该socket加入epoll监听池并切出所属的协程
+
+	NETCO_LOG()<<("waiting for connection...accepting...");
 	netco::Scheduler::getScheduler()->getProcessor(threadIdx)->waitEvent(_sockfd, EPOLLIN | EPOLLPRI | EPOLLRDHUP | EPOLLHUP);
 	// 执行到此说明当前协程恢复运行 也就是加入epoll的fd存在激活的事件 那么就再连接一次
 	auto con(accept_raw());
@@ -178,7 +180,12 @@ int Socket::connect(const char* ip, int port)
 	if(ret == -1 && errno == ENETUNREACH){
 		return -1;
 	}
-	netco::Scheduler::getScheduler()->getProcessor(threadIdx)->waitEvent(_sockfd, EPOLLOUT);
+	{
+		NETCO_LOG()<<"the connect coroutine yield";	
+		netco::Scheduler::getScheduler()->getProcessor(threadIdx)->waitEvent(_sockfd, EPOLLOUT);
+		NETCO_LOG()<<"the connect coroutine wake";
+	}
+
 	return connect(ip, port);
 }
 

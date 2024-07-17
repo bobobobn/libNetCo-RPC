@@ -8,7 +8,7 @@ Logger::Logger(const std::string & name)
     : level_(LogLevel::DEBUG)
 {
     logName_ = name;
-    formatter_.reset(new LoggerFormatter("%d%T[%p]%T[%c]%T%f:%l%T%m%n"));    
+    formatter_.reset(new LoggerFormatter());    
 }
 
 void Logger::setLevel(LogLevel::Level level)

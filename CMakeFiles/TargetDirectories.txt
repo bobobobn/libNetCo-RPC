@@ -1,4 +1,5 @@
 /home/bob/libNetCo/CMakeFiles/libnetco.dir
+/home/bob/libNetCo/CMakeFiles/co_go_test.dir
 /home/bob/libNetCo/CMakeFiles/doubly_buffer_test.dir
 /home/bob/libNetCo/CMakeFiles/log_test.dir
 /home/bob/libNetCo/CMakeFiles/method_test.dir

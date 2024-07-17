@@ -15,7 +15,7 @@ namespace netco
 	class ProcessorSelector
 	{
 	public:
-		ProcessorSelector(std::vector<Processor*>& processors, int strategy = MIN_EVENT_FIRST) :  curPro_(-1) , strategy_(strategy) , processors_(processors) {}
+		ProcessorSelector(std::vector<Processor*>& processors, int strategy = ROUND_ROBIN) :  curPro_(-1) , strategy_(strategy) , processors_(processors) {}
 		~ProcessorSelector() {}
 
 		/** 设置调度策略*/

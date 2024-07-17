@@ -47,6 +47,16 @@ namespace netco{
             }
         }
 
+        void UnregisterAllMethod(NameServiceRegister::Ptr ns_register, const std::string& ipPortAddr){
+            if(ns_register == nullptr){
+                NETCO_LOG()<<"ns_register is nullptr";
+                exit(1);
+            }
+            for(auto& method : m_methods){
+                ns_register->UnregisterMethod(m_service_name.c_str(), method.first.c_str(), ipPortAddr.c_str());
+            }
+        }
+
     private:
         std::string m_service_name;
         std::map<std::string, netco::RpcMethod::Ptr> m_methods;

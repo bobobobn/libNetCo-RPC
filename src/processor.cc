@@ -13,7 +13,8 @@ Processor::Processor(int tid)
 	: tid_(tid), status_(PRO_STOPPED), pLoop_(nullptr), runningNewQue_(0), pCurCoroutine_(nullptr), mainCtx_(0)
 {
 	// 初始化处理器主程序上下文
-	mainCtx_.makeCurContext();         
+	mainCtx_.makeCurContext();  
+	sem_init(&sem_thread_started_, 0, 0);
 }
 
 Processor::~Processor()
@@ -104,9 +105,11 @@ bool Processor::loop()
 		[this]
 		{
 			threadIdx = tid_;               
-			status_ = PRO_RUNNING;           
+			status_ = PRO_RUNNING;     
+			thread_started();      
 			while (PRO_RUNNING == status_)
 			{
+				NETCO_LOG() << "processor: " << threadIdx << " is running\n";
 				if (actCoroutines_.size())
 				{
 					actCoroutines_.clear();  
@@ -128,24 +131,26 @@ bool Processor::loop()
 				}
 
 				Coroutine* pNewCo = nullptr;
-				int runningQue = runningNewQue_;                    
-				
-				// 其次执行新加入的协程
-				while (!newCoroutines_[runningQue].empty())    	   
-				{
-					{
-						pNewCo = newCoroutines_[runningQue].front();
-						newCoroutines_[runningQue].pop();
-						coSet_.insert(pNewCo);
-					}
-					resume(pNewCo);                            
-				}
 
+				int runningQue = !runningNewQue_;     
+				// 其次执行新加入的协程
 				{
 					// 上锁并转换任务队列
 					SpinlockGuard lock(newQueLock_);
-					runningNewQue_ = !runningQue;              
+					runningNewQue_ = !runningNewQue_;              
+				}    
+				// std::cout << "processor: "<< threadIdx << "awaken\n";
+				while (!newCoroutines_[runningQue].empty())    	   
+				{
+					pNewCo = newCoroutines_[runningQue].front();
+					newCoroutines_[runningQue].pop();
+					SpinlockGuard lock(coSetLock_);
+					coSet_.insert(pNewCo);
+					// std::cout << "processor: "<< threadIdx << "has" <<coSet_.size() << " COROUTINES"<<"\n";
+					resume(pNewCo);        
 				}
+
+
 
 				// 然后执行被epoll唤醒的协程
 				size_t actCoCnt = actCoroutines_.size();
@@ -200,7 +205,6 @@ void Processor::wakeUpEpoller()
 void Processor::goNewCo(std::function<void()>&& coFunc, size_t stackSize)
 {
 	Coroutine* pCo = nullptr;
-
 	{
 		SpinlockGuard lock(coPoolLock_);				
 		pCo = coPool_.new_obj(this, stackSize, std::move(coFunc));	 

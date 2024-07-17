@@ -130,6 +130,19 @@ libnetco/fast:
 .PHONY : libnetco/fast
 
 #=============================================================================
+# Target rules for targets named co_go_test
+
+# Build rule for target.
+co_go_test: cmake_check_build_system
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 co_go_test
+.PHONY : co_go_test
+
+# fast build rule for target.
+co_go_test/fast:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/co_go_test.dir/build.make CMakeFiles/co_go_test.dir/build
+.PHONY : co_go_test/fast
+
+#=============================================================================
 # Target rules for targets named doubly_buffer_test
 
 # Build rule for target.
@@ -245,6 +258,21 @@ zkTest: cmake_check_build_system
 zkTest/fast:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/zkTest.dir/build.make CMakeFiles/zkTest.dir/build
 .PHONY : zkTest/fast
+
+# target to build an object file
+example/co_go_test.o:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/co_go_test.dir/build.make CMakeFiles/co_go_test.dir/example/co_go_test.o
+.PHONY : example/co_go_test.o
+
+# target to preprocess a source file
+example/co_go_test.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/co_go_test.dir/build.make CMakeFiles/co_go_test.dir/example/co_go_test.i
+.PHONY : example/co_go_test.i
+
+# target to generate assembly for a file
+example/co_go_test.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/co_go_test.dir/build.make CMakeFiles/co_go_test.dir/example/co_go_test.s
+.PHONY : example/co_go_test.s
 
 # target to build an object file
 example/doubly_buffer_test.o:
@@ -749,6 +777,7 @@ help:
 	@echo "... depend"
 	@echo "... edit_cache"
 	@echo "... rebuild_cache"
+	@echo "... co_go_test"
 	@echo "... doubly_buffer_test"
 	@echo "... libnetco"
 	@echo "... log_test"
@@ -759,6 +788,9 @@ help:
 	@echo "... tcp_client_test"
 	@echo "... tcp_server_test"
 	@echo "... zkTest"
+	@echo "... example/co_go_test.o"
+	@echo "... example/co_go_test.i"
+	@echo "... example/co_go_test.s"
 	@echo "... example/doubly_buffer_test.o"
 	@echo "... example/doubly_buffer_test.i"
 	@echo "... example/doubly_buffer_test.s"
