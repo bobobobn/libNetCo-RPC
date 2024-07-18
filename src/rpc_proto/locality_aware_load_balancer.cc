@@ -139,6 +139,7 @@ namespace netco{
             if(dice < left){
                 // dice落在左子树
                 index = 2 * index + 1;
+                continue;
             }
             else if(dice >= left + self)
             {
