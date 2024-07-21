@@ -311,19 +311,19 @@ namespace netco{
             return 0;
         }
         _base_weight = scaled_qps / _avg_latency;
-        // 每秒输出权值信息
-        if( end_time_us - last_time_us > 1000000L/*1s*/){
-            last_time_us = end_time_us;
-            struct tm tm;
-            time_t t;
-            time(&t);
-            localtime_r(&t, &tm);
-            char buf[64];
-            strftime(buf, sizeof(buf), "%Y-%m-%d %H:%M:%S", &tm);
-            std::string weights;
-            MutexGuard lock(ofs_lock);
-            std::cout << "weight info: ["<<buf<<"]" << "node: " << index << ", weight: " << _base_weight << ", avg_latency: " << _avg_latency << " QPS: " << scaled_qps / WEIGHT_SCALE << "\n";
-        }
+        // // 每秒输出权值信息
+        // if( end_time_us - last_time_us > 1000000L/*1s*/){
+        //     last_time_us = end_time_us;
+        //     struct tm tm;
+        //     time_t t;
+        //     time(&t);
+        //     localtime_r(&t, &tm);
+        //     char buf[64];
+        //     strftime(buf, sizeof(buf), "%Y-%m-%d %H:%M:%S", &tm);
+        //     std::string weights;
+        //     MutexGuard lock(ofs_lock);
+        //     std::cout << "weight info: ["<<buf<<"]" << "node: " << index << ", weight: " << _base_weight << ", avg_latency: " << _avg_latency << " QPS: " << scaled_qps / WEIGHT_SCALE << "\n";
+        // }
         return ResetWeight(index, end_time_us);
     }
     void LocalityAwareLoadBalancer::Feedback(const CallInfo& info){

@@ -27,27 +27,27 @@ make
 ./example/rpc_client_pb_test.cc为客户端示例代码，实现了压力测试，统计QPS与平均延时。
 ./example/rpc_server_can_set_delay为服务端示例代码，实现了factorial计算服务，并可通过TCP连接设置延时。
 
-## LLAB负载均衡
+## LALB负载均衡
 ---
-LLAB负载均衡算法基于Locality-aware的思想，以QPS/Latency为权重的加权随机算法自适应分配任务到各个服务器。
+LALB负载均衡算法基于Locality-aware的思想，以QPS/Latency为权重的加权随机算法自适应分配任务到各个服务器。
 
 开启3台RpcServer，分别设定延时为1、3、9ms，一段时间后翻转延时，各节点的权重变化：
 
-![llabWeight](img/llab_weight.png)
+![LALBWeight](img/lalb_weight.png)
 
 ## 负载均衡测试
 ---
 同时开启3台RpcServer，运行rpc_server_can_set_delay.cc，分别设定延时为1、3、9ms。启动rpc_client_pb_test.cc，设置连接数为5000，对比Locality-aware和随机负载均衡的QPS和平均延时。
 
 Locality-aware负载均衡：
-![llabTest](img/llab_benchmark.png)
+![LALBTest](img/lalb_benchmark.png)
 Random负载均衡：
-![llabTest](img/random_benchmark.png)
+![LALBTest](img/random_benchmark.png)
 
 
-## 类图
+<!-- ## 类图
 ---
 ### 日志系统
 ![log drawio](https://github.com/bobobobn/libNetCo/assets/145976151/6cda3728-0b86-438c-a443-b8eaac114f2a)
 ### netco协程库
-![netco drawio](https://github.com/bobobobn/libNetCo/assets/145976151/c3603d48-9697-4596-aec0-cada6e540b3d)
+![netco drawio](https://github.com/bobobobn/libNetCo/assets/145976151/c3603d48-9697-4596-aec0-cada6e540b3d) -->

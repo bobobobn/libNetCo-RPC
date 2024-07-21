@@ -12,6 +12,8 @@ namespace netco{
      * @brief A thread-safe data structure that provides two views of the same data, 
      * allowing concurrent reads and writes, 
      * based on the threadlocal mutex locks.
+     * use ScopePtr and Read(ScopePtr&) to read
+     * use Modify(Fn&& fn) to write
      * @tparam T The type of the data to be stored.
      */
     template<typename T>
@@ -31,17 +33,24 @@ namespace netco{
             Read(*s_ptr);
             return s_ptr;
         }
+        // 读取数据，在不需要使用时及时释放ScopePtr，ScopePtr会占用thread local锁
         void Read(ScopePtr& s_ptr);
+        // 写数据，调用fn(T& data)函数进行对应写操作
         template<typename Fn>
         void Modify(Fn&& fn);
+        // 写数据，用Closure包装带参数的函数
         template<typename Fn, typename Arg1>
         void Modify(Fn&& fn, Arg1&& arg1);
+        // 写数据，用Closure包装带参数的函数
         template<typename Fn, typename Arg1, typename Arg2>
         void Modify(Fn&& fn, Arg1&& arg1, Arg2&& arg2);
+        // 写数据，调用fn(T& bg, const T& fg)函数进行对应写操作
         template<typename Fn>
         void ModifyWithForeground(Fn&& fn);
+        // 写数据，用WithFg包装带参数的函数
         template<typename Fn, typename Arg1>
         void ModifyWithForeground(Fn&& fn, Arg1&& arg1);
+        // 写数据，用WithFg包装带参数的函数
         template<typename Fn, typename Arg1, typename Arg2>
         void ModifyWithForeground(Fn&& fn, Arg1&& arg1, Arg2&& arg2);
         
