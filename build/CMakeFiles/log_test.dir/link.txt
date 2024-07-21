@@ -1,1 +1,0 @@
-/usr/bin/c++ -g -rdynamic CMakeFiles/log_test.dir/example/log_test.o -o ../bin/log_test   -L/home/bob/libNetCo/build  -L/usr/local/lib  -Wl,-rpath,/home/bob/libNetCo/build:/usr/local/lib liblibnetco.so -lpthread /usr/local/lib/libprotobuf.so /usr/local/lib/libzookeeper_mt.so 
