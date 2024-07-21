@@ -3,6 +3,7 @@
 # Start the three programs in the background
 ./rpc_server_can_set_delay 12345 &
 ./rpc_server_can_set_delay 12346 &
+./rpc_server_can_set_delay 12347 &
 
 # Wait for all background jobs to complete
 wait
