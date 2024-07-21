@@ -1,1 +1,0 @@
-/usr/bin/c++ -g -rdynamic CMakeFiles/co_go_test.dir/example/co_go_test.o -o bin/co_go_test   -L/home/bob/libNetCo  -L/usr/local/lib  -Wl,-rpath,/home/bob/libNetCo:/usr/local/lib liblibnetco.so -lpthread /usr/local/lib/libprotobuf.so /usr/local/lib/libzookeeper_mt.so 
