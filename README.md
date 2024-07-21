@@ -39,15 +39,7 @@ LALB负载均衡算法基于Locality-aware的思想，以QPS/Latency为权重的
 ---
 同时开启3台RpcServer，运行rpc_server_can_set_delay.cc，分别设定延时为1、3、9ms。启动rpc_client_pb_test.cc，设置连接数为5000，对比Locality-aware和随机负载均衡的QPS和平均延时。
 
-Locality-aware负载均衡：
-![LALBTest](img/lalb_benchmark.png)
-Random负载均衡：
+Locality-aware负载均衡：  
+![LALBTest](img/lalb_benchmark.png)  
+Random负载均衡：  
 ![LALBTest](img/random_benchmark.png)
-
-
-<!-- ## 类图
----
-### 日志系统
-![log drawio](https://github.com/bobobobn/libNetCo/assets/145976151/6cda3728-0b86-438c-a443-b8eaac114f2a)
-### netco协程库
-![netco drawio](https://github.com/bobobobn/libNetCo/assets/145976151/c3603d48-9697-4596-aec0-cada6e540b3d) -->
