@@ -83,7 +83,7 @@ namespace netco
 		/** 获取当前处理器存在的协程总数量*/
 		inline size_t getCoCnt() { 
 			SpinlockGuard lock(coSetLock_);
-			return coSet_.size(); 
+			return coSet_.size() - removedCo_.size(); 
 		}
 
 		/** 运行一个指定的协程*/

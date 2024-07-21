@@ -109,7 +109,6 @@ bool Processor::loop()
 			thread_started();      
 			while (PRO_RUNNING == status_)
 			{
-				NETCO_LOG() << "processor: " << threadIdx << " is running\n";
 				if (actCoroutines_.size())
 				{
 					actCoroutines_.clear();  
@@ -144,8 +143,10 @@ bool Processor::loop()
 				{
 					pNewCo = newCoroutines_[runningQue].front();
 					newCoroutines_[runningQue].pop();
-					SpinlockGuard lock(coSetLock_);
-					coSet_.insert(pNewCo);
+					{
+						SpinlockGuard lock(coSetLock_);
+						coSet_.insert(pNewCo);
+					}
 					// std::cout << "processor: "<< threadIdx << "has" <<coSet_.size() << " COROUTINES"<<"\n";
 					resume(pNewCo);        
 				}

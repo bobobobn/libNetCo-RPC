@@ -1,0 +1,1 @@
+/usr/bin/c++ -g -rdynamic CMakeFiles/zkTest.dir/example/zkTest.o -o bin/zkTest   -L/home/bob/libNetCo-RPC  -L/usr/local/lib  -Wl,-rpath,/home/bob/libNetCo-RPC:/usr/local/lib liblibnetco.so -lpthread /usr/local/lib/libprotobuf.so /usr/local/lib/libzookeeper_mt.so 
