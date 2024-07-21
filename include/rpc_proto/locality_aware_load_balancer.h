@@ -60,6 +60,7 @@ namespace netco{
                 , _old_weight(0)
                 , _avg_latency(0)
                 , _time_q(_time_q_items, sizeof(_time_q_items), netco::NOT_OWN_STORAGE)
+                , last_time_us(utils::gettimeofday_us())
                 { }
                 // Called in Feedback() to recalculate _weight.
                 // Returns diff of _weight.
@@ -85,6 +86,7 @@ namespace netco{
                 int64_t volatile_value() const { return _weight; }
 
             private:
+                int64_t last_time_us;
                 // base_weight = QPS * WEIGHT_SCALE / latency ^ p
                 int64_t _base_weight;
                 // weight = base_weight * avg_latency / inflight_delay

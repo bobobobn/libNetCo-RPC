@@ -15,11 +15,9 @@ using namespace netco;
 /** RAII*/
 Socket::~Socket()
 {
-	--(*_pRef);
-	if (!(*_pRef) && isUseful())
+	if (isUseful())
 	{
 		::close(_sockfd);
-		delete _pRef;
 	}
 }
 
@@ -90,7 +88,7 @@ int Socket::listen()
 	return ret;
 }
 
-Socket Socket::accept_raw()
+Socket::Ptr Socket::accept_raw()
 {
 	int connfd = -1;
 	struct sockaddr_in client;
@@ -98,7 +96,7 @@ Socket Socket::accept_raw()
 	connfd = ::accept(_sockfd, (struct sockaddr*) & client, &len);
 	if (connfd < 0)
 	{
-		return Socket(connfd);
+		return std::make_shared<Socket>(connfd);
 	}
 
 	struct sockaddr_in* sock = (struct sockaddr_in*) & client;
@@ -107,13 +105,13 @@ Socket Socket::accept_raw()
 	char ip[INET_ADDRSTRLEN];   
 	inet_ntop(AF_INET, &in, ip, sizeof(ip));
 
-	return Socket(connfd, std::string(ip), port);
+	return std::make_shared<Socket>(connfd, std::string(ip), port);
 }
 
-Socket Socket::accept()
+Socket::Ptr Socket::accept()
 {
 	auto ret(accept_raw());
-	if(ret.isUseful())
+	if(ret->isUseful())
 	{
 		return ret;
 	}
@@ -123,7 +121,7 @@ Socket Socket::accept()
 	netco::Scheduler::getScheduler()->getProcessor(threadIdx)->waitEvent(_sockfd, EPOLLIN | EPOLLPRI | EPOLLRDHUP | EPOLLHUP);
 	// 执行到此说明当前协程恢复运行 也就是加入epoll的fd存在激活的事件 那么就再连接一次
 	auto con(accept_raw());
-	if(con.isUseful())
+	if(con->isUseful())
 	{
 		return con;
 	}

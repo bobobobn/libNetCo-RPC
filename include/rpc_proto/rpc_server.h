@@ -51,7 +51,7 @@ namespace netco{
 
     private:
         /** connection callback*/
-        void on_connection(netco::Socket* conn);
+        void on_connection(netco::Socket::Ptr conn);
 
         /** tcp server handle*/
         std::unique_ptr<RpcServerStub> m_rpc_server_stub;

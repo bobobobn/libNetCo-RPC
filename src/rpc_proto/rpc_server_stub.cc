@@ -46,7 +46,7 @@ namespace netco{
         NETCO_LOG()<<("rpc-server-stub start run the tcp-server multi loop");
     }
 
-    void RpcServerStub::register_connection(std::function<void(netco::Socket*)>& conn)
+    void RpcServerStub::register_connection(std::function<void(netco::Socket::Ptr)>& conn)
     {
         m_tcp_server->register_connection(conn);
     }

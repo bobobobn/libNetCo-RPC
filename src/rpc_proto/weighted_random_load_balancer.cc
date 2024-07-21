@@ -1,4 +1,4 @@
-#include "../../include/rpc_proto/locality_aware_load_balancer.h"
+#include "../../include/rpc_proto/weighted_random_load_balancer.h"
 #include "log.h"
 #include <fstream>
 namespace netco{
@@ -18,7 +18,7 @@ namespace netco{
         std::uniform_int_distribution<int64_t> distrib_int(1, n); // 定义随机数分布，生成在[1,n]之间的的均匀分布整数
         return distrib_int(gen);
     }
-    size_t LocalityAwareLoadBalancer::Add(Servers& bg, const Servers& fg , const ServerName& server_name, LocalityAwareLoadBalancer* balancer)
+    size_t WeightedRandomLoadBalancer::Add(Servers& bg, const Servers& fg , const ServerName& server_name, WeightedRandomLoadBalancer* balancer)
     {
         //TODO: ADD a NEW SERVER
         auto fg_it = fg.server_map.find(server_name);
@@ -45,7 +45,7 @@ namespace netco{
         }
         return 0;
     }
-    size_t LocalityAwareLoadBalancer::Remove(Servers& bg, const ServerName& server_name, LocalityAwareLoadBalancer* lb) {
+    size_t WeightedRandomLoadBalancer::Remove(Servers& bg, const ServerName& server_name, WeightedRandomLoadBalancer* lb) {
         //TODO: REMOVE a EXISTING SERVER
         size_t index = bg.server_map[server_name];
         bg.server_map.erase(server_name);
@@ -97,7 +97,7 @@ namespace netco{
         return 0;                  
     }
 
-    void LocalityAwareLoadBalancer::add_server(const ServerName& server_name) {
+    void WeightedRandomLoadBalancer::add_server(const ServerName& server_name) {
         {
             MutexGuard lock(server_map_mutex_);
             if(++server_map_[server_name] != 1){
@@ -107,10 +107,10 @@ namespace netco{
         }
         servers_dbd_.ModifyWithForeground(Add, server_name, this);
     }
-    size_t LocalityAwareLoadBalancer::AddServersInBatch(const std::vector<ServerName>& servers){
+    size_t WeightedRandomLoadBalancer::AddServersInBatch(const std::vector<ServerName>& servers){
         //TODO: ADD a BATCH OF SERVERS
     }
-    void LocalityAwareLoadBalancer::remove_server(const ServerName& server_name) {
+    void WeightedRandomLoadBalancer::remove_server(const ServerName& server_name) {
         {
             MutexGuard lock(server_map_mutex_);
             if(!server_map_.erase(server_name)){
@@ -119,10 +119,10 @@ namespace netco{
         }
         servers_dbd_.Modify(Remove, server_name, this);
     }
-    size_t LocalityAwareLoadBalancer::RemoveServersInBatch(const std::vector<ServerName>& servers){
+    size_t WeightedRandomLoadBalancer::RemoveServersInBatch(const std::vector<ServerName>& servers){
         //TODO: REMOVE a BATCH OF SERVERS
     }
-    int LocalityAwareLoadBalancer::select_server(const SelectIn& in, SelectOut* out) {
+    int WeightedRandomLoadBalancer::select_server(const SelectIn& in, SelectOut* out) {
         auto servers_scope_ptr_ptr = servers_dbd_.GetDataPtr();
         auto& servers = **servers_scope_ptr_ptr;
         const size_t n = servers.weight_tree.size();
@@ -153,21 +153,9 @@ namespace netco{
             }
             else
             {
-                const auto result = node.weight->AddInflight(in, index, dice-left);
-                if(result.weight_diff){
-                    // 权值变化，更新父节点权值
-                    servers.UpdateParentWeight(result.weight_diff, index);
-                    total_weight_.fetch_add(result.weight_diff, std::memory_order_relaxed);
-                }
-                if(result.chosen){
-                    out->node = node.server_name;
-                    out->need_feedback = true;                        
-                    return 0;
-                }
-                // 权值更新后不符合选择条件，重新搜索
-                if(++n_try >= n){
-                    break;
-                }
+                out->node = node.server_name;
+                out->need_feedback = true;                        
+                return 0;
             }
             
             // 重新搜索
@@ -181,57 +169,7 @@ namespace netco{
         return -1;
     }
 
-    inline LocalityAwareLoadBalancer::Weight::AddInflightResult LocalityAwareLoadBalancer::Weight::AddInflight(const SelectIn& in, size_t index, int64_t dice) {
-        MutexGuard lock(_mutex);
-        if (Disabled()) {
-            AddInflightResult r = { false, 0 };
-            return r;
-        }
-        const int64_t diff = ResetWeight(index, in.begin_time_us);
-        if (_weight < dice) {
-            // inflight delay makes the weight too small to choose.
-            AddInflightResult r = { false, diff };
-            return r;
-        }
-        _begin_time_sum += in.begin_time_us;
-        ++_begin_time_count;
-        AddInflightResult r = { true, diff };
-        return r;
-    }
-
-    inline int64_t LocalityAwareLoadBalancer::Weight::ResetWeight(size_t index, int64_t now_us) {
-        int64_t new_weight = _base_weight;
-        if (_begin_time_count > 0) {
-            const int64_t inflight_delay =
-                now_us - _begin_time_sum / _begin_time_count;
-            const int64_t punish_latency =
-                (int64_t)(_avg_latency * FLAGS_punish_inflight_ratio);
-            if (inflight_delay >= punish_latency && _avg_latency > 0) {
-                new_weight = new_weight * punish_latency / inflight_delay;
-            }
-        }
-        if (new_weight < FLAGS_min_weight) {
-            new_weight = FLAGS_min_weight;
-        }
-        const int64_t old_weight = _weight;
-        _weight = new_weight;
-        const int64_t diff = new_weight - old_weight;
-        if (_old_index == index && diff != 0) {
-            _old_diff_sum += diff;
-        }
-        return diff;
-    }
-
-    int64_t LocalityAwareLoadBalancer::Weight::MarkFailed(size_t index, int64_t avg_weight) {
-        MutexGuard lock(_mutex);
-        if (_base_weight <= avg_weight) {
-            return 0;
-        }
-        _base_weight = avg_weight;
-        return ResetWeight(index, 0);
-    }
-
-    int64_t LocalityAwareLoadBalancer::Weight::MarkOld(size_t index){
+    int64_t WeightedRandomLoadBalancer::Weight::MarkOld(size_t index){
         MutexGuard lock(_mutex);
         const int64_t saved = _weight;
         _old_weight = saved;
@@ -239,7 +177,7 @@ namespace netco{
         _old_index = index;
         return saved;
     }
-    std::pair<int64_t, int64_t> LocalityAwareLoadBalancer::Weight::ClearOld() {
+    std::pair<int64_t, int64_t> WeightedRandomLoadBalancer::Weight::ClearOld() {
         MutexGuard lock(_mutex);
         const int64_t old_weight = _old_weight;
         const int64_t diff = _old_diff_sum;
@@ -248,13 +186,14 @@ namespace netco{
         _old_weight = 0;
         return std::make_pair(old_weight, diff);
     }
-    int64_t LocalityAwareLoadBalancer::Weight::Disable() {
+    int64_t WeightedRandomLoadBalancer::Weight::Disable() {
         MutexGuard lock(_mutex);
         auto ret = _weight; 
         _base_weight = -1, _weight = 0;
         return ret;    
     }
-    int64_t LocalityAwareLoadBalancer::Weight::Update(const CallInfo& ci, size_t index) {
+
+    int64_t WeightedRandomLoadBalancer::Weight::Update(const CallInfo& ci, size_t index) {
         static MutexLock ofs_lock;        
         const int64_t end_time_us = utils::gettimeofday_us();
         const int64_t latency = end_time_us - ci.begin_time_us;
@@ -324,9 +263,9 @@ namespace netco{
             MutexGuard lock(ofs_lock);
             std::cout << "weight info: ["<<buf<<"]" << "node: " << index << ", weight: " << _base_weight << ", avg_latency: " << _avg_latency << " QPS: " << scaled_qps / WEIGHT_SCALE << "\n";
         }
-        return ResetWeight(index, end_time_us);
+        return 0;
     }
-    void LocalityAwareLoadBalancer::Feedback(const CallInfo& info){
+    void WeightedRandomLoadBalancer::Feedback(const CallInfo& info){
         ServerName node_name = info.node;
         if(server_map_.find(node_name) == server_map_.end()){
             return;
@@ -339,10 +278,6 @@ namespace netco{
             const size_t index = it->second;
             auto weight_ptr = servers.weight_tree[index].weight;            
             int64_t diff = weight_ptr->Update(info, index);
-            if (diff != 0) {
-                servers.UpdateParentWeight(diff, index);
-                total_weight_.fetch_add(diff, std::memory_order_relaxed);
-            }
         }
     }
 }

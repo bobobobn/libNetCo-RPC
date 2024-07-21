@@ -4,6 +4,7 @@
 #include "../../include/rpc_proto/rpc_response_header.pb.h"
 #include "../../include/zk_client.h"
 #include "../../include/rpc_proto/locality_aware_load_balancer.h"
+#include "../../include/rpc_proto/weighted_random_load_balancer.h"
 #include "../../include/rpc_proto/short_socket_channel.h"
 #include "../../include/utils.h"
 
@@ -24,7 +25,7 @@ namespace netco{
             MutexGuard lock(m_balancer_map_mutex);
             auto it = m_load_balancer_map.find(service_name);
             if (it == m_load_balancer_map.end()){
-                m_load_balancer_map[service_name] = LocalityAwareLoadBalancer::New(ShortSocketChannel::New);
+                m_load_balancer_map[service_name] = WeightedRandomLoadBalancer::New(ShortSocketChannel::New);
                 m_name_service->ManageLoadBalancer(service_name.c_str(), method_name.c_str(), &m_load_balancer_map[service_name]);
             }
         }
@@ -54,7 +55,7 @@ namespace netco{
             int recv_len = socket_channel->recv(rpc_response.data(), rpc_response.size());
             // feedback to load balancer
             if( out.need_feedback ){
-                m_load_balancer_map[service_name]->Feedback({in.begin_time_us, service_method_key, rpc_response_header.status()});
+                m_load_balancer_map[service_name]->Feedback({in.begin_time_us, out.node, rpc_response_header.status()});
             }
             rpc_header_len = *(uint32_t*)rpc_response.data();
             rpc_response_header.ParseFromArray(rpc_response.data() + sizeof(rpc_header_len), rpc_header_len);

@@ -14,7 +14,7 @@ int main()
     NETCO_LOG()<<("---------------");
 
     // Default: ping-pong
-    TcpServer tcp_server;
+    netco::TcpServer tcp_server;
     tcp_server.start("127.0.0.1",12345);
     netco::sche_join();
     return 0;

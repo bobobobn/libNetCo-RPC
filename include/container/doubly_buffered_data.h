@@ -122,8 +122,6 @@ namespace netco{
         explicit Wrapper() : _control(nullptr) {
         }
         ~Wrapper(){
-            if(_control)
-                _control->RemoveWrapper(std::enable_shared_from_this<typename DoublyBufferedData<T>::Wrapper>::shared_from_this());
         }
         inline std::shared_ptr<Wrapper> get_shared_from_this() {
             return std::enable_shared_from_this<typename DoublyBufferedData<T>::Wrapper>::shared_from_this();

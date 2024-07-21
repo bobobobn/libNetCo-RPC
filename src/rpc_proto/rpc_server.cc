@@ -16,7 +16,7 @@
 namespace netco{
     void RpcServer::start(const char* ip,int port)
     {
-        std::function<void(netco::Socket*)> on_connection = 
+        std::function<void(netco::Socket::Ptr)> on_connection = 
             std::bind(&RpcServer::on_connection,this,std::placeholders::_1);
         
         /** register the connection callback*/
@@ -29,7 +29,7 @@ namespace netco{
 
     void RpcServer::start_multi(const char* ip,int port)
     {
-        std::function<void(netco::Socket*)> on_connection = 
+        std::function<void(netco::Socket::Ptr)> on_connection = 
             std::bind(&RpcServer::on_connection,this,std::placeholders::_1);
         
         /** register the connection callback*/
@@ -39,7 +39,7 @@ namespace netco{
         m_rpc_server_stub->start_multi(ip,port);
     }
 
-    void RpcServer::on_connection(netco::Socket* conn)
+    void RpcServer::on_connection(netco::Socket::Ptr conn)
     {
         /** 进行conn-fd的生命期管理*/
         std::shared_ptr<netco::Socket> connection(conn);

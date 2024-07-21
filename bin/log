@@ -10790,4 +10790,77 @@
 
 2024-07-18 08:43:01	[DEBUG]	[0]	/home/bob/libNetCo/src/processor.cc:112	processor: 0 is running
 
-2024-07-18 08:43:01	[DEBUG]	[1]	/home/bob/libNetCo/src/processor.cc:112	pro
+2024-07-18 08:43:01	[DEBUG]	[1]	/home/bob/libNetCo/src/processor.cc:112	processor: 1 is running
+
+2024-07-18 08:43:01	[DEBUG]	[3]	/home/bob/libNetCo/src/processor.cc:112	processor: 3 is running
+
+2024-07-18 08:43:01	[DEBUG]	[1]	/home/bob/libNetCo/src/processor.cc:112	processor: 1 is running
+
+2024-07-18 08:43:01	[DEBUG]	[0]	/home/bob/libNetCo/src/processor.cc:112	processor: 0 is running
+
+2024-07-18 08:43:01	[DEBUG]	[1]	/home/bob/libNetCo/src/processor.cc:112	processor: 1 is running
+
+2024-07-18 08:43:01	[DEBUG]	[3]	/home/bob/libNetCo/src/processor.cc:112	processor: 3 is running
+
+2024-07-18 08:43:01	[DEBUG]	[2]	/home/bob/libNetCo/src/processor.cc:112	processor: 2 is running
+
+2024-07-18 08:43:01	[DEBUG]	[1]	/home/bob/libNetCo/src/processor.cc:112	processor: 1 is running
+
+2024-07-18 08:43:01	[DEBUG]	[2]	/home/bob/libNetCo/src/processor.cc:112	processor: 2 is running
+
+2024-07-18 08:43:01	[DEBUG]	[2]	/home/bob/libNetCo/src/processor.cc:112	processor: 2 is running
+
+2024-07-18 08:43:01	[DEBUG]	[3]	/home/bob/libNetCo/src/processor.cc:112	processor: 3 is running
+
+2024-07-18 08:43:01	[DEBUG]	[1]	/home/bob/libNetCo/src/processor.cc:112	processor: 1 is running
+
+2024-07-18 08:43:01	[DEBUG]	[1]	/home/bob/libNetCo/src/processor.cc:112	processor: 1 is running
+
+2024-07-18 08:43:01	[DEBUG]	[3]	/home/bob/libNetCo/src/processor.cc:112	processor: 3 is running
+
+2024-07-18 08:43:01	[DEBUG]	[0]	/home/bob/libNetCo/src/processor.cc:112	processor: 0 is running
+
+2024-07-18 08:43:01	[DEBUG]	[1]	/home/bob/libNetCo/src/processor.cc:112	processor: 1 is running
+
+2024-07-18 08:43:01	[DEBUG]	[3]	/home/bob/libNetCo/src/processor.cc:112	processor: 3 is running
+
+2024-07-18 08:43:01	[DEBUG]	[0]	/home/bob/libNetCo/src/processor.cc:112	processor: 0 is running
+
+2024-07-18 08:43:01	[DEBUG]	[2]	/home/bob/libNetCo/src/processor.cc:112	processor: 2 is running
+
+2024-07-18 08:43:01	[DEBUG]	[3]	/home/bob/libNetCo/src/processor.cc:112	processor: 3 is running
+
+2024-07-18 08:43:01	[DEBUG]	[2]	/home/bob/libNetCo/src/processor.cc:112	processor: 2 is running
+
+2024-07-18 08:43:01	[DEBUG]	[1]	/home/bob/libNetCo/src/processor.cc:112	processor: 1 is running
+
+2024-07-18 08:43:01	[DEBUG]	[3]	/home/bob/libNetCo/src/processor.cc:112	processor: 3 is running
+
+2024-07-18 08:43:01	[DEBUG]	[2]	/home/bob/libNetCo/src/processor.cc:112	processor: 2 is running
+
+2024-07-18 08:43:01	[DEBUG]	[0]	/home/bob/libNetCo/src/processor.cc:112	processor: 0 is running
+
+2024-07-18 08:43:01	[DEBUG]	[1]	/home/bob/libNetCo/src/processor.cc:112	processor: 1 is running
+
+2024-07-18 08:43:01	[DEBUG]	[2]	/home/bob/libNetCo/src/processor.cc:112	processor: 2 is running
+
+2024-07-18 08:43:01	[DEBUG]	[3]	/home/bob/libNetCo/src/processor.cc:112	processor: 3 is running
+
+2024-07-18 08:43:01	[DEBUG]	[1]	/home/bob/libNetCo/src/processor.cc:112	processor: 1 is running
+
+2024-07-18 08:43:01	[DEBUG]	[1]	/home/bob/libNetCo/src/processor.cc:112	processor: 1 is running
+
+2024-07-18 08:43:01	[DEBUG]	[2]	/home/bob/libNetCo/src/processor.cc:112	processor: 2 is running
+
+2024-07-18 08:43:01	[DEBUG]	[3]	/home/bob/libNetCo/src/processor.cc:112	processor: 3 is running
+
+2024-07-18 08:43:01	[DEBUG]	[2]	/home/bob/libNetCo/src/processor.cc:112	processor: 2 is running
+
+2024-07-18 08:43:01	[DEBUG]	[3]	/home/bob/libNetCo/src/processor.cc:112	processor: 3 is running
+
+2024-07-18 15:25:29	[DEBUG]	[-1]	/home/bob/libNetCo/src/rpc_proto/zk_naming_service.cc:8	watcher_chld called with type 4 state 3 path /test/factorial
+2024-07-18 15:25:29	[DEBUG]	[-1]	/home/bob/libNetCo/src/rpc_proto/zk_naming_service.cc:9	 ZOO_CHILD_EVENT:4 ZOO_SESSION_EVENT:-1 ZOO_CREATED_EVENT:1 ZOO_DELETED_EVENT:2 ZOO_CHANGED_EVENT:3 ZOO_CHILD_EVENT:4 ZOO_NOTWATCHING_EVENT:-2
+2024-07-18 15:25:29	[DEBUG]	[-1]	/home/bob/libNetCo/src/rpc_proto/zk_naming_service.cc:20	Method factorial of service test is updated, updating servers
+2024-07-18 15:25:29	[DEBUG]	[-1]	/home/bob/libNetCo/src/zk_client.cc:165	children of /test/factorial: get ok
+2024-07-18 15:33:00	[DEBUG]	[-1]	/home/bob/libNetCo/src/rpc_proto/zk_naming_service.cc:8	watcher_chld called with type 4 state 3 path /test/factorial
+2024-07-18 15:33:00	[DEBUG]	[-1]	/home/bob/libNetCo/src/rpc_proto/zk_naming_serv

@@ -1,12 +1,11 @@
 #include "../../include/tcp/tcp_server.h"
 
+using namespace netco;
 /** 默认的server自定义函数*/
 TcpServer::conn_callback default_connection(
-    [](netco::Socket* co_socket)
+    [](netco::Socket::Ptr connect_socket)
     {
         NETCO_LOG()<<("add one client connection");
-        /** 对这个改造的socket进行生命其管理*/
-        std::unique_ptr<netco::Socket> connect_socket(co_socket);
         
         /** 设置数据缓冲区*/
         std::vector<char> buf;
@@ -50,7 +49,7 @@ void TcpServer::start(const char* ip,int port)
         register_connection(default_connection);
     }
     /** 创建一个socket,进行服务器的参数的配置*/
-    _listen_fd = new netco::Socket();
+    _listen_fd = std::make_shared<netco::Socket>();
     if(_listen_fd->isUseful())
     {
         NETCO_LOG_FMT("the server listen fd %d is useful",_listen_fd);
@@ -94,23 +93,26 @@ void TcpServer::start_multi(const char* ip,int port)
         NETCO_LOG()<<("user has not register the connection func,so the tcp_connection func is the default");
         register_connection(default_connection);
     }
-    _multi_listen_fd = new netco::Socket[tCnt];
+    _multi_listen_fd.resize(tCnt);
+    for(int i = 0; i < tCnt; ++i){
+        _multi_listen_fd[i] = std::make_shared<netco::Socket>();
+    }
     /** 每个线程对应一个连接*/
     for(int i = 0; i < tCnt; ++i)
     {
-        if(_multi_listen_fd[i].isUseful())
+        if(_multi_listen_fd[i]->isUseful())
         {
             NETCO_LOG()<<("the tcpserver listen fd is useful");
-            _multi_listen_fd[i].setTcpNoDelay(true);
-            _multi_listen_fd[i].setReuseAddr(true);
-            _multi_listen_fd[i].setReusePort(true);
-            if(_multi_listen_fd[i].bind(ip,port) < 0)
+            _multi_listen_fd[i]->setTcpNoDelay(true);
+            _multi_listen_fd[i]->setReuseAddr(true);
+            _multi_listen_fd[i]->setReusePort(true);
+            if(_multi_listen_fd[i]->bind(ip,port) < 0)
             {
                 NETCO_LOG()<<("server start error");
                 return;
             }
             /** 开启监听*/
-            _multi_listen_fd[i].listen();
+            _multi_listen_fd[i]->listen();
         }
         /** 开始运行server loop*/
         auto loop = std::bind(&TcpServer::multi_server_loop,this,i);
@@ -132,7 +134,7 @@ void TcpServer::server_loop()
     while(true)
     {
         /** conn即可以用来进行fd通信*/
-        netco::Socket* conn = new netco::Socket(_listen_fd->accept());
+        netco::Socket::Ptr conn = _listen_fd->accept();
         NETCO_LOG_FMT("unblock,the server add a new tcpclient connection,the connect fd is %d",conn->fd());
         conn->setTcpNoDelay(true);
         /** 
@@ -155,14 +157,14 @@ void TcpServer::multi_server_loop(int thread_number)
     while(true)
     {
         /** conn即可以用来进行fd通信*/
-        netco::Socket* conn = new netco::Socket(_multi_listen_fd[thread_number].accept());
+        netco::Socket::Ptr conn = _multi_listen_fd[thread_number]->accept();
         NETCO_LOG()<<("add one client socket");
         conn->setTcpNoDelay(true);
         /** 
          *运行绑定的用户工作函数
          *为了防止内存泄漏,这里需要对conn进行管理 也就是用户自身进行管理
          */
-        auto user_connection = std::bind(*_on_server_connection,conn);
+        auto user_connection = std::bind(*_on_server_connection, conn);
         netco::co_go(user_connection);
     }
     NETCO_LOG()<<("server exit");

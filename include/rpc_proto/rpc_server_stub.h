@@ -31,7 +31,7 @@ namespace netco{
         void process_request(const std::string& read_buffer, std::string& write_buffer);
         void start(const char* ip,int port);
         void start_multi(const char* ip,int port);
-        void register_connection(std::function<void(netco::Socket*)>& conn);
+        void register_connection(std::function<void(netco::Socket::Ptr)>& conn);
         void registerAllService(const std::string& ipPortAddr);
         void UnregisterAll();
     private:

@@ -18,8 +18,9 @@ namespace netco
 	class Socket
 	{
 	public:
+		using Ptr = std::shared_ptr<Socket>;
 		explicit Socket(int sockfd, std::string ip = "", int port = -1)
-			: _sockfd(sockfd), _pRef(new int(1)), _port(port), _ip(std::move(ip))
+			: _sockfd(sockfd), _port(port), _ip(std::move(ip))
 		{
 			if (sockfd > 0)
 			{
@@ -29,7 +30,7 @@ namespace netco
 		}
 
 		Socket(std::string type = "TCP")
-			: _pRef(new int(1)), _port(-1), _ip("")
+			: _port(-1), _ip("")
 		{ 
 			if(type == "UDP" || type == "udp")
 			{
@@ -46,24 +47,6 @@ namespace netco
 			}
 		}
 
-		Socket(const Socket& otherSock) : _sockfd(otherSock._sockfd)
-		{
-			*(otherSock._pRef) += 1;
-			_pRef = otherSock._pRef;
-			_ip = otherSock._ip;
-			_port = otherSock._port;
-		}
-
-		Socket(Socket&& otherSock) : _sockfd(otherSock._sockfd)
-		{
-			*(otherSock._pRef) += 1;
-			_pRef = otherSock._pRef;
-			_ip = std::move(otherSock._ip);
-			_port = otherSock._port;
-		}
-
-		Socket& operator=(const Socket& otherSock) = delete;
-
 		~Socket();
 
 		/** 返回当前Socket对应的系统fd*/
@@ -79,7 +62,7 @@ namespace netco
 		int listen();
 
 		/** 监听Socket接收一个连接，并返回一个新的Socket连接*/
-		Socket accept();
+		Ptr accept();
 
 		/** 协程化改造-从Socket中读取数据*/
 		ssize_t read(void* buf, size_t count);
@@ -129,7 +112,7 @@ namespace netco
 	private:
 
 		/** 接收一个连接，并返回一个新的Socket连接的具体实现*/
-		Socket accept_raw();
+		Ptr accept_raw();
 
 		/** 系统套接字*/
 		int _sockfd;

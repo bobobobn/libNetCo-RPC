@@ -162,7 +162,10 @@ bool Processor::loop()
 				// 最后销毁已经执行完毕的协程
 				for (auto deadCo : removedCo_)
 				{
-					coSet_.erase(deadCo);
+					{
+						SpinlockGuard lock(coSetLock_);
+						coSet_.erase(deadCo);
+					}
 					//delete deadCo;
 					{
 						SpinlockGuard lock(coPoolLock_);   

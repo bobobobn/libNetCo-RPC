@@ -57,10 +57,10 @@ RM = /usr/bin/cmake -E rm -f
 EQUALS = =
 
 # The top-level source directory on which CMake was run.
-CMAKE_SOURCE_DIR = /home/bob/libNetCo
+CMAKE_SOURCE_DIR = /home/bob/libNetCo-RPC
 
 # The top-level build directory on which CMake was run.
-CMAKE_BINARY_DIR = /home/bob/libNetCo
+CMAKE_BINARY_DIR = /home/bob/libNetCo-RPC
 
 #=============================================================================
 # Targets provided globally by CMake.
@@ -87,9 +87,9 @@ rebuild_cache/fast: rebuild_cache
 
 # The main all target
 all: cmake_check_build_system
-	$(CMAKE_COMMAND) -E cmake_progress_start /home/bob/libNetCo/CMakeFiles /home/bob/libNetCo//CMakeFiles/progress.marks
+	$(CMAKE_COMMAND) -E cmake_progress_start /home/bob/libNetCo-RPC/CMakeFiles /home/bob/libNetCo-RPC//CMakeFiles/progress.marks
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 all
-	$(CMAKE_COMMAND) -E cmake_progress_start /home/bob/libNetCo/CMakeFiles 0
+	$(CMAKE_COMMAND) -E cmake_progress_start /home/bob/libNetCo-RPC/CMakeFiles 0
 .PHONY : all
 
 # The main clean target
@@ -206,6 +206,19 @@ rpc_client_pb_test: cmake_check_build_system
 rpc_client_pb_test/fast:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/rpc_client_pb_test.dir/build.make CMakeFiles/rpc_client_pb_test.dir/build
 .PHONY : rpc_client_pb_test/fast
+
+#=============================================================================
+# Target rules for targets named rpc_server_can_set_delay
+
+# Build rule for target.
+rpc_server_can_set_delay: cmake_check_build_system
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 rpc_server_can_set_delay
+.PHONY : rpc_server_can_set_delay
+
+# fast build rule for target.
+rpc_server_can_set_delay/fast:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/rpc_server_can_set_delay.dir/build.make CMakeFiles/rpc_server_can_set_delay.dir/build
+.PHONY : rpc_server_can_set_delay/fast
 
 #=============================================================================
 # Target rules for targets named rpc_server_pb_test
@@ -348,6 +361,21 @@ example/rpc_client_pb_test.i:
 example/rpc_client_pb_test.s:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/rpc_client_pb_test.dir/build.make CMakeFiles/rpc_client_pb_test.dir/example/rpc_client_pb_test.s
 .PHONY : example/rpc_client_pb_test.s
+
+# target to build an object file
+example/rpc_server_can_set_delay.o:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/rpc_server_can_set_delay.dir/build.make CMakeFiles/rpc_server_can_set_delay.dir/example/rpc_server_can_set_delay.o
+.PHONY : example/rpc_server_can_set_delay.o
+
+# target to preprocess a source file
+example/rpc_server_can_set_delay.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/rpc_server_can_set_delay.dir/build.make CMakeFiles/rpc_server_can_set_delay.dir/example/rpc_server_can_set_delay.i
+.PHONY : example/rpc_server_can_set_delay.i
+
+# target to generate assembly for a file
+example/rpc_server_can_set_delay.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/rpc_server_can_set_delay.dir/build.make CMakeFiles/rpc_server_can_set_delay.dir/example/rpc_server_can_set_delay.s
+.PHONY : example/rpc_server_can_set_delay.s
 
 # target to build an object file
 example/rpc_server_pb_test.o:
@@ -665,6 +693,21 @@ src/rpc_proto/rpcheader.pb.s:
 .PHONY : src/rpc_proto/rpcheader.pb.s
 
 # target to build an object file
+src/rpc_proto/weighted_random_load_balancer.o:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/libnetco.dir/build.make CMakeFiles/libnetco.dir/src/rpc_proto/weighted_random_load_balancer.o
+.PHONY : src/rpc_proto/weighted_random_load_balancer.o
+
+# target to preprocess a source file
+src/rpc_proto/weighted_random_load_balancer.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/libnetco.dir/build.make CMakeFiles/libnetco.dir/src/rpc_proto/weighted_random_load_balancer.i
+.PHONY : src/rpc_proto/weighted_random_load_balancer.i
+
+# target to generate assembly for a file
+src/rpc_proto/weighted_random_load_balancer.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/libnetco.dir/build.make CMakeFiles/libnetco.dir/src/rpc_proto/weighted_random_load_balancer.s
+.PHONY : src/rpc_proto/weighted_random_load_balancer.s
+
+# target to build an object file
 src/rpc_proto/zk_naming_service.o:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/libnetco.dir/build.make CMakeFiles/libnetco.dir/src/rpc_proto/zk_naming_service.o
 .PHONY : src/rpc_proto/zk_naming_service.o
@@ -784,6 +827,7 @@ help:
 	@echo "... method_test"
 	@echo "... name_service_test"
 	@echo "... rpc_client_pb_test"
+	@echo "... rpc_server_can_set_delay"
 	@echo "... rpc_server_pb_test"
 	@echo "... tcp_client_test"
 	@echo "... tcp_server_test"
@@ -806,6 +850,9 @@ help:
 	@echo "... example/rpc_client_pb_test.o"
 	@echo "... example/rpc_client_pb_test.i"
 	@echo "... example/rpc_client_pb_test.s"
+	@echo "... example/rpc_server_can_set_delay.o"
+	@echo "... example/rpc_server_can_set_delay.i"
+	@echo "... example/rpc_server_can_set_delay.s"
 	@echo "... example/rpc_server_pb_test.o"
 	@echo "... example/rpc_server_pb_test.i"
 	@echo "... example/rpc_server_pb_test.s"
@@ -869,6 +916,9 @@ help:
 	@echo "... src/rpc_proto/rpcheader.pb.o"
 	@echo "... src/rpc_proto/rpcheader.pb.i"
 	@echo "... src/rpc_proto/rpcheader.pb.s"
+	@echo "... src/rpc_proto/weighted_random_load_balancer.o"
+	@echo "... src/rpc_proto/weighted_random_load_balancer.i"
+	@echo "... src/rpc_proto/weighted_random_load_balancer.s"
 	@echo "... src/rpc_proto/zk_naming_service.o"
 	@echo "... src/rpc_proto/zk_naming_service.i"
 	@echo "... src/rpc_proto/zk_naming_service.s"
