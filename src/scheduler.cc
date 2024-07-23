@@ -44,7 +44,7 @@ Scheduler* Scheduler::getScheduler()
 		{
 			pScher_ = new Scheduler();
 			// 根据实际CPU核心数开启对应数量的线程
-			pScher_->startScheduler(::get_nprocs_conf());	
+			pScher_->startScheduler(parameter::defaultThreadNum);	
 		}
 	}
 	return pScher_;

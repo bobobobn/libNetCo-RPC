@@ -6,11 +6,11 @@
 
 int count = 0;
 // netco::MutexLock mutex;
-// netco::CoMutex mutex;
+netco::CoMutex mutex;
 
 void test()
 {
-    int i = 1000000;
+    int i = 10000000;
     while(i--){
         netco::GuardCoMutex guard(mutex);
         // netco::MutexGuard guard(mutex);
@@ -22,7 +22,7 @@ void test()
 }
 
 int main(){
-    int thread_num = 1;
+    int thread_num = 8;
     int64_t start_time = netco::utils::gettimeofday_us();
     while(thread_num--)
         netco::co_go(test);

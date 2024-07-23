@@ -53,6 +53,9 @@ namespace netco
 		/** 暂停运行当前协程*/
 		void yield();
 
+		/** 重新排队当前协程*/
+		void blocked_yield();
+
 		/** 当前运行协程等待time毫秒*/
 		void wait(Time time);
 
@@ -136,6 +139,12 @@ namespace netco
 
 		/** 协程定时任务队列*/
 		std::vector<Coroutine*> timerExpiredCo_;
+
+		/** 阻塞重新排队的协程*/
+		std::vector<Coroutine*> blockedCo_[2];
+
+		/** 阻塞重新排队的协程*/
+		int blockingCoIdx_;
 
 		/** 待销毁协程任务队列*/
 		std::vector<Coroutine*> removedCo_;

@@ -34,6 +34,10 @@ void netco::co_sleep(Time time)
 	netco::Scheduler::getScheduler()->getProcessor(threadIdx)->wait(time);
 }
 
+void netco::co_blocked_yield(){
+	netco::Scheduler::getScheduler()->getProcessor(threadIdx)->blocked_yield();
+}
+
 void netco::sche_join()
 {
 	netco::Scheduler::getScheduler()->join();

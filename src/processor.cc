@@ -10,7 +10,7 @@ using namespace netco;
 __thread int netco::threadIdx = -1;
 
 Processor::Processor(int tid)
-	: tid_(tid), status_(PRO_STOPPED), pLoop_(nullptr), runningNewQue_(0), pCurCoroutine_(nullptr), mainCtx_(0)
+	: tid_(tid), status_(PRO_STOPPED), pLoop_(nullptr), runningNewQue_(0), pCurCoroutine_(nullptr), mainCtx_(0), blockingCoIdx_(0)
 {
 	// 初始化处理器主程序上下文
 	mainCtx_.makeCurContext();  
@@ -35,6 +35,7 @@ Processor::~Processor()
 	{
 		delete co;
 	}
+	sem_destroy(&sem_thread_started_);
 }
 
 void Processor::resume(Coroutine* pCo)
@@ -119,8 +120,17 @@ bool Processor::loop()
 				}
 				
 				// 获取活跃的事件，这里是loop中唯一会被阻塞的地方(epoll_wait)
-				epoller_.getActEvServ(parameter::epollTimeOutMs, actCoroutines_);
-
+				if(blockedCo_[blockingCoIdx_].empty()){
+					epoller_.getActEvServ(parameter::epollTimeOutMs, actCoroutines_);
+				}
+				else{
+					epoller_.getActEvServ(0, actCoroutines_);
+				}				
+				// 处理被阻塞的协程
+				blockingCoIdx_ = !blockingCoIdx_;
+				for(auto &co : blockedCo_[!blockingCoIdx_]){
+					resume(co);
+				}
 				// 首先处理定时任务协程
 				timer_.getExpiredCoroutines(timerExpiredCo_);
 				size_t timerCoCnt = timerExpiredCo_.size();
@@ -150,8 +160,6 @@ bool Processor::loop()
 					// std::cout << "processor: "<< threadIdx << "has" <<coSet_.size() << " COROUTINES"<<"\n";
 					resume(pNewCo);        
 				}
-
-
 
 				// 然后执行被epoll唤醒的协程
 				size_t actCoCnt = actCoroutines_.size();
@@ -183,6 +191,10 @@ bool Processor::loop()
     return true;
 }
 
+void Processor::blocked_yield(){
+	blockedCo_[blockingCoIdx_].push_back(pCurCoroutine_);
+	yield();
+}
 
 void Processor::waitEvent(int fd, int ev)
 {

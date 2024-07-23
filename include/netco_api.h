@@ -16,6 +16,7 @@ namespace netco
 
 	void co_sleep(Time t);
 
+	void co_blocked_yield();
 	void sche_join();
 
 }

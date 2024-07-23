@@ -10,7 +10,7 @@ namespace netco {
     public:
         void lock() {
             while (locked.test_and_set(std::memory_order_acquire)) {
-                netco::co_sleep(0);
+                netco::co_blocked_yield();
             }
         }
         void unlock() {
